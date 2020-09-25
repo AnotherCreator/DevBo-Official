@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from src.pybo import bot_owner_check
+from app.pybo import bot_owner_check
 
 
 class Templates(commands.Cog):
