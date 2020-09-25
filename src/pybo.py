@@ -27,7 +27,7 @@ def bot_owner_check(ctx):
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(status=discord.Status.online, activity=discord.Game('Under development! Type ;help'))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game('Now on a server! Type ;help'))
     print(f'{bot.user.name} is ready!')
 
 
