@@ -4,7 +4,7 @@
 import discord
 import random
 from discord.ext import commands
-from src.modules.help import bot_avatar_link
+from app.modules.help import bot_avatar_link
 
 # ---       MAIN LINE       ---#
 

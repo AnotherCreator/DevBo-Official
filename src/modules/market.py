@@ -82,6 +82,7 @@ def prices():
             clean_price = clean_price.replace('$', '$ ')
             clean_price = clean_price.replace('USDC', ' \nUSDC')
             clean_price = clean_price.replace('ETH', ' \nETH')
+            clean_price = clean_price.replace('DAI', ' \nDAI')
             clean_prices[counter] = clean_price
             counter += 1
 
