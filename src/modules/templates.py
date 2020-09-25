@@ -1,8 +1,6 @@
 import discord
 from discord.ext import commands
 
-from src.pybo import bot_owner_check
-
 
 class Templates(commands.Cog):
     def __init__(self, bot):
@@ -10,7 +8,6 @@ class Templates(commands.Cog):
 
     # Commands
     @commands.command()
-    @commands.check(bot_owner_check)
     async def template(self, ctx):
         embed = discord.Embed(
             title='Title',
