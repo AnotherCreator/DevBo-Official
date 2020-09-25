@@ -118,13 +118,7 @@ class Market(commands.Cog):
             colour=discord.Colour.blurple()
         )
         embed.set_footer(text=site)
-        if 0 < int(message) < 50:
-            embed.set_author(
-                name=str(coin_names.get(int(message) + (-1))),
-                icon_url=f'https://coinlib.io/{str(coin_icons.get(int(message) + (-1)))}'
-            )
-            embed.add_field(name='24 Hour Change', value=str(coin_percent.get(int(message) + (-1))), inline=False)
-        elif int(message) == 50:
+        if 0 < int(message) <= 50:
             embed.set_author(
                 name=str(coin_names.get(int(message) + (-1))),
                 icon_url=f'https://coinlib.io/{str(coin_icons.get(int(message) + (-1)))}'
