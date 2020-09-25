@@ -44,7 +44,7 @@ async def on_ready():
 
 for filename in os.listdir('./modules'):
     if filename.endswith('.py'):
-        bot.load_extension(f'modules.{filename[:-3]}')
+        bot.load_extension(f'modules.{filename}')
 
 
 #@bot.command()
