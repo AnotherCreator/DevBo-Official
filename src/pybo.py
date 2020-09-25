@@ -43,8 +43,7 @@ async def unload(ctx, extension):
     bot.unload_extension(f'modules.{extension}')
 
 for filename in os.listdir('./modules'):
-    if filename.endswith('.py'):
-        bot.load_extension(f'modules.{filename[:-3]}')
+    bot.load_extension(f'modules.{filename}')
 
 
 @bot.command()
