@@ -31,26 +31,27 @@ async def on_ready():
     print(f'{bot.user.name} is ready!')
 
 
-@bot.command()
-@commands.check(bot_owner_check)
-async def load(ctx, extension):
-    bot.load_extension(f'modules.{extension}')
+#@bot.command()
+#@commands.check(bot_owner_check)
+#async def load(ctx, extension):
+#    bot.load_extension(f'modules.{extension}')
 
 
-@bot.command()
-@commands.check(bot_owner_check)
-async def unload(ctx, extension):
-    bot.unload_extension(f'modules.{extension}')
+#@bot.command()
+#@commands.check(bot_owner_check)
+#async def unload(ctx, extension):
+#    bot.unload_extension(f'modules.{extension}')
 
-for filename in os.listdir('./modules'):
-    bot.load_extension(f'modules.{filename}')
+#for filename in os.listdir('./modules'):
+#    if filename.endswith('.py'):
+#        bot.load_extension(f'modules.{filename[:-3]}')
 
 
-@bot.command()
-@commands.check(bot_owner_check)
-async def reload(ctx, extension):
-    bot.unload_extension(f'modules.{extension}')
-    bot.load_extension(f'modules.{extension}')
+#@bot.command()
+#@commands.check(bot_owner_check)
+#async def reload(ctx, extension):
+#    bot.unload_extension(f'modules.{extension}')
+#    bot.load_extension(f'modules.{extension}')
 
 
 # ---       END MAIN        ---#
