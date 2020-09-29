@@ -197,6 +197,18 @@ class Market(commands.Cog):
 
         await ctx.send(embed=embed)
 
+    @cryptolist.error
+    async def cryptolist_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = discord.Embed(
+                title='Error: Specify cryptolist #',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            embed.set_footer(text='ex => ;cryptolist 1')
+
+            await ctx.send(embed=embed)
+
 
 # ---       END MAIN        ---#
 def setup(bot):
