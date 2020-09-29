@@ -133,6 +133,17 @@ class Market(commands.Cog):
 
         await ctx.send(embed=embed)
 
+    @crypto.error
+    async def crypto_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = discord.Embed(
+                title='Error: Specify crypto #',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+
+            await ctx.send(embed=embed)
+
     @commands.command()
     async def cryptolist(self, ctx, page):
         name()
