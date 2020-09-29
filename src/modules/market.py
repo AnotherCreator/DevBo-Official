@@ -141,6 +141,7 @@ class Market(commands.Cog):
                 description=' ',
                 colour=discord.Colour.red()
             )
+            embed.set_footer(text='ex => ;crypto 1')
 
             await ctx.send(embed=embed)
 
