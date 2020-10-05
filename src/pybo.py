@@ -1,6 +1,5 @@
 # ---       IMPORTS          ---#
 
-
 import discord
 import os
 from discord.ext import commands
@@ -27,7 +26,7 @@ def bot_owner_check(ctx):
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(status=discord.Status.online, activity=discord.Game('Running 24/7! ;help'))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game('For more info | ;help'))
     print(f'{bot.user.name} is ready!')
 
 
