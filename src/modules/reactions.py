@@ -17,7 +17,7 @@ class Reactions(Cog):
     @Cog.listener()
     async def on_reaction_add(self, reaction, user):
         # To get emote format -> \emote
-        pin_reaction = '<:lirikWINK:670327394065842207>'
+        pin_reaction = '👌'
         channel = self.bot.get_channel(746153453075693682)
 
         if str(reaction.emoji) == pin_reaction:
@@ -39,6 +39,12 @@ class Reactions(Cog):
                     icon_url=reaction.message.author.avatar_url
                 )
                 await channel.send(embed=embed)
+
+            # TODO: Add a check to see if a user already reacted / added a reaction to a message
+                # Method: Maybe some sort of array to keep a list of users who reacted
+                #           - Then a loop that goes through each index to check if user is in the array
+                #           - If user is in array, ignore reaction
+                #           - If user is not in array, add the reaction
 
     '''@Cog.listener()
     async def on_reaction_remove(self, reaction, user):
