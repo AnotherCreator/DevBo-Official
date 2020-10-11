@@ -16,12 +16,10 @@ class Reactions(Cog):
 
     @Cog.listener()
     async def on_reaction_add(self, reaction, user):
-        # To get emote format -> \emote
         pin_reaction = '👌'
         channel = self.bot.get_channel(746153453075693682)
 
         if str(reaction.emoji) == pin_reaction:
-            print(reaction.count)
             print(f'{user.name} has reacted with {reaction.emoji}')
 
             pin_count = reaction.count
