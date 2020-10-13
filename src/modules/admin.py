@@ -33,7 +33,7 @@ class Admin(commands.Cog):
     async def prune(self, ctx, amount):
         while True:
             try:
-                ctx.channel.purge(limit=amount)
+                await ctx.channel.purge(limit=amount)
                 embed = discord.Embed(
                     title=f'Successfully removed {amount} messages',
                     description=' ',
