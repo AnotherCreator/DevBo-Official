@@ -31,7 +31,6 @@ class Admin(commands.Cog):
     # TODO: Add prune command
     @commands.command()
     async def prune(self, ctx, amount):
-        while True:
             try:
                 await ctx.channel.purge(limit=int(amount))
                 embed = discord.Embed(
