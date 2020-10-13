@@ -40,7 +40,7 @@ class Admin(commands.Cog):
                     colour=discord.Colour.blurple()
                 )
                 await ctx.send(embed=embed)
-            except commands.MissingRequiredArgument:
+            except discord.ext.commands.errors.MissingRequiredArgument:
                 embed = discord.Embed(
                     title='Error: Specify the amount of messages to be removed',
                     description=' ',
