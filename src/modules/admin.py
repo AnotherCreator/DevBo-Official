@@ -26,9 +26,8 @@ class Admin(commands.Cog):
         )
         await ctx.send(embed=embed)
 
-    # TODO: Add 'admin' only functionality
     @commands.command()
-    @commands.has_permissions(manage_messages=True)
+    @commands.has_guild_permissions(manage_messages=True)
     async def prune(self, ctx, amount):
         if int(amount) > 0:
             await ctx.channel.purge(limit=int(amount) + 1)
@@ -55,7 +54,6 @@ class Admin(commands.Cog):
                 colour=discord.Colour.red()
             )
             embed.set_footer(text='ex => ;prune 10')
-
             await ctx.send(embed=embed, delete_after=5)
 
     # TODO: Add mute command
