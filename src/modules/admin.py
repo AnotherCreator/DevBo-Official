@@ -12,7 +12,8 @@ class Admin(commands.Cog):
 
     # TODO: Add kick command
     @commands.command()
-    async def kick (self, ctx, message):
+    @commands.has_guild_permissions(kick_members=True)
+    async def kick(self, ctx, message):
         embed = discord.Embed(
 
         )
@@ -20,6 +21,7 @@ class Admin(commands.Cog):
 
     # TODO: Add ban command
     @commands.command()
+    @commands.has_guild_permissions(ban_members=True)
     async def ban(self, ctx, message):
         embed = discord.Embed(
 
