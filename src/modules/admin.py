@@ -32,7 +32,7 @@ class Admin(commands.Cog):
     @commands.command()
     async def prune(self, ctx, amount):
         try:
-            await ctx.channel.purge(limit=int(amount))
+            await ctx.channel.purge(limit=int(amount + 1))
             embed = discord.Embed(
                 title=f'Successfully removed {amount} messages',
                 description=' ',
@@ -46,7 +46,7 @@ class Admin(commands.Cog):
                 colour=discord.Colour.red()
             )
             embed.set_footer(text='ex => ;prune 5')
-            await ctx.send(embed=embed)
+            await ctx.self.send(embed=embed)
 
     # TODO: Add mute command
     # Create some function that applies a 'mute' role
