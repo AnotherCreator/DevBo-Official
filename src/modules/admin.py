@@ -37,9 +37,7 @@ class Admin(commands.Cog):
                 description=' ',
                 colour=discord.Colour.blurple()
             )
-            await ctx.send(embed=embed)
-            sleep(.5)
-            await ctx.channel.purge(limit=1)
+            await ctx.send(embed=embed, delete_after=5)
         except discord.ext.commands.errors.MissingRequiredArgument:
             embed = discord.Embed(
                 title='Error: Specify the amount of messages to be removed',
