@@ -31,22 +31,25 @@ class Admin(commands.Cog):
     # TODO: Add prune command
     @commands.command()
     async def prune(self, ctx, amount):
-        try:
-            await ctx.channel.purge(limit=int(amount) + 1)
+        await ctx.channel.purge(limit=int(amount) + 1)
+        embed = discord.Embed(
+            title=f'Successfully removed {amount} messages',
+            description=' ',
+            colour=discord.Colour.blurple()
+        )
+        await ctx.send(embed=embed, delete_after=2)
+
+    @prune.error()
+    async def prune_error(self,ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
             embed = discord.Embed(
-                title=f'Successfully removed {amount} messages',
-                description=' ',
-                colour=discord.Colour.blurple()
-            )
-            await ctx.send(embed=embed, delete_after=2)
-        except:
-            embed = discord.Embed(
-                title='Error: Specify the amount of messages to be removed',
+                title='Error: Specify amount of messages to be deleted',
                 description=' ',
                 colour=discord.Colour.red()
             )
-            embed.set_footer(text='ex => ;prune 5')
-            await ctx.send(embed=embed)
+            embed.set_footer(text='ex => ;prune 10')
+
+            await ctx.send(embed=embed, delete_after=2)
 
     # TODO: Add mute command
     # Create some function that applies a 'mute' role
