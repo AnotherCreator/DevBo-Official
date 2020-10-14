@@ -39,14 +39,14 @@ class Admin(commands.Cog):
                 colour=discord.Colour.blurple()
             )
             await ctx.send(embed=embed, delete_after=5)
-        except MissingRequiredArgument:
+        except commands.MissingRequiredArgument:
             embed = discord.Embed(
                 title='Error: Specify the amount of messages to be removed',
                 description=' ',
                 colour=discord.Colour.red()
             )
             embed.set_footer(text='ex => ;prune 5')
-            await ctx.self.send(embed=embed)
+            await ctx.send(embed=embed)
 
     # TODO: Add mute command
     # Create some function that applies a 'mute' role
