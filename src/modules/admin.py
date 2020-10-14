@@ -5,6 +5,7 @@ from discord.ext import commands
 from time import sleep
 
 # ---       MAIN LINE       ---#
+from discord.ext.commands import MissingRequiredArgument
 
 
 class Admin(commands.Cog):
@@ -38,7 +39,7 @@ class Admin(commands.Cog):
                 colour=discord.Colour.blurple()
             )
             await ctx.send(embed=embed, delete_after=5)
-        except discord.ext.commands.errors.MissingRequiredArgument:
+        except MissingRequiredArgument:
             embed = discord.Embed(
                 title='Error: Specify the amount of messages to be removed',
                 description=' ',

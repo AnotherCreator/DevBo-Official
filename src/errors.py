@@ -7,3 +7,6 @@ class Error(Exception):
 
     class ValueTooSmallError(Error):
         pass
+
+    class MissingRequiredArgument(Error):
+        pass
