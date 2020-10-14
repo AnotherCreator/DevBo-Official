@@ -38,8 +38,8 @@ class Admin(commands.Cog):
                 description=' ',
                 colour=discord.Colour.blurple()
             )
-            await ctx.send(embed=embed, delete_after=5)
-        except commands.MissingRequiredArgument:
+            await ctx.send(embed=embed, delete_after=2)
+        except:
             embed = discord.Embed(
                 title='Error: Specify the amount of messages to be removed',
                 description=' ',
