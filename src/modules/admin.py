@@ -39,7 +39,7 @@ class Admin(commands.Cog):
         )
         await ctx.send(embed=embed, delete_after=2)
 
-    @prune.error()
+    @prune.error
     async def prune_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             embed = discord.Embed(

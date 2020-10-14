@@ -133,7 +133,7 @@ class Market(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @crypto.error()
+    @crypto.error
     async def crypto_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             embed = discord.Embed(
