@@ -143,7 +143,7 @@ class Market(commands.Cog):
             )
             embed.set_footer(text='ex => ;crypto 1')
 
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, delete_after=5)
 
     @commands.command()
     async def cryptolist(self, ctx, page):
@@ -207,7 +207,7 @@ class Market(commands.Cog):
             )
             embed.set_footer(text='ex => ;cryptolist 1')
 
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, delete_after=5)
 
 
 # ---       END MAIN        ---#

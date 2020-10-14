@@ -49,7 +49,7 @@ class Admin(commands.Cog):
             )
             embed.set_footer(text='ex => ;prune 10')
 
-            await ctx.send(embed=embed, delete_after=2)
+            await ctx.send(embed=embed, delete_after=5)
 
     # TODO: Add mute command
     # Create some function that applies a 'mute' role
