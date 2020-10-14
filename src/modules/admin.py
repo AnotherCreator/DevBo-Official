@@ -26,7 +26,7 @@ class Admin(commands.Cog):
         )
         await ctx.send(embed=embed)
 
-    # TODO: Add prune command
+    # TODO: Add 'admin' only functionality
     @commands.command()
     async def prune(self, ctx, amount):
         if int(amount) > 0:
