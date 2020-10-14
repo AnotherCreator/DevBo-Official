@@ -40,7 +40,7 @@ class Admin(commands.Cog):
         await ctx.send(embed=embed, delete_after=2)
 
     @prune.error()
-    async def prune_error(self,ctx, error):
+    async def prune_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             embed = discord.Embed(
                 title='Error: Specify amount of messages to be deleted',
