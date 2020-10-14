@@ -1,12 +1,15 @@
-class Error(Exception):
+class MyError(Exception):
     class Error(Exception):
         pass
 
-    class ValueTooLargeError(Error):
+    class ValueTooLargeError(Exception):
         pass
 
-    class ValueTooSmallError(Error):
+    class ValueTooSmallError(Exception):
         pass
 
-    class MissingRequiredArgument(Error):
+    class InvalidValue(Exception):
+        pass
+
+    class MissingRequiredArgument(Exception):
         pass

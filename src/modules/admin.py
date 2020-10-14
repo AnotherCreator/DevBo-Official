@@ -2,10 +2,8 @@
 
 import discord
 from discord.ext import commands
-from time import sleep
 
 # ---       MAIN LINE       ---#
-from discord.ext.commands import MissingRequiredArgument
 
 
 class Admin(commands.Cog):
@@ -31,13 +29,21 @@ class Admin(commands.Cog):
     # TODO: Add prune command
     @commands.command()
     async def prune(self, ctx, amount):
-        await ctx.channel.purge(limit=int(amount) + 1)
-        embed = discord.Embed(
-            title=f'Successfully removed {amount} messages',
-            description=' ',
-            colour=discord.Colour.blurple()
-        )
-        await ctx.send(embed=embed, delete_after=2)
+        if int(amount) > 0:
+            await ctx.channel.purge(limit=int(amount) + 1)
+            embed = discord.Embed(
+                title=f'Successfully removed {amount} messages',
+                description=' ',
+                colour=discord.Colour.blurple()
+            )
+            await ctx.send(embed=embed, delete_after=2)
+        elif int(amount) <= 0:
+            embed = discord.Embed(
+                title='Error: The amount must be greater than 0',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            await ctx.send(embed=embed, delete_after=5)
 
     @prune.error
     async def prune_error(self, ctx, error):
