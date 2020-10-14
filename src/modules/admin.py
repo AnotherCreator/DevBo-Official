@@ -28,6 +28,7 @@ class Admin(commands.Cog):
 
     # TODO: Add 'admin' only functionality
     @commands.command()
+    @commands.has_permissions(manage_messages=True)
     async def prune(self, ctx, amount):
         if int(amount) > 0:
             await ctx.channel.purge(limit=int(amount) + 1)
