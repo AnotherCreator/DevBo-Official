@@ -60,14 +60,26 @@ class Admin(commands.Cog):
 
     # TODO: Add mute command
     # Create some function that applies a 'mute' role
-    # Creates a 'mute' role if it does not previously exist (Possibly easier to pre-make ...
-    # ... a mute role then apply it via function)
+    # Creates a 'mute' role if it does not previously exist
+    # (Possibly easier to pre-make a mute role then apply it via function)
     @commands.command()
     async def mute(self, ctx, message):
         embed = discord.Embed(
 
         )
         await ctx.send(message)
+
+    # TODO: Add unmute command
+    # This will either be a separate command that removes the 'mute' role
+    # or will use the already made 'mute' command
+
+    # If it uses the 'mute' command ==>
+        # Create some sort of check that determines whether a user has the 'mute' role or not
+        # If the user has the 'mute' role ==> Remove the role
+    # If it uses a separate command ==>
+        # Check if the user has the 'mute' role
+        # If the user has the 'mute' role ==> Remove the role
+        # If the user does not have the 'mute' role ==> Pass an error
 
 
 # ---       END MAIN        ---#
