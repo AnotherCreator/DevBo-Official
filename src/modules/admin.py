@@ -67,16 +67,16 @@ class Admin(commands.Cog):
     # @commands.has_role("The Elite 4")
     # Better, more general use
     @commands.has_guild_permissions(manage_roles=True)
-    async def check(self, ctx):
+    async def mute(self, ctx):
         embed = discord.Embed(
-            title='You are able to manage roles',
+            title='[TEMPORARY PLACEHOLDER]',
             description=' ',
-            colour=discord.Colour.blurple()
+            colour=discord.Colour.red()
         )
         await ctx.send(embed=embed, delete_after=5)
 
-    @check.error
-    async def check_error(self, ctx, error):
+    @mute.error
+    async def mute_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
             embed = discord.Embed(
                 title='Error: You are not able to manage roles',
