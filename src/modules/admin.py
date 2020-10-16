@@ -63,9 +63,12 @@ class Admin(commands.Cog):
     # Creates a 'mute' role if it does not previously exist
     # (Possibly easier to pre-make a mute role then apply it via function)
     @commands.command()
-    async def mute(self, ctx, message):
+    @commands.has_role("The Elite 4")
+    async def check(self, ctx, message):
         embed = discord.Embed(
-
+            title='You are a part of "The Elite 4',
+            description=' ',
+            colour=discord.Colour.blurple()
         )
         await ctx.send(message)
 
