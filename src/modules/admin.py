@@ -66,11 +66,21 @@ class Admin(commands.Cog):
     @commands.has_role("The Elite 4")
     async def check(self, ctx, message):
         embed = discord.Embed(
-            title='You are a part of "The Elite 4',
+            title='You are a part of "The Elite 4"',
             description=' ',
             colour=discord.Colour.blurple()
         )
         await ctx.send(message)
+
+    @check.error
+    async def check_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            embed = discord.Embed(
+                title='Error: You are not a part of "The Elite 4"',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            await ctx.send(embed=embed, delete_after=5)
 
     # TODO: Add unmute command
     # This will either be a separate command that removes the 'mute' role
