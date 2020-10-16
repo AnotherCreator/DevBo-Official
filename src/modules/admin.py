@@ -64,13 +64,13 @@ class Admin(commands.Cog):
     # (Possibly easier to pre-make a mute role then apply it via function)
     @commands.command()
     @commands.has_role("The Elite 4")
-    async def check(self, ctx, message):
+    async def check(self, ctx):
         embed = discord.Embed(
             title='You are a part of "The Elite 4"',
             description=' ',
             colour=discord.Colour.blurple()
         )
-        await ctx.send(embed)
+        await ctx.send(embed=embed)
 
     @check.error
     async def check_error(self, ctx, error):
