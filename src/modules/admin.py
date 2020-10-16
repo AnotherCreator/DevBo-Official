@@ -63,10 +63,13 @@ class Admin(commands.Cog):
     # Creates a 'mute' role if it does not previously exist
     # (Possibly easier to pre-make a mute role then apply it via function)
     @commands.command()
-    @commands.has_role("The Elite 4")
+    # Limited to one server
+    # @commands.has_role("The Elite 4")
+    # Better, more general use
+    @commands.has_guild_permissions(manage_roles=True)
     async def check(self, ctx):
         embed = discord.Embed(
-            title='You are a part of "The Elite 4"',
+            title='You are able to manage roles',
             description=' ',
             colour=discord.Colour.blurple()
         )
@@ -76,7 +79,7 @@ class Admin(commands.Cog):
     async def check_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
             embed = discord.Embed(
-                title='Error: You are not a part of "The Elite 4"',
+                title='Error: You are not able to manage roles',
                 description=' ',
                 colour=discord.Colour.red()
             )
