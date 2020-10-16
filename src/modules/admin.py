@@ -70,7 +70,7 @@ class Admin(commands.Cog):
             description=' ',
             colour=discord.Colour.blurple()
         )
-        await ctx.send(message)
+        await ctx.send(embed)
 
     @check.error
     async def check_error(self, ctx, error):
