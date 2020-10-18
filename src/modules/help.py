@@ -39,8 +39,8 @@ class Help(commands.Cog):
                 colour=discord.Colour.blurple()
             )
             embed.set_author(name='Commands List', icon_url=bot_avatar_link)
-            embed.add_field(name='UNDER CONSTRUCTION',
-                            value='COMING SOON',
+            embed.add_field(name=';prune [Amount]',
+                            value='Removes the amount of messages specified',
                             inline=False)
 
             await ctx.send(embed=embed)

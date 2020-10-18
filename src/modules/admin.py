@@ -17,7 +17,7 @@ class Admin(commands.Cog):
         embed = discord.Embed(
 
         )
-        await ctx.send(message)
+        await ctx.send(embed=embed)
 
     # TODO: Add ban command
     @commands.command()
@@ -26,7 +26,7 @@ class Admin(commands.Cog):
         embed = discord.Embed(
 
         )
-        await ctx.send(embed=embed)
+        await ctx.send(embed=embed, delete_after=2)
 
     @commands.command()
     @commands.has_guild_permissions(manage_messages=True)
@@ -67,7 +67,7 @@ class Admin(commands.Cog):
     # @commands.has_role("The Elite 4")
     # Better, more general use
     @commands.has_guild_permissions(manage_roles=True)
-    async def mute(self, ctx):
+    async def mute(self, ctx, message):
         embed = discord.Embed(
             title='[TEMPORARY PLACEHOLDER]',
             description=' ',
@@ -80,6 +80,13 @@ class Admin(commands.Cog):
         if isinstance(error, commands.CheckFailure):
             embed = discord.Embed(
                 title='Error: You are not able to manage roles',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            await ctx.send(embed=embed, delete_after=5)
+        elif isinstance(error, commands.MissingRequiredArgument):
+            embed = discord.Embed(
+                title='Error: Specify user',
                 description=' ',
                 colour=discord.Colour.red()
             )
