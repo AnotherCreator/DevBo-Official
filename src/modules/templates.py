@@ -31,6 +31,9 @@ class Templates(commands.Cog):
 
         await ctx.send(embed=embed)
 
+    # TODO: Add a server 'template' that allows a user to type a command which makes the bot send multiple ...
+    # TODO: ... messages that introduces all the majority of its commands (excluding administration commands)
+    # TODO: Administration commands can go in a separate 'mod only' chat
 
 # ---       END MAIN        ---#
 def setup(bot):
