@@ -67,7 +67,7 @@ class Admin(commands.Cog):
     async def mute(self, ctx, user: discord.Member):
         await user.add_roles('Mute')
         embed = discord.Embed(
-            title=f'{discord.Member} has been muted',
+            title=f'{user} has been muted',
             description=' ',
             colour=discord.Colour.red()
         )
