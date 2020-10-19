@@ -67,9 +67,10 @@ class Admin(commands.Cog):
     # @commands.has_role("The Elite 4")
     # Better, more general use
     @commands.has_guild_permissions(manage_roles=True)
-    async def mute(self, ctx, message):
+    async def mute(self, ctx, user: discord.Member, role: discord.Role):
+        await user.add_roles(role)
         embed = discord.Embed(
-            title='[TEMPORARY PLACEHOLDER]',
+            title=f'{discord.Member} has been muted',
             description=' ',
             colour=discord.Colour.red()
         )
