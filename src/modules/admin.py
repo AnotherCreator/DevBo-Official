@@ -58,15 +58,11 @@ class Admin(commands.Cog):
             embed.set_footer(text='ex => ;prune 10')
             await ctx.send(embed=embed, delete_after=5)
 
-    # TODO: Add mute command
-    # Create some function that applies a 'mute' role
-    # Creates a 'mute' role if it does not previously exist
-    # (Possibly easier to pre-make a mute role then apply it via function)
     @commands.command()
     @commands.has_guild_permissions(manage_roles=True)
     async def mute(self, ctx, user: discord.Member):
         mute_role = discord.utils.get(ctx.guild.roles, name='Mute')
-        if user.has_role(mute_role):
+        if user.has_role('Mute'):
             embed = discord.Embed(
                 title=f'{user} is now unmute',
                 description=' ',
