@@ -42,6 +42,12 @@ class Help(commands.Cog):
             embed.add_field(name=';prune [Amount]',
                             value='Removes the amount of messages specified',
                             inline=False)
+            embed.add_field(name=';mute [@user / user ID]',
+                            value='Mutes the specified user',
+                            inline=False)
+            embed.add_field(name=';unmute [@user / user ID]',
+                            value='Unmutes the specified user',
+                            inline=False)
 
             await ctx.send(embed=embed)
         elif module == 'Info' or module == 'info':
