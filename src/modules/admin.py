@@ -66,7 +66,7 @@ class Admin(commands.Cog):
     @commands.has_guild_permissions(manage_roles=True)
     async def mute(self, ctx, user: discord.Member):
         mute_role = discord.utils.get(ctx.guild.roles, name='Mute')
-        if user.has_role() != 'Mute':
+        if user.has_role(mute_role) != mute_role:
             await user.add_roles(mute_role)
             embed = discord.Embed(
                 title=f'{user} has been muted',
