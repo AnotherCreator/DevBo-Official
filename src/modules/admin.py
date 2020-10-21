@@ -65,21 +65,13 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.has_guild_permissions(manage_roles=True)
     async def mute(self, ctx, user: discord.Member, role: discord.Role):
-        if user.has_role(role) != role:
-            await user.add_roles(role, reason=None, atomic=True)
-            embed = discord.Embed(
-                title=f'{user} has been muted',
-                description=' ',
-                colour=discord.Colour.red()
-            )
-            await ctx.send(embed=embed, delete_after=5)
-        elif user.has_role(role) == role:
-            embed = discord.Embed(
-                title=f'{user} is already muted',
-                description=' ',
-                colour=discord.Colour.red()
-            )
-            await ctx.send(embed=embed, delete_after=5)
+        await user.add_roles(role)
+        embed = discord.Embed(
+            title=f'{discord.Member} has been muted',
+            description=' ',
+            colour=discord.Colour.red()
+        )
+        await ctx.send(embed=embed, delete_after=5)
 
     @mute.error
     async def mute_error(self, ctx, error):
