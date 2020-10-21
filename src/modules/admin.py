@@ -95,7 +95,7 @@ class Admin(commands.Cog):
         embed = discord.Embed(
             title=f'{user} is unmuted',
             description=' ',
-            colour=discord.Colour.red()
+            colour=discord.Colour.green()
         )
         await ctx.send(embed=embed, delete_after=5)
 
