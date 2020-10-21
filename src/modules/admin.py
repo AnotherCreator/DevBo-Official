@@ -92,7 +92,7 @@ class Admin(commands.Cog):
     async def roletest(self, ctx, user: discord.Member):
         role = discord.utils.get(ctx.guild.roles, name='Role')
         if ctx.guild.user.has_role(role):
-            await user.add_roles(role)
+            await ctx.guild.user.add_roles(role)
             embed = discord.Embed(
                 title=f'{user} has has been given Role',
                 description=' ',
@@ -100,7 +100,7 @@ class Admin(commands.Cog):
             )
             await ctx.send(embed=embed, delete_after=5)
         else:
-            await user.add_roles(role)
+            await ctx.guild.user.add_roles(role)
             embed = discord.Embed(
                 title=f'{user} has has been given Role',
                 description=' ',
