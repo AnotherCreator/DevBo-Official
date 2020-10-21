@@ -62,21 +62,13 @@ class Admin(commands.Cog):
     @commands.has_guild_permissions(manage_roles=True)
     async def mute(self, ctx, user: discord.Member):
         mute_role = discord.utils.get(ctx.guild.roles, name='Mute')
-        if discord.Member.has_role('Mute'):
-            embed = discord.Embed(
-                title=f'{user} is now unmute',
-                description=' ',
-                colour=discord.Colour.red()
-            )
-            await ctx.send(embed=embed, delete_after=5)
-        else:
-            await user.add_roles(mute_role)
-            embed = discord.Embed(
-                title=f'{user} has been muted',
-                description=' ',
-                colour=discord.Colour.red()
-            )
-            await ctx.send(embed=embed, delete_after=5)
+        await user.add_roles(mute_role)
+        embed = discord.Embed(
+            title=f'{user} has been muted',
+            description=' ',
+            colour=discord.Colour.red()
+        )
+        await ctx.send(embed=embed, delete_after=5)
 
     @mute.error
     async def mute_error(self, ctx, error):
