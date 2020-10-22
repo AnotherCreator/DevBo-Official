@@ -99,6 +99,23 @@ class Admin(commands.Cog):
         )
         await ctx.send(embed=embed, delete_after=5)
 
+    @unmute.error
+    async def unmute_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            embed = discord.Embed(
+                title='Error: You are not able to manage roles',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            await ctx.send(embed=embed, delete_after=5)
+        elif isinstance(error, commands.MissingRequiredArgument):
+            embed = discord.Embed(
+                title='Error: Specify user',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            await ctx.send(embed=embed, delete_after=5)
+
 
 # ---       END MAIN        ---#
 def setup(bot):
