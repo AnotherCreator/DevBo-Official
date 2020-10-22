@@ -18,7 +18,7 @@ class Help(commands.Cog):
     @commands.command()
     async def help(self, ctx):
         embed = discord.Embed(
-            title='Use ``;more __Module Name__`` to get more info',
+            title='Use ``;more`` __``Module Name``__ to get more info',
             description='• Administration\n'
                         '• Info\n'
                         '• Market\n'
@@ -39,13 +39,13 @@ class Help(commands.Cog):
                 colour=discord.Colour.blurple()
             )
             embed.set_author(name='Commands List', icon_url=bot_avatar_link)
-            embed.add_field(name=';prune [Amount]',
+            embed.add_field(name=';prune __Amount__',
                             value='Removes the amount of messages specified',
                             inline=False)
-            embed.add_field(name=';mute [@user / user ID]',
+            embed.add_field(name=';mute __@user / user ID__',
                             value='Mutes the specified user',
                             inline=False)
-            embed.add_field(name=';unmute [@user / user ID]',
+            embed.add_field(name=';unmute __@user / user ID__',
                             value='Unmutes the specified user',
                             inline=False)
 
@@ -67,10 +67,10 @@ class Help(commands.Cog):
                 colour=discord.Colour.blurple()
             )
             embed.set_author(name='Commands List', icon_url=bot_avatar_link)
-            embed.add_field(name=';crypto [1-50]',
+            embed.add_field(name=';crypto __1-50__',
                             value='Displays Name / Current Price / Percent Change',
                             inline=False)
-            embed.add_field(name=';cryptolist [1-5]',
+            embed.add_field(name=';cryptolist __1-5__',
                             value='Displays the top 50 coins',
                             inline=False)
 
