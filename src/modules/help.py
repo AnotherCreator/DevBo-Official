@@ -18,7 +18,7 @@ class Help(commands.Cog):
     @commands.command()
     async def help(self, ctx):
         embed = discord.Embed(
-            title='Use *;more** __**Module Name*__ to get more info',
+            title='Use *;more* __*Module Name*__ to get more info',
             description='• Administration\n'
                         '• Info\n'
                         '• Market\n'
