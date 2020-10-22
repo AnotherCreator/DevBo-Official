@@ -48,6 +48,7 @@ class Help(commands.Cog):
             embed.add_field(name=';unmute __@user / user ID__',
                             value='Unmutes the specified user',
                             inline=False)
+            embed.set_footer(text='User IDs can be found by turning on "Developer Mode"')
 
             await ctx.send(embed=embed)
         elif module == 'Info' or module == 'info':
