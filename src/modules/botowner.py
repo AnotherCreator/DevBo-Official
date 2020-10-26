@@ -15,7 +15,7 @@ class BotOwner(commands.cog):
         channel = self.bot.get_channel(768626068629880902)
 
         embed = discord.Embed(
-            title='Test',
+            title=f'{message}',
             description='',
             colour=discord.Color.blurple()
         )
