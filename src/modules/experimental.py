@@ -22,12 +22,12 @@ class Experimental(commands.Cog):
 
     @commands.command()
     async def reactionembed(self, ctx):
-        discord.Embed(
+        embed = discord.Embed(
             title='Test',
             description='Test',
             colour=discord.Colour.blurple()
         )
-        await ctx.message.add_reaction('👌')
+        await ctx.send.add_reaction(embed=embed, '👌')
 
     @commands.command()
     async def pic(self, ctx):
