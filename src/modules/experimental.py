@@ -17,7 +17,16 @@ class Experimental(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def reactiontest(self, ctx, message):
+    async def reactiontext(self, ctx, message):
+        await ctx.message.add_reaction('👌')
+
+    @commands.command()
+    async def reactionembed(self, ctx):
+        discord.Embed(
+            title='Test',
+            description='Test',
+            colour=discord.Colour.blurple()
+        )
         await ctx.message.add_reaction('👌')
 
     @commands.command()
