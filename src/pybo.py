@@ -24,6 +24,20 @@ def bot_owner_check(ctx):
 # ---       MAIN LINE        ---#
 
 
+@commands.command()
+@commands.check(bot_owner_check)
+async def updatelogs(self, message):
+    # 'update-notes' channel
+    channel = self.bot.get_channel(768626068629880902)
+    embed = discord.Embed(
+        title=f'{message}',
+        description='',
+        colour=discord.Colour.blurple()
+    )
+
+    await channel.send(embed=embed)
+
+
 @bot.event
 async def on_ready():
     await bot.change_presence(status=discord.Status.online, activity=discord.Game('For more info | ;help'))
