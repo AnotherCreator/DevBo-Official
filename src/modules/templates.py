@@ -1,12 +1,15 @@
+# ---       IMPORTS          ---#
+
 import discord
 from discord.ext import commands
+
+# ---       MAIN LINE       ---#
 
 
 class Templates(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # Commands
     @commands.command()
     async def template(self, ctx):
         embed = discord.Embed(
@@ -34,6 +37,7 @@ class Templates(commands.Cog):
     # TODO: Add a server 'template' that allows a user to type a command which makes the bot send multiple ...
     # TODO: ... messages that introduces all the majority of its commands (excluding administration commands)
     # TODO: Administration commands can go in a separate 'mod only' chat
+
 
 # ---       END MAIN        ---#
 def setup(bot):
