@@ -130,7 +130,8 @@ class Market(commands.Cog):
                 colour=discord.Colour.red()
             )
 
-        await ctx.send.message.add_reaction('◀️', embed=embed)
+        await ctx.add_reaction('◀️')
+        await ctx.send(embed=embed)
 
 
     @crypto.error
