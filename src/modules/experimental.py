@@ -17,8 +17,8 @@ class Experimental(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def reactiontest(self, message):
-        await message.add_reaction('👌')
+    async def reactiontest(self, ctx, message):
+        await ctx.message.add_reaction('👌')
 
     @commands.command()
     async def pic(self, ctx):
