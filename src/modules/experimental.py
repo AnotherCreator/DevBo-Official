@@ -18,7 +18,7 @@ class Experimental(commands.Cog):
 
     @commands.command()
     async def reactiontext(self, ctx, message):
-        emoji = ctx.get_emoji(770433765038227477)
+        emoji = self.bot.get_emoji(770433765038227477)
         await ctx.message.add_reaction(emoji)
 
     @commands.command()
