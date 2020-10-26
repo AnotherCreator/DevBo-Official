@@ -24,7 +24,7 @@ def bot_owner_check(ctx):
 # ---       MAIN LINE        ---#
 
 
-@commands.command()
+@bot.command()
 @commands.check(bot_owner_check)
 async def updatelogs(self, message):
     # 'update-notes' channel
