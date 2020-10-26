@@ -18,16 +18,18 @@ class Experimental(commands.Cog):
 
     @commands.command()
     async def reactiontext(self, ctx, message):
-        await ctx.message.add_reaction('👌')
+        emoji = ctx.get_emoji(770433765038227477)
+        await ctx.message.add_reaction(emoji)
 
     @commands.command()
     async def reactionembed(self, ctx):
+        emoji = '👌'
         embed = discord.Embed(
             title='Test',
             description='Test',
             colour=discord.Colour.blurple()
         )
-        await ctx.send.add_reaction(embed=embed, '👌')
+        await ctx.send.add_reaction(embed=embed,)
 
     @commands.command()
     async def pic(self, ctx):
