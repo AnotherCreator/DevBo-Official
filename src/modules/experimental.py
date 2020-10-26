@@ -17,6 +17,10 @@ class Experimental(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    async def reactiontest(self, message):
+        await message.add_reaction('👌')
+
+    @commands.command()
     async def pic(self, ctx):
 
         random_int = random.randint(1, 100000)
