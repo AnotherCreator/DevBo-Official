@@ -11,7 +11,7 @@ class BotOwner(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def updatelogs(self, ctx, message):
+    async def updatelogs(self, message):
         # 'update-notes' channel
         channel = self.bot.get_channel(768626068629880902)
         embed = discord.Embed(
@@ -20,7 +20,7 @@ class BotOwner(commands.Cog):
             colour=discord.Colour.blurple()
         )
 
-        await ctx.channel.send(embed=embed)
+        await channel.send(embed=embed)
 
 
 # ---       END MAIN        ---#
