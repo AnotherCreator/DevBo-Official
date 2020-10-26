@@ -130,7 +130,7 @@ class Market(commands.Cog):
                 colour=discord.Colour.red()
             )
 
-        await ctx.add_reaction('◀️')
+        await ctx.add_reaction('👌')
         await ctx.send(embed=embed)
 
 
