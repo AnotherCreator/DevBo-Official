@@ -5,8 +5,8 @@ import os
 from discord.ext import commands
 from dotenvy import load_env, read_file
 
-# ---       GLOBAL VARIABLES          ---#
 
+# ---       GLOBAL VARIABLES          ---#
 load_env(read_file('.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
@@ -14,23 +14,24 @@ OWNER_ID = os.environ.get('OWNER_ID')
 bot = commands.Bot(command_prefix=';')
 bot.remove_command('help')
 
-# ---       FUNCTIONS        ---#
 
-
+# ---       FUNCTIONS        --- #
 def bot_owner_check(ctx):
     if ctx.author.id == int(OWNER_ID):
         return ctx.author.id
 
-# ---       MAIN LINE        ---#
 
+# ---       MAIN LINE        --- #
 
+# TODO: Update log command
 @bot.command()
 @commands.check(bot_owner_check)
 async def updatelogs(self, message):
     # 'update-notes' channel
     channel = self.bot.get_channel(768626068629880902)
+
     embed = discord.Embed(
-        title=f'{message}',
+        title=f'',
         description='',
         colour=discord.Colour.blurple()
     )
@@ -38,6 +39,7 @@ async def updatelogs(self, message):
     await channel.send(embed=embed)
 
 
+# ---       LOAD MODULES           --- #
 @bot.event
 async def on_ready():
     await bot.change_presence(status=discord.Status.online, activity=discord.Game('For more info | ;help'))

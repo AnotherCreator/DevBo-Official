@@ -104,7 +104,6 @@ class Market(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # Commands
     @commands.command()
     async def crypto(self, ctx, message):
         name()
@@ -131,7 +130,8 @@ class Market(commands.Cog):
                 colour=discord.Colour.red()
             )
 
-        await ctx.send(embed=embed)
+        await ctx.send.message.add_reaction('◀️', embed=embed)
+
 
     @crypto.error
     async def crypto_error(self, ctx, error):
