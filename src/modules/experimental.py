@@ -23,7 +23,7 @@ class Experimental(commands.Cog):
             await ctx.message.add_reaction(emoji)
 
     @commands.command()
-    async def reactionembed(self, ctx):
+    async def reactionembed(self, ctx, message):
         emoji_list = ['◀', '▶']
         embed = discord.Embed(
             title='Test',
@@ -31,7 +31,7 @@ class Experimental(commands.Cog):
             colour=discord.Colour.blurple()
         )
         for emoji in emoji_list:
-            await ctx.add_reaction(emoji)
+            await ctx.message.add_reaction(emoji)
         await ctx.send(embed=embed)
 
     @commands.command()
