@@ -24,13 +24,15 @@ class Experimental(commands.Cog):
 
     @commands.command()
     async def reactionembed(self, ctx):
-        emoji = '◀'
+        emoji_list = ['◀', '▶']
         embed = discord.Embed(
             title='Test',
             description='Test',
             colour=discord.Colour.blurple()
         )
-        await ctx.send.add_reaction(embed=embed,)
+        for emoji in emoji_list:
+            await ctx.add_reaction(emoji)
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def pic(self, ctx):
