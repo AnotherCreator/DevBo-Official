@@ -18,12 +18,12 @@ class Experimental(commands.Cog):
 
     @commands.command()
     async def reactiontext(self, ctx, message):
-        emoji = '◀'
+        emoji = ['◀', '▶']
         await ctx.message.add_reaction(emoji)
 
     @commands.command()
     async def reactionembed(self, ctx):
-        emoji = '👌'
+        emoji = '◀'
         embed = discord.Embed(
             title='Test',
             description='Test',
