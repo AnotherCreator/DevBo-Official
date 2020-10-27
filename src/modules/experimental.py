@@ -18,7 +18,7 @@ class Experimental(commands.Cog):
 
     @commands.command()
     async def reactiontext(self, ctx, message):
-        emoji = discord.utils.get('<:lirikCAPPY:770433765038227477>')
+        emoji = '◀'
         await ctx.message.add_reaction(emoji)
 
     @commands.command()
