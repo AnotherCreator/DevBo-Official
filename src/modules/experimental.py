@@ -32,7 +32,7 @@ class Experimental(commands.Cog):
         )
         await ctx.send(embed=embed)
         for emoji in emoji_list:
-            await self.bot.message.add_reaction(emoji)
+            await self.bot.embed.add_reaction(emoji)
 
     @commands.command()
     async def pic(self, ctx):
