@@ -26,13 +26,13 @@ class Experimental(commands.Cog):
     async def reactionembed(self, ctx, message):
         emoji_list = ['◀', '▶']
         embed = discord.Embed(
-            title='Test',
-            description='Test',
+            title='Embed reaction testing',
+            description='',
             colour=discord.Colour.blurple()
         )
         await ctx.send(embed=embed)
         for emoji in emoji_list:
-            await self.bot.add_reaction(emoji)
+            await self.bot.message.add_reaction(emoji)
 
     @commands.command()
     async def pic(self, ctx):
