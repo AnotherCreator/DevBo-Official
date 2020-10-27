@@ -18,9 +18,9 @@ class Experimental(commands.Cog):
 
     @commands.command()
     async def reactiontext(self, ctx, message):
-        emoji1 = '◀'
-        emoji2 = '▶'
-        await ctx.message.add_reaction(emoji1, emoji2)
+        emoji_list = ['◀', '▶']
+        for emoji in emoji_list:
+            await ctx.message.add_reaction(emoji)
 
     @commands.command()
     async def reactionembed(self, ctx):
