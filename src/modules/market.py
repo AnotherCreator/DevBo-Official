@@ -112,6 +112,8 @@ class Market(commands.Cog):
         prices()
         percent()
 
+        emoji_list = ['◀', '▶']
+
         embed = discord.Embed(
             title=str(coin_prices.get(int(coin_number) + (-1))),
             description=' ',
@@ -131,7 +133,9 @@ class Market(commands.Cog):
                 colour=discord.Colour.red()
             )
 
-        await ctx.send(embed=embed)
+        message_embed = await ctx.send(embed=embed)
+        for emoji in emoji_list:
+            await message_embed.add_reaction(emoji)
 
     @crypto.error
     async def crypto_error(self, ctx, error):
@@ -149,6 +153,8 @@ class Market(commands.Cog):
     async def cryptolist(self, ctx, page):
         name()
         prices()
+
+        emoji_list = ['◀', '▶']
 
         embed = discord.Embed(
             title=' ',
@@ -195,7 +201,9 @@ class Market(commands.Cog):
                                 inline=False)
                 counter += 1
 
-        await ctx.send(embed=embed)
+        message_embed = await ctx.send(embed=embed)
+        for emoji in emoji_list:
+            await message_embed.add_reaction(emoji)
 
     @cryptolist.error
     async def cryptolist_error(self, ctx, error):
