@@ -111,7 +111,6 @@ class Market(commands.Cog):
         icons()
         prices()
         percent()
-
         emoji_list = ['◀', '▶']
 
         embed = discord.Embed(
@@ -122,7 +121,7 @@ class Market(commands.Cog):
         embed.set_footer(text=site)
         if 0 < int(coin_number) <= 50:
             embed.set_author(
-                name=str(coin_names.get(int(coin_number) + (-1))),
+                name=f'{coin_number}. {str(coin_names.get(int(coin_number) + (-1)))}',
                 icon_url=f'https://coinlib.io/{str(coin_icons.get(int(coin_number) + (-1)))}'
             )
             embed.add_field(name='24 Hour Change', value=str(coin_percent.get(int(coin_number) + (-1))), inline=False)
@@ -153,7 +152,6 @@ class Market(commands.Cog):
     async def cryptolist(self, ctx, page):
         name()
         prices()
-
         emoji_list = ['◀', '▶']
 
         embed = discord.Embed(
