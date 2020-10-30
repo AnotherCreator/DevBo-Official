@@ -20,7 +20,7 @@ class Experimental(commands.Cog):
     async def reactiontext(self, ctx, message):
         emoji_list = ['◀', '▶']
         for emoji in emoji_list:
-            await message.add_reaction(emoji)
+            await ctx.message.add_reaction(emoji)
 
     @commands.command()
     async def reactionembed(self, ctx, message):
