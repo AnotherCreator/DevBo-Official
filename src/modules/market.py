@@ -83,6 +83,7 @@ def prices():
             clean_price = clean_price.replace('USDC', ' \nUSDC')
             clean_price = clean_price.replace('ETH', ' \nETH')
             clean_price = clean_price.replace('DAI', ' \nDAI')
+            clean_price = clean_price.replace('$ 1ERD  46', '')
             clean_prices[counter] = clean_price
             counter += 1
 
@@ -90,7 +91,7 @@ def prices():
     counter2 = 0    # Checks dict for even #'s and adds them to the new dict
     counter3 = 0    # New dict starting from '0'
     for price in clean_prices:
-        if price % 2 == 0:
+        if price % 2 == 1:
             coin_prices[counter3] = clean_prices[counter2]
             counter2 += 1
             counter3 += 1
