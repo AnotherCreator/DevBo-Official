@@ -30,7 +30,7 @@ class Admin(commands.Cog):
 
     @commands.command()
     @commands.has_guild_permissions(manage_messages=True)
-    async def prune(self, ctx, amount):
+    async def prune(self, ctx, amount=5):
         if int(amount) > 0:
             await ctx.channel.purge(limit=int(amount) + 1)
             embed = discord.Embed(
