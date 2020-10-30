@@ -105,24 +105,24 @@ class Market(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def crypto(self, ctx, message):
+    async def crypto(self, ctx, coin_number):
         name()
         icons()
         prices()
         percent()
 
         embed = discord.Embed(
-            title=str(coin_prices.get(int(message) + (-1))),
+            title=str(coin_prices.get(int(coin_number) + (-1))),
             description=' ',
             colour=discord.Colour.blurple()
         )
         embed.set_footer(text=site)
-        if 0 < int(message) <= 50:
+        if 0 < int(coin_number) <= 50:
             embed.set_author(
-                name=str(coin_names.get(int(message) + (-1))),
-                icon_url=f'https://coinlib.io/{str(coin_icons.get(int(message) + (-1)))}'
+                name=str(coin_names.get(int(coin_number) + (-1))),
+                icon_url=f'https://coinlib.io/{str(coin_icons.get(int(coin_number) + (-1)))}'
             )
-            embed.add_field(name='24 Hour Change', value=str(coin_percent.get(int(message) + (-1))), inline=False)
+            embed.add_field(name='24 Hour Change', value=str(coin_percent.get(int(coin_number) + (-1))), inline=False)
         else:
             embed = discord.Embed(
                 title='Invalid Number',
