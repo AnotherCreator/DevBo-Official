@@ -87,15 +87,15 @@ def prices():
             counter += 1
 
     # Creates a new dict removing all the blank keys from 'clean_prices'
-    counter2 = 0    # Checks dict for even #'s and adds them to the new dict
-    counter3 = 0    # New dict starting from '0'
-    for price in clean_prices:
-        if price % 2 == 0:
-            coin_prices[counter3] = clean_prices[counter2 + 1]
-            counter2 += 1
-            counter3 += 1
-        else:
-            counter2 += 1
+    #counter2 = 0    # Checks dict for even #'s and adds them to the new dict
+    #counter3 = 0    # New dict starting from '0'
+    #for price in clean_prices:
+        #if price % 2 == 0:
+            #coin_prices[counter3] = clean_prices[counter2 + 1]
+            #counter2 += 1
+            #counter3 += 1
+        #else:
+            #counter2 += 1
 
 # ---       MAIN LINE       ---#
 
