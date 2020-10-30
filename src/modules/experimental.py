@@ -30,9 +30,9 @@ class Experimental(commands.Cog):
             description='',
             colour=discord.Colour.blurple()
         )
-        await ctx.send(embed=embed)
+        message_embed = await ctx.send(embed=embed)
         for emoji in emoji_list:
-            await self.bot.embed.add_reaction(emoji)
+            await message_embed.add_reaction(emoji)
 
     @commands.command()
     async def pic(self, ctx):
