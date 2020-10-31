@@ -13,6 +13,7 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
+    # '*' allows admins to send full length messages, ignoring the spaces
     async def kick(self, ctx, user: discord.Member, *, reason=None):
         await user.kick(reason=reason)
         embed = discord.Embed(
@@ -25,6 +26,7 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
+    # '*' allows admins to send full length messages, ignoring the spaces
     async def ban(self, ctx, user: discord.Member, *, reason=None):
         await user.ban(reason=reason)
         embed = discord.Embed(
@@ -102,7 +104,7 @@ class Admin(commands.Cog):
                 description=' ',
                 colour=discord.Colour.red()
             )
-            embed.set_footer(text='ex => ;unban **UserID**')
+            embed.set_footer(text='ex => ;kick UserID / @User')
             await ctx.send(embed=embed, delete_after=5)
         elif isinstance(error, commands.CheckFailure):
             embed = discord.Embed(
@@ -120,7 +122,7 @@ class Admin(commands.Cog):
                 description=' ',
                 colour=discord.Colour.red()
             )
-            embed.set_footer(text='ex => ;unban **UserID**')
+            embed.set_footer(text='ex => ;ban UserID / @User')
             await ctx.send(embed=embed, delete_after=5)
         elif isinstance(error, commands.CheckFailure):
             embed = discord.Embed(
@@ -138,7 +140,7 @@ class Admin(commands.Cog):
                 description=' ',
                 colour=discord.Colour.red()
             )
-            embed.set_footer(text='ex => ;unban **UserID**')
+            embed.set_footer(text='ex => ;unban UserID / @User')
             await ctx.send(embed=embed, delete_after=5)
         elif isinstance(error, commands.CheckFailure):
             embed = discord.Embed(
