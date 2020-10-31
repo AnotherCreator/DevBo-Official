@@ -40,7 +40,7 @@ class Admin(commands.Cog):
     # Allows banning via UserID
     @commands.command()
     @commands.has_guild_permissions(ban_members=True)
-    async def banid(self, ctx, userid, *, reason=None):
+    async def idban(self, ctx, userid, *, reason=None):
         user = discord.Object(id=userid)
         await ctx.guild.ban(user, reason=reason)
         embed = discord.Embed(
