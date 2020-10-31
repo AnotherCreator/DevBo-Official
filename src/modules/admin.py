@@ -39,7 +39,6 @@ class Admin(commands.Cog):
 
     # Allows banning via UserID
     @commands.command()
-    @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
     async def banid(self, ctx, userid, *, reason=None):
         user = discord.Object(id=userid)
