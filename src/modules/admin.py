@@ -43,10 +43,9 @@ class Admin(commands.Cog):
     @commands.has_guild_permissions(ban_members=True)
     async def banid(self, ctx, userid, *, reason=None):
         user = discord.Object(id=userid)
-        username = discord.Member.get_user(userid)
         await ctx.guild.ban(user, reason=reason)
         embed = discord.Embed(
-            title=f'Banned {userid}, {username}',
+            title=f'Banned {userid}',
             description=' ',
             colour=discord.Colour.red()
         )
