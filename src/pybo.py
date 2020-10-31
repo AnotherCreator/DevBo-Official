@@ -44,7 +44,7 @@ async def on_ready():
 @commands.check(bot_owner_check)
 async def updatelogs(ctx, *, message):
     # 'update-notes' channel
-    channel = ctx.get_channel(768626068629880902)
+    channel = bot.get_channel(768626068629880902)
 
     embed = discord.Embed(
         title=f'{message}',
