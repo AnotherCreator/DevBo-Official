@@ -2,6 +2,7 @@
 
 import discord
 import os
+from datetime import date
 from discord.ext import commands, tasks
 from dotenvy import load_env, read_file
 from itertools import cycle
