@@ -19,7 +19,7 @@ class Admin(commands.Cog):
         embed = discord.Embed(
             title=f'Kicked {user}',
             description=' ',
-            colour=discord.Colour.blurple()
+            colour=discord.Colour.red()
         )
         await ctx.send(embed=embed, delete_after=10)
 
@@ -33,7 +33,7 @@ class Admin(commands.Cog):
         embed = discord.Embed(
             title=f'Banned {user}',
             description=' ',
-            colour=discord.Colour.blurple()
+            colour=discord.Colour.red()
         )
         await ctx.send(embed=embed, delete_after=10)
 
@@ -57,7 +57,7 @@ class Admin(commands.Cog):
     @commands.has_guild_permissions(ban_members=True)
     async def unban(self, ctx, userid, *, reason=None):
         user = discord.Object(id=userid)
-        username = self.bot.get_user(userid)
+        username = discord.Member.get_user(userid)
         await ctx.guild.unban(user, reason=reason)
         embed = discord.Embed(
             title=f'Unbanned {userid}, {username}',
