@@ -39,12 +39,26 @@ async def on_ready():
     print(f'{bot.user.name} is ready!')
 
 
-# TODO: Update log command
 @bot.command()
 @commands.check(bot_owner_check)
 async def updatelogs(ctx, *, message):
     # 'update-notes' channel
     channel = bot.get_channel(768626068629880902)
+
+    embed = discord.Embed(
+        title='',
+        description=f'{message}',
+        colour=discord.Colour.blurple()
+    )
+
+    await channel.send(embed=embed)
+
+
+@bot.command()
+@commands.check(bot_owner_check)
+async def updateissues(ctx, *, message):
+    # 'known-issues' channel
+    channel = bot.get_channel(772224003833069618)
 
     embed = discord.Embed(
         title='',
