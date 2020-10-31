@@ -36,6 +36,16 @@ class Admin(commands.Cog):
         )
         await ctx.send(embed=embed, delete_after=10)
 
+    async def ban(self, ctx, userid):
+        user = discord.Object(id=userid)
+        await ctx.guild.ban(user)
+        embed = discord.Embed(
+            title=f'banned {userid}',
+            description=' ',
+            colour=discord.Colour.red()
+        )
+        await ctx.send(embed=embed, delete_after=10)
+
     @commands.command()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
