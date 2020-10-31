@@ -43,10 +43,9 @@ class Admin(commands.Cog):
     @commands.has_guild_permissions(ban_members=True)
     async def ban(self, ctx, userid, *, reason=None):
         user = discord.Object(id=userid)
-        username = ctx.get_user(userid)
         await ctx.guild.ban(user, reason=reason)
         embed = discord.Embed(
-            title=f'Banned {username}',
+            title=f'Banned {user}',
             description=' ',
             colour=discord.Colour.red()
         )
@@ -59,7 +58,7 @@ class Admin(commands.Cog):
         user = discord.Object(id=userid)
         await ctx.guild.unban(user)
         embed = discord.Embed(
-            title=f'Unbanned {ctx.get_user(userid)}',
+            title=f'Unbanned {user}',
             description=' ',
             colour=discord.Colour.red()
         )
