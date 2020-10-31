@@ -10,23 +10,42 @@ class Admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # TODO: Add kick command
     @commands.command()
+    @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
-    async def kick(self, ctx, message):
+    async def kick(self, ctx, user: discord.Member, *, reason=None):
+        await user.kick(reason=reason)
         embed = discord.Embed(
-
+            title=f'{ctx}  ',
+            description=' ',
+            colour=discord.Colour.blurple()
         )
-        await ctx.send(embed=embed)
+        await ctx.send(embed=embed, delete_after=10)
 
-    # TODO: Add ban command
     @commands.command()
+    @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    async def ban(self, ctx, message):
+    async def ban(self, ctx, user: discord.Member, *, reason=None):
+        await user.ban(reason=reason)
         embed = discord.Embed(
-
+            title=f'{ctx}  ',
+            description=' ',
+            colour=discord.Colour.blurple()
         )
-        await ctx.send(embed=embed, delete_after=2)
+        await ctx.send(embed=embed, delete_after=10)
+
+    @commands.command()
+    @commands.guild_only()
+    @commands.has_guild_permissions(ban_members=True)
+    async def unban(self, ctx, userid):
+        user = discord.Object(id=userid)
+        await ctx.guild.unban(user)
+        embed = discord.Embed(
+            title=f'Unbanned {userid}',
+            description=' ',
+            colour=discord.Colour.red()
+        )
+        await ctx.send(embed=embed, delete_after=10)
 
     @commands.command()
     @commands.has_guild_permissions(manage_messages=True)
