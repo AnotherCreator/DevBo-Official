@@ -1,9 +1,10 @@
-# ---       IMPORTS          ---#
+# ---       IMPORTS             ---#
 
 import discord
 import os
-from discord.ext import commands
+from discord.ext import commands, tasks
 from dotenvy import load_env, read_file
+from itertools import cycle
 
 
 # ---       GLOBAL VARIABLES          ---#
@@ -14,14 +15,29 @@ OWNER_ID = os.environ.get('OWNER_ID')
 bot = commands.Bot(command_prefix=';')
 bot.remove_command('help')
 
+status = cycle(['For more info | ;help', 'Under development! | ;help'])
 
-# ---       FUNCTIONS        --- #
+
+# ---       FUNCTIONS           --- #
 def bot_owner_check(ctx):
     if ctx.author.id == int(OWNER_ID):
         return ctx.author.id
 
 
-# ---       MAIN LINE        --- #
+# ---       BACKGROUND STUFF    --- #
+
+@tasks.loop(seconds=10)
+async def change_status():
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game(next(status)))
+
+
+# ---       MAIN LINE           --- #
+
+@bot.event
+async def on_ready():
+    change_status.start()
+    print(f'{bot.user.name} is ready!')
+
 
 # TODO: Update log command
 @bot.command()
@@ -39,12 +55,7 @@ async def updatelogs(self, message):
     await channel.send(embed=embed)
 
 
-# ---       LOAD MODULES           --- #
-@bot.event
-async def on_ready():
-    await bot.change_presence(status=discord.Status.online, activity=discord.Game('For more info | ;help'))
-    print(f'{bot.user.name} is ready!')
-
+# ---       LOAD MODULES        --- #
 
 @bot.command()
 @commands.check(bot_owner_check)
@@ -71,5 +82,5 @@ async def reload(ctx, extension):
     bot.load_extension(f'modules.{extension}')
 
 
-# ---       END MAIN        ---#
+# ---       END MAIN            ---#
 bot.run(SECRET_KEY)
