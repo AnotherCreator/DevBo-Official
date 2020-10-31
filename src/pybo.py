@@ -66,7 +66,7 @@ async def updateissues(ctx, *, message):
         description=f'{message}',
         colour=discord.Colour.blurple()
     )
-    embed.set_footer()
+    embed.set_footer(text=ctx.message.created_at)
     await channel.send(embed=embed)
 
 
