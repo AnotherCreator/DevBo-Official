@@ -43,7 +43,7 @@ class Admin(commands.Cog):
         user = discord.Object(id=userid)
         await ctx.guild.ban(user, reason=reason)
         embed = discord.Embed(
-            title=f'Banned <@{userid}>',
+            title=f'Banned {user}',
             description=' ',
             colour=discord.Colour.red()
         )
@@ -56,7 +56,7 @@ class Admin(commands.Cog):
         user = discord.Object(id=userid)
         await ctx.guild.unban(user)
         embed = discord.Embed(
-            title=f'Unbanned <@{userid}>',
+            title=f'Unbanned {user}',
             description=' ',
             colour=discord.Colour.red()
         )
