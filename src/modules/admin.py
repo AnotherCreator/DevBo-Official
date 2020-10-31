@@ -23,6 +23,7 @@ class Admin(commands.Cog):
         )
         await ctx.send(embed=embed, delete_after=10)
 
+    # Allows banning via @User
     @commands.command()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
@@ -36,6 +37,7 @@ class Admin(commands.Cog):
         )
         await ctx.send(embed=embed, delete_after=10)
 
+    # Allows banning via UserID
     @commands.command()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
@@ -43,7 +45,7 @@ class Admin(commands.Cog):
         user = discord.Object(id=userid)
         await ctx.guild.ban(user, reason=reason)
         embed = discord.Embed(
-            title=f'Banned {user}',
+            title=f'Banned {ctx.get_user(userid)}',
             description=' ',
             colour=discord.Colour.red()
         )
@@ -56,7 +58,7 @@ class Admin(commands.Cog):
         user = discord.Object(id=userid)
         await ctx.guild.unban(user)
         embed = discord.Embed(
-            title=f'Unbanned {user}',
+            title=f'Unbanned {ctx.get_user(userid)}',
             description=' ',
             colour=discord.Colour.red()
         )
