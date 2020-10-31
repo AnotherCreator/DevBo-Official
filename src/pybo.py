@@ -26,7 +26,7 @@ def bot_owner_check(ctx):
 
 # ---       BACKGROUND STUFF    --- #
 
-@tasks.loop(seconds=10)
+@tasks.loop(seconds=30)
 async def change_status():
     await bot.change_presence(status=discord.Status.online, activity=discord.Game(next(status)))
 
