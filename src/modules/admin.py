@@ -48,6 +48,7 @@ class Admin(commands.Cog):
         await ctx.send(embed=embed, delete_after=10)
 
     @commands.command()
+    @commands.guild_only()
     @commands.has_guild_permissions(manage_messages=True)
     async def prune(self, ctx, amount=5):
         if int(amount) > 0:
@@ -66,18 +67,8 @@ class Admin(commands.Cog):
             )
             await ctx.send(embed=embed, delete_after=5)
 
-    @prune.error
-    async def prune_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed = discord.Embed(
-                title='Error: Specify amount of messages to be deleted',
-                description=' ',
-                colour=discord.Colour.red()
-            )
-            embed.set_footer(text='ex => ;prune 10')
-            await ctx.send(embed=embed, delete_after=5)
-
     @commands.command()
+    @commands.guild_only()
     @commands.has_guild_permissions(manage_roles=True)
     async def mute(self, ctx, user: discord.Member):
         mute_role = discord.utils.get(ctx.guild.roles, name='Mute')
@@ -88,6 +79,85 @@ class Admin(commands.Cog):
             colour=discord.Colour.red()
         )
         await ctx.send(embed=embed, delete_after=5)
+
+    @commands.command()
+    @commands.guild_only()
+    @commands.has_guild_permissions(manage_roles=True)
+    async def unmute(self, ctx, user: discord.Member):
+        mute_role = discord.utils.get(ctx.guild.roles, name='Mute')
+        await user.remove_roles(mute_role)
+        embed = discord.Embed(
+            title=f'{user} is unmuted',
+            description=' ',
+            colour=discord.Colour.green()
+        )
+        await ctx.send(embed=embed, delete_after=5)
+
+    # ---       ERROR HANDLING       ---#
+    @kick.error
+    async def kick_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = discord.Embed(
+                title='Error: Specify user to kick',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            embed.set_footer(text='ex => ;unban **UserID**')
+            await ctx.send(embed=embed, delete_after=5)
+        elif isinstance(error, commands.CheckFailure):
+            embed = discord.Embed(
+                title='Error: You are not allowed to manage users',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            await ctx.send(embed=embed, delete_after=5)
+
+    @ban.error
+    async def ban_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = discord.Embed(
+                title='Error: Specify user ID to ban',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            embed.set_footer(text='ex => ;unban **UserID**')
+            await ctx.send(embed=embed, delete_after=5)
+        elif isinstance(error, commands.CheckFailure):
+            embed = discord.Embed(
+                title='Error: You are not allowed to manage users',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            await ctx.send(embed=embed, delete_after=5)
+
+    @unban.error
+    async def unban_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = discord.Embed(
+                title='Error: Specify user ID to unban',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            embed.set_footer(text='ex => ;unban **UserID**')
+            await ctx.send(embed=embed, delete_after=5)
+        elif isinstance(error, commands.CheckFailure):
+            embed = discord.Embed(
+                title='Error: You are not allowed to manage users',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            await ctx.send(embed=embed, delete_after=5)
+
+    @prune.error
+    async def prune_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = discord.Embed(
+                title='Error: Specify amount of messages to be deleted',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            embed.set_footer(text='ex => ;prune 10')
+            await ctx.send(embed=embed, delete_after=5)
 
     @mute.error
     async def mute_error(self, ctx, error):
@@ -105,18 +175,6 @@ class Admin(commands.Cog):
                 colour=discord.Colour.red()
             )
             await ctx.send(embed=embed, delete_after=5)
-
-    @commands.command()
-    @commands.has_guild_permissions(manage_roles=True)
-    async def unmute(self, ctx, user: discord.Member):
-        mute_role = discord.utils.get(ctx.guild.roles, name='Mute')
-        await user.remove_roles(mute_role)
-        embed = discord.Embed(
-            title=f'{user} is unmuted',
-            description=' ',
-            colour=discord.Colour.green()
-        )
-        await ctx.send(embed=embed, delete_after=5)
 
     @unmute.error
     async def unmute_error(self, ctx, error):
