@@ -39,10 +39,16 @@ class Reactions(Cog):
                 await channel.send(embed=embed)
 
             # TODO: Add a check to see if a user already reacted / added a reaction to a message
-                # Method: Maybe some sort of array to keep a list of users who reacted
+                # Method 1: Maybe some sort of array to keep a list of users who reacted
                 #           - Then a loop that goes through each index to check if user is in the array
                 #           - If user is in array, ignore reaction
                 #           - If user is not in array, add the reaction
+
+                # Method 2: A JSON file might be the way to go to temporarily keep track of users who reacted with the message
+                #           - Keep a list of users who reacted and add them accordingly
+                #           - If a user unreacts to the message remove them from the list
+                #           - Once the reaction has reached the threshold, the message cannot be pinned again
+                #                   even if all the users unreacted and reacts again
 
     '''@Cog.listener()
     async def on_reaction_remove(self, reaction, user):

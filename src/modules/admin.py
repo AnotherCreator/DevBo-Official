@@ -27,7 +27,6 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
-    # '*' allows admins to send full length messages, ignoring the spaces
     async def ban(self, ctx, user: discord.Member, *, reason=None):
         await user.ban(reason=reason)
         embed = discord.Embed(
@@ -42,9 +41,10 @@ class Admin(commands.Cog):
     @commands.has_guild_permissions(ban_members=True)
     async def idban(self, ctx, userid, *, reason=None):
         user = discord.Object(id=userid)
+        username = ctx.get_user(userid)
         await ctx.guild.ban(user, reason=reason)
         embed = discord.Embed(
-            title=f'Banned {userid}',
+            title=f'Banned {userid}, {username}',
             description=' ',
             colour=discord.Colour.red()
         )
