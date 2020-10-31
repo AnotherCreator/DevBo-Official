@@ -47,8 +47,8 @@ async def updatelogs(ctx, *, message):
     channel = bot.get_channel(768626068629880902)
 
     embed = discord.Embed(
-        title=f'{message}',
-        description='',
+        title='',
+        description=f'{message}',
         colour=discord.Colour.blurple()
     )
 
