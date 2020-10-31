@@ -28,7 +28,7 @@ def bot_owner_check(ctx):
 @commands.check(bot_owner_check)
 async def updatelogs(self, message):
     # 'update-notes' channel
-    channel = self.bot.get_channel(768626068629880902)
+    channel = self.get_channel(768626068629880902)
 
     embed = discord.Embed(
         title=f'',
@@ -50,12 +50,14 @@ async def on_ready():
 @commands.check(bot_owner_check)
 async def load(ctx, extension):
     bot.load_extension(f'modules.{extension}')
+    print(f'{extension} has been loaded')
 
 
 @bot.command()
 @commands.check(bot_owner_check)
 async def unload(ctx, extension):
     bot.unload_extension(f'modules.{extension}')
+    print(f'{extension} has been unloaded')
 
 for filename in os.listdir('./modules'):
     if filename.endswith('.py'):
