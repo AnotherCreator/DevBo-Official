@@ -17,7 +17,7 @@ class Admin(commands.Cog):
     async def kick(self, ctx, user: discord.Member, *, reason=None):
         await user.kick(reason=reason)
         embed = discord.Embed(
-            title=f'{ctx}  ',
+            title=f'Kicked {user}',
             description=' ',
             colour=discord.Colour.blurple()
         )
@@ -30,7 +30,7 @@ class Admin(commands.Cog):
     async def ban(self, ctx, user: discord.Member, *, reason=None):
         await user.ban(reason=reason)
         embed = discord.Embed(
-            title=f'{user} is banned',
+            title=f'Banned {user}',
             description=' ',
             colour=discord.Colour.blurple()
         )
@@ -76,7 +76,7 @@ class Admin(commands.Cog):
         mute_role = discord.utils.get(ctx.guild.roles, name='Mute')
         await user.add_roles(mute_role)
         embed = discord.Embed(
-            title=f'{user} is muted',
+            title=f'Muted {user}',
             description=' ',
             colour=discord.Colour.red()
         )
@@ -89,7 +89,7 @@ class Admin(commands.Cog):
         mute_role = discord.utils.get(ctx.guild.roles, name='Mute')
         await user.remove_roles(mute_role)
         embed = discord.Embed(
-            title=f'{user} is unmuted',
+            title=f'Unmuted {user}',
             description=' ',
             colour=discord.Colour.green()
         )
