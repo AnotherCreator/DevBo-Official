@@ -20,6 +20,7 @@ bot.remove_command('help')
 
 status = cycle(['For more info | ;help', 'Under development! | ;help'])
 
+# postgres://zypblmyaueyqrh:1cdb6059ecd29ad868acd11e840125b05f74b56b93508846c330d01352268dfa@ec2-34-200-106-49.compute-1.amazonaws.com:5432/d5vv5mj3ftlf9f
 
 # ---       FUNCTIONS           --- #
 def bot_owner_check(ctx):
@@ -92,8 +93,8 @@ async def unload(ctx, extension):
     bot.unload_extension(f'modules.{extension}')
     print(f'{extension} has been unloaded')
 
-for filename in os.listdir('./modules'):
-    if filename.endswith('.py'):
+for filename in os.listdir('.\\modules'):
+    if filename.endswith('.py') and not filename.startswith('_'):
         bot.load_extension(f'modules.{filename[:-3]}')
 
 
