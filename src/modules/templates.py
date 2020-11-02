@@ -12,9 +12,6 @@ class Templates(commands.Cog):
 
     @commands.command()
     async def template(self, ctx):
-
-        user_avatar = discord.Member.avatar_url
-
         embed = discord.Embed(
             title='Title',
             description='This is a description',
@@ -23,17 +20,15 @@ class Templates(commands.Cog):
 
         embed.set_footer(text='This is a footer.')
         embed.set_image(
-            url='https://cdn.discordapp.com/attachments/445104854327623692/604275896202821632'
-                '/Self-potrait_Shading.png')
+            url=discord.Member.avatar_url
+        )
         embed.set_thumbnail(
             url='https://cdn.discordapp.com/attachments/445104854327623692/604275896202821632'
                 '/Self-potrait_Shading.png')
-        embed.set_author(
-            name=discord.Member.name,
-            icon_url=str(user_avatar)
-        )
-        print(discord.Member.avatar_url)
-        print(user_avatar)
+        #embed.set_author(
+            #name=discord.Member.name,
+            #icon_url=discord.Member.avatar_url
+        #)
         embed.add_field(name='Field Name', value='Field Value', inline=False)
         embed.add_field(name='Field Name', value='Field Value', inline=True)
         embed.add_field(name='Field Name', value='Field Value', inline=True)
