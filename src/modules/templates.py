@@ -20,7 +20,7 @@ class Templates(commands.Cog):
 
         embed.set_footer(text='This is a footer.')
         embed.set_image(
-            url=self.bot.avatar_url)
+            url=ctx.avatar_url)
         embed.set_thumbnail(
             url='https://cdn.discordapp.com/attachments/445104854327623692/604275896202821632'
             '/Self-potrait_Shading.png'
