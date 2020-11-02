@@ -26,9 +26,10 @@ class Templates(commands.Cog):
             url='https://cdn.discordapp.com/attachments/445104854327623692/604275896202821632'
                 '/Self-potrait_Shading.png')
         embed.set_author(
-            name=f'{discord.Member.name}',
-            icon_url=f'{discord.Member.avatar_url}'
+            name=discord.Member.name,
+            icon_url=discord.Member.avatar_url
         )
+        print(discord.Member.avatar_url)
         embed.add_field(name='Field Name', value='Field Value', inline=False)
         embed.add_field(name='Field Name', value='Field Value', inline=True)
         embed.add_field(name='Field Name', value='Field Value', inline=True)
