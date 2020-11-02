@@ -114,5 +114,4 @@ async def reload(ctx, extension):
 
 
 # ---       END MAIN            ---#
-bot.loop.run_until_complete(create_db_pool())
 bot.run(SECRET_KEY)
