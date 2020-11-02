@@ -13,7 +13,8 @@ load_env(read_file('.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
 
-bot = commands.Bot(command_prefix=';')
+intents = discord.Intents.all()
+bot = commands.Bot(command_prefix=';', intents=intents)
 bot.remove_command('help')
 
 status = cycle(['For more info | ;help', 'Under development! | ;help'])
