@@ -1,5 +1,5 @@
 # ---       IMPORTS             ---#
-
+import asyncpg
 import discord
 import os
 from datetime import datetime
@@ -12,6 +12,7 @@ from itertools import cycle
 load_env(read_file('.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
+PG_PW = os.environ.get('OWNER_ID')
 
 bot = commands.Bot(command_prefix=';')
 bot.remove_command('help')
@@ -23,6 +24,9 @@ status = cycle(['For more info | ;help', 'Under development! | ;help'])
 def bot_owner_check(ctx):
     if ctx.author.id == int(OWNER_ID):
         return ctx.author.id
+
+async def create_db_pool():
+    bot.pg_con = await asyncpg.create_pool(database='PyboDB', user='postgres', password='')
 
 
 # ---       BACKGROUND STUFF    --- #
