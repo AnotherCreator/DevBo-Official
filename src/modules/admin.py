@@ -76,7 +76,7 @@ class Admin(commands.Cog):
             )
             await ctx.send(embed=embed, delete_after=2)
 
-            audit_channel = ctx.get_channel(772860738796650537)
+            audit_channel = self.bot.get_channel(772860738796650537)
             embed2 = discord.Embed(
                 title=f'Successfully removed {amount} messages',
                 description=' ',
