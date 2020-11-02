@@ -2,11 +2,11 @@
 
 import discord
 import os
-from datetime import date
+from datetime import datetime
 from discord.ext import commands, tasks
 from dotenvy import load_env, read_file
 from itertools import cycle
-
+ 
 
 # ---       GLOBAL VARIABLES          ---#
 load_env(read_file('.env'))
@@ -17,6 +17,8 @@ bot = commands.Bot(command_prefix=';')
 bot.remove_command('help')
 
 status = cycle(['For more info | ;help', 'Under development! | ;help'])
+
+current_time = datetime.now()
 
 
 # ---       FUNCTIONS           --- #
@@ -51,7 +53,7 @@ async def updatelogs(ctx, *, message):
         description=f'{message}',
         colour=discord.Colour.blurple()
     )
-    embed.set_footer(text=ctx.message.created_at)
+    embed.set_footer(text=str(current_time))
 
     await channel.send(embed=embed)
 
@@ -67,7 +69,7 @@ async def updateissues(ctx, *, message):
         description=f'{message}',
         colour=discord.Colour.blurple()
     )
-    embed.set_footer(text=ctx.message.created_at)
+    embed.set_footer(text=str(current_time))
     await channel.send(embed=embed)
 
 

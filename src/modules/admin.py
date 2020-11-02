@@ -13,7 +13,7 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.has_guild_permissions(kick_members=True)
-    # '*' allows admins to send full length messages, ignoring the spaces
+    # '*' allow admins to send full length messages, ignoring the spaces
     async def kick(self, ctx, user: discord.Member, *, reason=None):
         await user.kick(reason=reason)
         embed = discord.Embed(
@@ -23,7 +23,7 @@ class Admin(commands.Cog):
         )
         await ctx.send(embed=embed, delete_after=10)
 
-    # Allows banning via @User
+    # Allow banning via @User
     @commands.command()
     @commands.guild_only()
     @commands.has_guild_permissions(ban_members=True)
@@ -36,7 +36,7 @@ class Admin(commands.Cog):
         )
         await ctx.send(embed=embed, delete_after=10)
 
-    # Allows banning via UserID
+    # Allow banning via UserID
     @commands.command()
     @commands.has_guild_permissions(ban_members=True)
     async def idban(self, ctx, userid, *, reason=None):
