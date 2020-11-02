@@ -12,16 +12,20 @@ class Templates(commands.Cog):
 
     @commands.command()
     async def template(self, ctx):
+
+        asset = ctx.author.avatar_url
+        bytes = await asset.read()
+        print(bytes)
+
         embed = discord.Embed(
             title='Title',
             description='This is a description',
             colour=discord.Colour.blurple()
         )
-
         embed.set_footer(text='This is a footer.')
-        embed.set_image(
-            url=discord.Member.avatar_url
-        )
+        #embed.set_image(
+            #url=discord.Member.avatar_url
+        #)
         embed.set_thumbnail(
             url='https://cdn.discordapp.com/attachments/445104854327623692/604275896202821632'
                 '/Self-potrait_Shading.png')
