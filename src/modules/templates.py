@@ -12,6 +12,9 @@ class Templates(commands.Cog):
 
     @commands.command()
     async def template(self, ctx):
+
+        user_avatar = discord.Member.avatar_url
+
         embed = discord.Embed(
             title='Title',
             description='This is a description',
@@ -27,7 +30,7 @@ class Templates(commands.Cog):
                 '/Self-potrait_Shading.png')
         embed.set_author(
             name=discord.Member.name,
-            icon_url=discord.Member.avatar_url
+            icon_url=str(discord.Member.avatar_url)
         )
         print(discord.Member.avatar_url)
         embed.add_field(name='Field Name', value='Field Value', inline=False)
