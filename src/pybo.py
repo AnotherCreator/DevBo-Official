@@ -53,7 +53,7 @@ async def updatelogs(ctx, *, message):
         description=f'{message}',
         colour=discord.Colour.blurple()
     )
-    embed.set_footer(text=str(current_time))
+    embed.set_footer(text=current_time)
 
     await channel.send(embed=embed)
 
