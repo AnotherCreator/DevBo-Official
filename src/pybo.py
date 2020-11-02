@@ -3,7 +3,6 @@ import asyncpg
 import discord
 import os
 import psycopg2
-from datetime import datetime
 from discord.ext import commands, tasks
 from dotenvy import load_env, read_file
 from itertools import cycle
@@ -20,12 +19,21 @@ bot.remove_command('help')
 
 status = cycle(['For more info | ;help', 'Under development! | ;help'])
 
-# postgres://zypblmyaueyqrh:1cdb6059ecd29ad868acd11e840125b05f74b56b93508846c330d01352268dfa@ec2-34-200-106-49.compute-1.amazonaws.com:5432/d5vv5mj3ftlf9f
 
 # ---       FUNCTIONS           --- #
 def bot_owner_check(ctx):
     if ctx.author.id == int(OWNER_ID):
         return ctx.author.id
+
+
+async def create_db_pool():
+    bot.pg_con = await asyncpg.create_pool(
+        database='postgres://zypblmyaueyqrh'
+        ':1cdb6059ecd29ad868acd11e840125b05f74b56b93508846c330d01352268dfa@'
+        ':ec2-34-200-106-49.compute-1.amazonaws.com:5432/d5vv5mj3ftlf9f',
+        user='postgres',
+        password=PG_PW
+    )
 
 
 # ---       BACKGROUND STUFF    --- #
@@ -106,4 +114,5 @@ async def reload(ctx, extension):
 
 
 # ---       END MAIN            ---#
+bot.loop.run_until_complete(create_db_pool())
 bot.run(SECRET_KEY)
