@@ -118,9 +118,9 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.has_guild_permissions(manage_messages=True)
-    async def prune(self, ctx, amount=5, *, reason=None):
+    async def prune(self, ctx, amount=5):
         if int(amount) > 0:
-            await ctx.channel.purge(limit=int(amount) + 1, reason=reason)
+            await ctx.channel.purge(limit=int(amount) + 1)
             embed = discord.Embed(
                 title=f'Successfully removed {amount} messages',
                 description=' ',
@@ -134,7 +134,6 @@ class Admin(commands.Cog):
                 description=' ',
                 colour=discord.Colour.red()
             )
-            embed2.set_footer(text=f'Reason: {reason}')
             embed2.set_author(
                 name=ctx.author,
                 icon_url=ctx.author.avatar_url
