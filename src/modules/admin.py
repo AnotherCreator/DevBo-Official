@@ -83,10 +83,11 @@ class Admin(commands.Cog):
                 colour=discord.Colour.blurple()
             )
             embed2.set_author(
-                name=f'{str(ctx.user.name)}',
-                icon_url=f'{ctx.user.avatar_url}'
+                name=ctx.user.name,
+                icon_url=ctx.user.avatar_url
                 )
             await audit_channel.send(embed=embed2)
+
         elif int(amount) <= 0:
             embed = discord.Embed(
                 title='Error: The amount must be greater than 0',
