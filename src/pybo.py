@@ -1,5 +1,4 @@
 # ---       IMPORTS             ---#
-import asyncpg
 import discord
 import os
 import psycopg2
