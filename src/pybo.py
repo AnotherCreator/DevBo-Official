@@ -13,6 +13,7 @@ load_env(read_file('.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
 PG_PW = os.environ.get('PG_PW')
+DB_URL = os.environ.get('DB_URL')
 
 bot = commands.Bot(command_prefix=';')
 bot.remove_command('help')
@@ -28,9 +29,7 @@ def bot_owner_check(ctx):
 
 async def create_db_pool():
     bot.pg_con = await asyncpg.create_pool(
-        database='postgres://zypblmyaueyqrh'
-        ':1cdb6059ecd29ad868acd11e840125b05f74b56b93508846c330d01352268dfa@'
-        ':ec2-34-200-106-49.compute-1.amazonaws.com:5432/d5vv5mj3ftlf9f',
+        database=DB_URL,
         user='postgres',
         password=PG_PW
     )
