@@ -93,7 +93,7 @@ async def unload(ctx, extension):
     bot.unload_extension(f'modules.{extension}')
     print(f'{extension} has been unloaded')
 
-for filename in os.listdir('.\\modules'):
+for filename in os.listdir('./modules'):
     if filename.endswith('.py') and not filename.startswith('_'):
         bot.load_extension(f'modules.{filename[:-3]}')
 
