@@ -6,14 +6,15 @@ import psycopg2
 from discord.ext import commands, tasks
 from dotenvy import load_env, read_file
 from itertools import cycle
- 
 
 # ---       GLOBAL VARIABLES          ---#
 load_env(read_file('.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
 PG_PW = os.environ.get('PG_PW')
+
 DB_URL = os.environ.get('DB_URL')
+conn = psycopg2.connect(DB_URL, sslmode='require')
 
 bot = commands.Bot(command_prefix=';')
 bot.remove_command('help')
@@ -27,12 +28,8 @@ def bot_owner_check(ctx):
         return ctx.author.id
 
 
-async def create_db_pool():
-    bot.pg_con = await asyncpg.create_pool(
-        database=DB_URL,
-        user='postgres',
-        password=PG_PW
-    )
+# async def create_db_pool():
+#    conn = psycopg2.connect(DB_URL, sslmode='require')
 
 
 # ---       BACKGROUND STUFF    --- #
@@ -92,6 +89,7 @@ async def load(ctx, extension):
 async def unload(ctx, extension):
     bot.unload_extension(f'modules.{extension}')
     print(f'{extension} has been unloaded')
+
 
 for filename in os.listdir('./modules'):
     if filename.endswith('.py') and not filename.startswith('_'):
