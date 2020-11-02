@@ -62,10 +62,6 @@ async def updatelogs(ctx, *, message):
         description=f'{message}',
         colour=discord.Colour.blurple()
     )
-    embed.set_footer(
-        text=ctx.message.created_at(),
-    )
-
     await channel.send(embed=embed)
 
 
@@ -79,9 +75,6 @@ async def updateissues(ctx, *, message):
         title='',
         description=f'{message}',
         colour=discord.Colour.blurple()
-    )
-    embed.set_footer(
-        text=ctx.message.created_at(),
     )
     await channel.send(embed=embed)
 
