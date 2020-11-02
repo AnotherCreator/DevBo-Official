@@ -18,8 +18,6 @@ bot.remove_command('help')
 
 status = cycle(['For more info | ;help', 'Under development! | ;help'])
 
-current_time = datetime.now()
-
 
 # ---       FUNCTIONS           --- #
 def bot_owner_check(ctx):
@@ -53,7 +51,9 @@ async def updatelogs(ctx, *, message):
         description=f'{message}',
         colour=discord.Colour.blurple()
     )
-    embed.set_footer(text=current_time)
+    embed.set_footer(
+        text=ctx.message.created_at(),
+    )
 
     await channel.send(embed=embed)
 
@@ -69,7 +69,9 @@ async def updateissues(ctx, *, message):
         description=f'{message}',
         colour=discord.Colour.blurple()
     )
-    embed.set_footer(text=str(current_time))
+    embed.set_footer(
+        text=ctx.message.created_at(),
+    )
     await channel.send(embed=embed)
 
 

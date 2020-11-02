@@ -75,6 +75,14 @@ class Admin(commands.Cog):
                 colour=discord.Colour.blurple()
             )
             await ctx.send(embed=embed, delete_after=2)
+
+            audit_channel = discord.utils.get(ctx.guild.channel, name='audit-test-channel')
+            embed2 = discord.Embed(
+                title=f'Successfully removed {amount} messages',
+                description=' ',
+                colour=discord.Colour.blurple()
+            )
+            await ctx.send(audit_channel, embed=embed2)
         elif int(amount) <= 0:
             embed = discord.Embed(
                 title='Error: The amount must be greater than 0',
