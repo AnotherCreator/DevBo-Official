@@ -12,7 +12,7 @@ from itertools import cycle
 load_env(read_file('.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
-PG_PW = os.environ.get('OWNER_ID')
+PG_PW = os.environ.get('PG_PW')
 
 bot = commands.Bot(command_prefix=';')
 bot.remove_command('help')
@@ -25,8 +25,9 @@ def bot_owner_check(ctx):
     if ctx.author.id == int(OWNER_ID):
         return ctx.author.id
 
+
 async def create_db_pool():
-    bot.pg_con = await asyncpg.create_pool(database='PyboDB', user='postgres', password='')
+    bot.pg_con = await asyncpg.create_pool(database='PyBoDB', user='postgres', password=PG_PW)
 
 
 # ---       BACKGROUND STUFF    --- #
@@ -107,4 +108,5 @@ async def reload(ctx, extension):
 
 
 # ---       END MAIN            ---#
+bot.loop.run_until_complete(create_db_pool())
 bot.run(SECRET_KEY)
