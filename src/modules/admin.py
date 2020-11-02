@@ -82,6 +82,10 @@ class Admin(commands.Cog):
                 description=' ',
                 colour=discord.Colour.blurple()
             )
+            embed.set_author(
+                name=self.bot.User.name,
+                icon_url=self.bot.User.avatar
+                )
             await audit_channel.send(embed=embed2)
         elif int(amount) <= 0:
             embed = discord.Embed(
