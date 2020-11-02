@@ -82,7 +82,7 @@ class Admin(commands.Cog):
                 description=' ',
                 colour=discord.Colour.blurple()
             )
-            embed.set_author(
+            embed2.set_author(
                 name=self.bot.User.name,
                 icon_url=self.bot.User.avatar
                 )
