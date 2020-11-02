@@ -27,7 +27,7 @@ class Templates(commands.Cog):
                 '/Self-potrait_Shading.png')
         embed.set_author(
             name='Author Name',
-            icon_url=str(ctx.user.avatar_url)
+            icon_url=str(ctx.avatar_url)
         )
         embed.add_field(name='Field Name', value='Field Value', inline=False)
         embed.add_field(name='Field Name', value='Field Value', inline=True)
