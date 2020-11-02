@@ -82,7 +82,7 @@ class Admin(commands.Cog):
                 description=' ',
                 colour=discord.Colour.blurple()
             )
-            await audit_channel.send(audit_channel, embed=embed2)
+            await audit_channel.send(embed=embed2)
         elif int(amount) <= 0:
             embed = discord.Embed(
                 title='Error: The amount must be greater than 0',
