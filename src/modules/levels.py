@@ -2,7 +2,6 @@
 
 import discord
 from discord.ext import commands
-from pybo import conn, cur
 
 
 # ---       MAIN LINE       ---#
