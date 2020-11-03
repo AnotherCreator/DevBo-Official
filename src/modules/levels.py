@@ -32,7 +32,7 @@ class Levels(commands.Cog):
         author_id = str(message.author.id)
         guild_id = str(message.guild.id)
 
-        user = await conn.fetch(
+        user = await conn.fetchall(
             'SELECT * FROM users WHERE user_id = $1 AND guild_id = $2', author_id, guild_id
         )
 
