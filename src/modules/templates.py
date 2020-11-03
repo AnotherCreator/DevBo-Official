@@ -11,9 +11,8 @@ class Templates(commands.Cog):
         self.bot = bot
 
     @commands.command()
-
+    @commands.is_owner()
     async def template(self, ctx):
-
         embed = discord.Embed(
             title='Title',
             description='This is a description',
