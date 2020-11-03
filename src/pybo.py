@@ -43,13 +43,6 @@ elif CURR_ENV == 'prod':
 status = cycle(['For more info | ;help', 'Under development! | ;help'])
 
 
-# ---         FUNCTIONS         --- #
-
-def bot_owner_check(ctx):
-    if ctx.author.id == int(OWNER_ID):
-        return ctx.author.id
-
-
 # ---       BACKGROUND STUFF    --- #
 
 @tasks.loop(seconds=30)
@@ -66,7 +59,7 @@ async def on_ready():
 
 
 @bot.command()
-@commands.check(bot_owner_check)
+@commands.is_owner()
 async def updatelogs(ctx, *, message):
     # 'update-notes' channel
     channel = bot.get_channel(768626068629880902)
@@ -80,7 +73,7 @@ async def updatelogs(ctx, *, message):
 
 
 @bot.command()
-@commands.check(bot_owner_check)
+@commands.is_owner()
 async def updateissues(ctx, *, message):
     # 'known-issues' channel
     channel = bot.get_channel(772224003833069618)
@@ -106,21 +99,21 @@ elif CURR_ENV == 'prod':
 
 
 @bot.command()
-@commands.check(bot_owner_check)
+@commands.is_owner()
 async def load(ctx, extension):
     bot.load_extension(f'modules.{extension}')
     print(f'{extension} has been loaded')
 
 
 @bot.command()
-@commands.check(bot_owner_check)
+@commands.is_owner()
 async def unload(ctx, extension):
     bot.unload_extension(f'modules.{extension}')
     print(f'{extension} has been unloaded')
 
 
 @bot.command()
-@commands.check(bot_owner_check)
+@commands.is_owner()
 async def reload(ctx, extension):
     bot.unload_extension(f'modules.{extension}')
     bot.load_extension(f'modules.{extension}')
