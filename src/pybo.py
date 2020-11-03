@@ -17,7 +17,7 @@ DB_DEV_PW = os.environ.get('DB_DEV_PW')
 
 # PostgreSQL related
 
-CURR_ENV = 'dev'
+CURR_ENV = 'prod'
 
 # Local Database
 if CURR_ENV == 'dev':
