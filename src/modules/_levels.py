@@ -1,8 +1,9 @@
+# THIS IS FOR LOCAL DEVELOPMENT
+
 # ---       IMPORTS          ---#
 
 import discord
 from discord.ext import commands
-
 
 # ---       MAIN LINE       ---#
 

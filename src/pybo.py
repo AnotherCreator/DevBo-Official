@@ -35,7 +35,7 @@ elif CURR_ENV == 'prod':
     DB_URL = os.environ.get('DB_URL')
 
     async def heroku_db_pool():
-        bot.conn = await psycopg2.connect(DB_URL, sslmode='require')
+        bot.conn = psycopg2.connect(DB_URL, sslmode='require')
 
 # ---     GLOBAL VARIABLES      --- #
 
