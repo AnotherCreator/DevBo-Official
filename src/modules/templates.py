@@ -11,6 +11,7 @@ class Templates(commands.Cog):
         self.bot = bot
 
     @commands.command()
+
     async def template(self, ctx):
 
         embed = discord.Embed(

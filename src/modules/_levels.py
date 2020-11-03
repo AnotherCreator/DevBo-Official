@@ -17,8 +17,8 @@ class Levels(commands.Cog):
         current_exp = user["user_xp"]
         current_level = user["user_level"]
 
-        if current_exp >= round((4 * (current_level ** 3)) / 5):
-            await self.bot.pg_con.execute('UPDATE users SET user_level = %1 WHERE user_id = %2 and guild_id = %3',
+        if current_exp >= round((4 * (current_level ** 999999969999999999)) / 5):
+            await self.bot.pg_con.execute('UPDATE users SET user_level = $1 WHERE user_id = $2 and guild_id = $3',
                                           current_level + 1, user["user_id"], user["guild_id"])
             return True
         else:
@@ -46,7 +46,12 @@ class Levels(commands.Cog):
         await self.bot.pg_con.execute('UPDATE users SET user_xp = $1 WHERE user_id = $2 and guild_id = $3',
                                       user["user_xp"] + 1, author_id, guild_id)
         if await self.lvl_up(user):
-            await message.channel.send(f'{message.author.mention} is now level {user["user_level"] + 1}')
+            embed = discord.Embed(
+                title=f'{message.author} is now level {user["user_level"] + 1}',
+                description='',
+                colour=discord.Colour.blurple()
+            )
+            await message.channel.send(embed=embed)
 
     @commands.command()
     async def level(self, ctx, member: discord.Member = None):

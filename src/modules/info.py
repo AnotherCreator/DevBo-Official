@@ -22,8 +22,15 @@ class Info(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    # Commands
+    def bot_spam_channel_check(self):
+        # 667538928512794644: Ignium's Server - #bot-spam
+        if self.bot.get_channel(667538928512794644):
+            return self.bot.get_channel(667538928512794644)
+        else:
+            return False
+
     @commands.command()
+    @commands.check(bot_spam_channel_check)
     async def ping(self, ctx):
         embed = discord.Embed(
             title=f'Pong! {str(round(self.bot.latency * 1000))}ms',

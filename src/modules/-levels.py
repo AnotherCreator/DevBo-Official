@@ -18,7 +18,7 @@ class Levels(commands.Cog):
         current_level = user["user_level"]
 
         if current_exp >= round((4 * (current_level ** 3)) / 5):
-            await self.bot.cur.execute('UPDATE users SET user_level = $1 WHERE user_id = $2 and guild_id = $3',
+            await self.bot.cur.execute('CREATE TABLE users (user_level int, user_id varchar, guild_id varchar)',
                                        current_level + 1, user["user_id"], user["guild_id"])
             return True
         else:
@@ -32,15 +32,15 @@ class Levels(commands.Cog):
         author_id = str(message.author.id)
         guild_id = str(message.guild.id)
 
-        user = await self.bot.cur.execute(
-            'SELECT * FROM users WHERE user_id = $1 AND guild_id = $2', author_id, guild_id
+        user = await self.bot.cur.fetchall(
+            'SELECT * FROM users (user_id, guild_id )', author_id, guild_id
         )
 
         if not user:
             await self.bot.cur.execute(
                 'INSERT INTO users (user_id, guild_id, user_level, user_xp) VALUES ($1, $2, 1, 0)', author_id, guild_id
             )
-        user = await self.bot.cur.execute(
+        user = await self.bot.cur.fetchone(
             'SELECT * FROM users WHERE user_id = $1 AND guild_id = $2', author_id, guild_id
         )
         await self.bot.cur.execute('UPDATE users SET user_xp = $1 WHERE user_id = $2 and guild_id = $3',

@@ -105,7 +105,15 @@ class Market(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    def bot_spam_channel_check(self):
+        # 667538928512794644: Ignium's Server - #bot-spam
+        if self.bot.get_channel(667538928512794644):
+            return self.bot.get_channel(667538928512794644)
+        else:
+            return False
+
     @commands.command()
+    @commands.check(bot_spam_channel_check)
     async def crypto(self, ctx, coin_number):
         name()
         icons()
@@ -149,6 +157,7 @@ class Market(commands.Cog):
             await ctx.send(embed=embed, delete_after=5)
 
     @commands.command()
+    @commands.check(bot_spam_channel_check)
     async def cryptolist(self, ctx, page):
         name()
         prices()

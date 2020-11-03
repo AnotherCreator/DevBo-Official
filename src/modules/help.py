@@ -8,6 +8,7 @@ from discord.ext import commands
 
 bot_avatar_link = 'https://cdn.discordapp.com/avatars/733004304855597056/d55234172599dca4b11e6345078a32b0.png?size=128'
 
+
 # ---       MAIN LINE       ---#
 
 
@@ -15,7 +16,15 @@ class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    def bot_spam_channel_check(self):
+        # 667538928512794644: Ignium's Server - #bot-spam
+        if self.bot.get_channel(667538928512794644):
+            return self.bot.get_channel(667538928512794644)
+        else:
+            return False
+
     @commands.command()
+    @commands.check(bot_spam_channel_check)
     async def help(self, ctx):
         embed = discord.Embed(
             title='Use *;more* __*Module Name*__ to get more info',
@@ -31,6 +40,7 @@ class Help(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
+    @commands.check(bot_spam_channel_check)
     async def more(self, ctx, module):
         if module == 'Administration' or module == 'administration' or module == 'Admin' or module == 'admin':
             embed = discord.Embed(
