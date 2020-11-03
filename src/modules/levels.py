@@ -2,7 +2,7 @@
 
 import discord
 from discord.ext import commands
-from pybo import conn
+from pybo import conn, cur
 
 
 # ---       MAIN LINE       ---#
@@ -18,8 +18,8 @@ class Levels(commands.Cog):
         current_level = user["user_level"]
 
         if current_exp >= round((4 * (current_level ** 3)) / 5):
-            await conn.execute('UPDATE users SET user_level = $1 WHERE user_id = $2 and guild_id = $3',
-                               self.bot.current_level + 1, user["user_id"], user["guild_id"])
+            await cur.execute('UPDATE users SET user_level = $1 WHERE user_id = $2 and guild_id = $3',
+                              self.bot.current_level + 1, user["user_id"], user["guild_id"])
             return True
         else:
             return False
@@ -32,18 +32,18 @@ class Levels(commands.Cog):
         author_id = str(message.author.id)
         guild_id = str(message.guild.id)
 
-        user = await conn.fetch(
+        user = await cur.fetch(
             'SELECT * FROM users WHERE user_id = $1 AND guild_id = $2', author_id, guild_id
         )
 
         if not user:
-            await conn.execute(
+            await cur.execute(
                 'INSERT INTO users (user_id, guild_id, user_level, user_xp) VALUES ($1, $2, 1, 0)', author_id, guild_id
             )
-        user = await conn.fetchrow(
+        user = await cur.fetchrow(
             'SELECT * FROM users WHERE user_id = $1 AND guild_id = $2', author_id, guild_id
         )
-        await conn.execute('UPDATE users SET user_xp = $1 WHERE user_id = $2 and guild_id = $3',
+        await cur.execute('UPDATE users SET user_xp = $1 WHERE user_id = $2 and guild_id = $3',
                            user["user_xp"] + 1, author_id, guild_id)
         if await self.lvl_up(user):
             await message.channel.send(f'{message.author.mention} is now level {user["user_level"] + 1}')
@@ -54,7 +54,7 @@ class Levels(commands.Cog):
         member_id = str(member.id)
         guild_id = str(ctx.guild.id)
 
-        user = await conn.fetchrow(
+        user = await cur.fetchrow(
             'SELECT * FROM users WHERE user_id = $1 AND guild_id = $2', member_id, guild_id
         )
 
