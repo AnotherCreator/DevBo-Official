@@ -14,11 +14,10 @@ bot.remove_command('help')
 
 # ---       ENV VARIABLES       --- #
 
-load_env(read_file('.env'))
 # Bot / Bot Owner related
+load_env(read_file('.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
-DB_DEV_PW = os.environ.get('DB_DEV_PW')
 
 # ---       DATABASE STUFF      --- #
 # PostgreSQL related
@@ -26,13 +25,15 @@ CURR_ENV = 'prod'
 
 # Local Database
 if CURR_ENV == 'dev':
+    DB_DEV_PW = os.environ.get('DB_DEV_PW')
+
     async def create_db_pool():
         bot.pg_con = await asyncpg.create_pool(database='PyCharmPyBoDB', user='postgres', password=DB_DEV_PW)
 # Heroku Database
 elif CURR_ENV == 'prod':
     PG_PW = os.environ.get('PG_PW')
     DB_URL = os.environ.get('DB_URL')
-    conn = psycopg2.connect(DB_URL, sslmode='require')
+    bot.conn = await psycopg2.connect(DB_URL, sslmode='require')
 
 # ---     GLOBAL VARIABLES      --- #
 
