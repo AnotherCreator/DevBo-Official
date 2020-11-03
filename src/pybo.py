@@ -33,7 +33,6 @@ elif CURR_ENV == 'prod':
     PG_PW = os.environ.get('PG_PW')
     DB_URL = os.environ.get('DB_URL')
     conn = psycopg2.connect(DB_URL, sslmode='require')
-    bot.cur = conn.cursor()
 
 # ---     GLOBAL VARIABLES      --- #
 
