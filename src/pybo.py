@@ -12,7 +12,7 @@ from itertools import cycle
 bot = commands.Bot(command_prefix=';')
 bot.remove_command('help')
 
-# ---       ENV VARIABLES       ---#
+# ---       ENV VARIABLES       --- #
 
 load_env(read_file('.env'))
 # Bot / Bot Owner related
@@ -20,8 +20,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
 DB_DEV_PW = os.environ.get('DB_DEV_PW')
 
+# ---       DATABASE STUFF      --- #
 # PostgreSQL related
-
 CURR_ENV = 'prod'
 
 # Local Database
