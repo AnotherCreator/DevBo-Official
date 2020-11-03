@@ -30,9 +30,12 @@ if CURR_ENV == 'dev':
         bot.pg_con = await asyncpg.create_pool(database='PyCharmPyBoDB', user='postgres', password=DB_DEV_PW)
 # Heroku Database
 elif CURR_ENV == 'prod':
-    PG_PW = os.environ.get('PG_PW')
+    HEROKU_DB_PW = os.environ.get('HEROKU_DB_PW')
     DB_URL = os.environ.get('DB_URL')
-    bot.conn = psycopg2.connect(DB_URL, sslmode='require')
+    conn = psycopg2.connect(DB_URL, sslmode='require')
+
+    async def create_db_pool():
+        bot.conn = await asyncpg.create_pool(database='d5vv5mj3ftlf9f', user='zypblmyaueyqrh', password=HEROKU_DB_PW)
 
 # ---     GLOBAL VARIABLES      --- #
 
@@ -118,6 +121,5 @@ async def reload(ctx, extension):
 
 
 # ---       END MAIN            ---#
-if CURR_ENV == 'dev':
-    bot.loop.run_until_complete(create_db_pool())
+bot.loop.run_until_complete(create_db_pool())
 bot.run(SECRET_KEY)
