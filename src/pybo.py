@@ -7,6 +7,11 @@ from discord.ext import commands, tasks
 from dotenvy import load_env, read_file
 from itertools import cycle
 
+# ---     BOT INITIALIZATION    --- #
+
+bot = commands.Bot(command_prefix=';')
+bot.remove_command('help')
+
 # ---       ENV VARIABLES       ---#
 
 load_env(read_file('.env'))
@@ -27,12 +32,7 @@ if CURR_ENV == 'dev':
 elif CURR_ENV == 'prod':
     PG_PW = os.environ.get('PG_PW')
     DB_URL = os.environ.get('DB_URL')
-    conn = psycopg2.connect(DB_URL, sslmode='require')
-
-# ---     BOT INITIALIZATION    --- #
-
-bot = commands.Bot(command_prefix=';')
-bot.remove_command('help')
+    bot.conn = psycopg2.connect(DB_URL, sslmode='require')
 
 # ---     GLOBAL VARIABLES      --- #
 
