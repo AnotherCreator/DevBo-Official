@@ -6,7 +6,6 @@ from discord.ext import commands
 
 # ---       MAIN LINE       ---#
 
-
 class Levels(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -31,7 +30,7 @@ class Levels(commands.Cog):
         author_id = str(message.author.id)
         guild_id = str(message.guild.id)
 
-        user = await self.bot.conn.fetch(
+        user = await self.cursor.execute(
             'SELECT * FROM users WHERE user_id = $1 AND guild_id = $2', author_id, guild_id
         )
 
@@ -39,7 +38,7 @@ class Levels(commands.Cog):
             await self.bot.conn.execute(
                 'INSERT INTO users (user_id, guild_id, user_level, user_xp) VALUES ($1, $2, 1, 0)', author_id, guild_id
             )
-        user = await self.bot.conn.fetchrow(
+        user = await self.bot.conn.execute(
             'SELECT * FROM users WHERE user_id = $1 AND guild_id = $2', author_id, guild_id
         )
         await self.bot.conn.execute('UPDATE users SET user_xp = $1 WHERE user_id = $2 and guild_id = $3',
