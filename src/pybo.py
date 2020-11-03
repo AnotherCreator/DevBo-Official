@@ -1,4 +1,5 @@
 # ---       IMPORTS             ---#
+import asyncpg
 import discord
 import os
 import psycopg2
@@ -12,11 +13,21 @@ load_env(read_file('.env'))
 # Bot / Bot Owner related
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
+DB_DEV_PW = os.environ.get('DB_DEV_PW')
 
 # PostgreSQL related
-PG_PW = os.environ.get('PG_PW')
-DB_URL = os.environ.get('DB_URL')
-conn = psycopg2.connect(DB_URL, sslmode='require')
+
+CURR_ENV = 'dev'
+
+# Local Database
+if CURR_ENV == 'dev':
+    async def create_db_pool():
+        bot.pg_con = await asyncpg.create_pool(database='PyCharmPyBoDB', user='postgres', password=DB_DEV_PW)
+# Heroku Database
+elif CURR_ENV == 'prod':
+    PG_PW = os.environ.get('PG_PW')
+    DB_URL = os.environ.get('DB_URL')
+    conn = psycopg2.connect(DB_URL, sslmode='require')
 
 # ---     BOT INITIALIZATION    --- #
 
@@ -107,4 +118,6 @@ async def reload(ctx, extension):
 
 
 # ---       END MAIN            ---#
+if CURR_ENV == 'dev':
+    bot.loop.run_until_complete(create_db_pool())
 bot.run(SECRET_KEY)
