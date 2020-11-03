@@ -17,11 +17,10 @@ class Help(commands.Cog):
         self.bot = bot
 
     def bot_spam_channel_check(self):
+        botspam_channels = 667538928512794644
         # 667538928512794644: Ignium's Server - #bot-spam
-        if self.bot.get_channel(667538928512794644):
-            return self.bot.get_channel(667538928512794644)
-        else:
-            return False
+        if botspam_channels == self.bot.get_channel(667538928512794644):
+            return botspam_channels
 
     @commands.command()
     @commands.check(bot_spam_channel_check)
