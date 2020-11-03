@@ -18,7 +18,7 @@ class Levels(commands.Cog):
         current_level = user["user_level"]
 
         if current_exp >= round((4 * (current_level ** 3)) / 5):
-            await self.bot.pg_con.execute('UPDATE users SET user_level = $1 WHERE user_id = $2 and guild_id = $3',
+            await self.bot.pg_con.execute('UPDATE users SET user_level = %1 WHERE user_id = %2 and guild_id = %3',
                                           current_level + 1, user["user_id"], user["guild_id"])
             return True
         else:

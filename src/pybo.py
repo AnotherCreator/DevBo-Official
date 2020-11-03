@@ -21,7 +21,7 @@ OWNER_ID = os.environ.get('OWNER_ID')
 
 # ---       DATABASE STUFF      --- #
 # PostgreSQL related
-CURR_ENV = 'dev'
+CURR_ENV = 'prod'
 
 # Local Database
 if CURR_ENV == 'dev':
@@ -35,8 +35,8 @@ elif CURR_ENV == 'prod':
     DB_URL = os.environ.get('DB_URL')
 
     async def heroku_db_pool():
-        bot.conn = psycopg2.connect(DB_URL, sslmode='require')
-        cursor = bot.conn.cursor()
+        conn = psycopg2.connect(DB_URL, sslmode='require')
+        bot.cur = conn.cursor()
 
 # ---     GLOBAL VARIABLES      --- #
 
@@ -95,9 +95,14 @@ async def updateissues(ctx, *, message):
 
 # ---       LOAD MODULES        --- #
 
-for filename in os.listdir('./modules'):
-    if filename.endswith('.py') and not filename.startswith('_'):
-        bot.load_extension(f'modules.{filename[:-3]}')
+if CURR_ENV == 'dev':
+    for filename in os.listdir('./modules'):
+        if filename.endswith('.py') and not filename.startswith('-'):
+            bot.load_extension(f'modules.{filename[:-3]}')
+elif CURR_ENV == 'prod':
+    for filename in os.listdir('./modules'):
+        if filename.endswith('.py') and not filename.startswith('_'):
+            bot.load_extension(f'modules.{filename[:-3]}')
 
 
 @bot.command()
