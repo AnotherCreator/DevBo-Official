@@ -40,7 +40,7 @@ class Levels(commands.Cog):
         author_id = str(message.author.id)
         guild_id = str(message.guild.id)
 
-        user = await self.bot.cur.fetchall(
+        user = await self.bot.cur.execute(
             'SELECT * FROM users (user_id, guild_id )', author_id, guild_id
         )
 
@@ -48,7 +48,7 @@ class Levels(commands.Cog):
             await self.bot.cur.execute(
                 'INSERT INTO users (user_id, guild_id, user_level, user_xp) VALUES ($1, $2, 1, 0)', author_id, guild_id
             )
-        user = await self.bot.cur.fetchone(
+        user = await self.bot.cur.execute(
             'SELECT * FROM users WHERE user_id = $1 AND guild_id = $2', author_id, guild_id
         )
         await self.bot.cur.execute('UPDATE users SET user_xp = $1 WHERE user_id = $2 and guild_id = $3',
