@@ -5,8 +5,16 @@
 import discord
 from discord.ext import commands
 
-# ---       MAIN LINE       ---#
+# ---     CUSTOM CHECKS     --- #
 
+
+def bot_channel_check(ctx):
+    botspam_channels = ['bot-spam']
+    if str(ctx.message.channel) in botspam_channels:
+        return True
+
+
+# ---       MAIN LINE       ---#
 
 class Levels(commands.Cog):
     def __init__(self, bot):
@@ -54,6 +62,7 @@ class Levels(commands.Cog):
             await message.channel.send(embed=embed)
 
     @commands.command()
+    @commands.check(bot_channel_check)
     async def level(self, ctx, member: discord.Member = None):
         member = ctx.author if not member else member
         member_id = str(member.id)

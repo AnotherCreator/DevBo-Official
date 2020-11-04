@@ -5,6 +5,14 @@
 import discord
 from discord.ext import commands
 
+# ---     CUSTOM CHECKS     --- #
+
+
+def bot_channel_check(ctx):
+    botspam_channels = ['bot-spam']
+    if str(ctx.message.channel) in botspam_channels:
+        return True
+
 
 # ---       MAIN LINE       ---#
 
@@ -49,6 +57,7 @@ class Levels(commands.Cog):
     #         await message.channel.send(f'{message.author.mention} is now level {user["user_level"] + 1}')
     #
     # @commands.command()
+    # @commands.check(bot_channel_check)
     # async def level(self, ctx, member: discord.Member = None):
     #     member = ctx.author if not member else member
     #     member_id = str(member.id)

@@ -12,8 +12,13 @@ from urllib.request import Request, urlopen
 # links
 bot_avatar_link = 'https://cdn.discordapp.com/avatars/733004304855597056/d55234172599dca4b11e6345078a32b0.png?size=128'
 
-# ---       FUNCTIONS        ---#
+# ---     CUSTOM CHECKS     --- #
 
+
+def bot_channel_check(ctx):
+    botspam_channels = ['bot-spam']
+    if str(ctx.message.channel) in botspam_channels:
+        return True
 
 # ---       MAIN LINE       ---#
 
@@ -22,14 +27,8 @@ class Info(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def bot_spam_channel_check(self):
-        botspam_channels = 667538928512794644
-        # 667538928512794644: Ignium's Server - #bot-spam
-        if botspam_channels == self.bot.get_channel(667538928512794644):
-            return botspam_channels
-
     @commands.command()
-    @commands.check(bot_spam_channel_check)
+    @commands.check(bot_channel_check)
     async def ping(self, ctx):
         embed = discord.Embed(
             title=f'Pong! {str(round(self.bot.latency * 1000))}ms',
