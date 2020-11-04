@@ -21,7 +21,7 @@ OWNER_ID = os.environ.get('OWNER_ID')
 
 # ---       DATABASE STUFF      --- #
 
-CURR_ENV = 'dev'
+CURR_ENV = 'prod'
 
 # Local PostgreSQL Database
 if CURR_ENV == 'dev':
@@ -32,12 +32,8 @@ if CURR_ENV == 'dev':
 
 # Heroku PostgreSQL Database
 elif CURR_ENV == 'prod':
-    PG_PW = os.environ.get('PG_PW')
     DB_URL = os.environ.get('DB_URL')
-
-    async def heroku_db_pool():
-        conn = psycopg2.connect(str(DB_URL), sslmode='require')
-        bot.cur = conn.cursor()
+    conn = psycopg2.connect(DB_URL, sslmode='require')
 
 # ---     GLOBAL VARIABLES      --- #
 
@@ -123,6 +119,4 @@ async def reload(ctx, extension):
 # ---       END MAIN            ---#
 if CURR_ENV == 'dev':
     bot.loop.run_until_complete(create_db_pool())
-elif CURR_ENV == 'prod':
-    bot.loop.run_until_complete(heroku_db_pool())
 bot.run(SECRET_KEY)
