@@ -20,22 +20,23 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
 
 # ---       DATABASE STUFF      --- #
-# PostgreSQL related
-CURR_ENV = 'prod'
 
-# Local Database
+CURR_ENV = 'dev'
+
+# Local PostgreSQL Database
 if CURR_ENV == 'dev':
     DB_DEV_PW = os.environ.get('DB_DEV_PW')
 
     async def create_db_pool():
         bot.pg_con = await asyncpg.create_pool(database='PyCharmPyBoDB', user='postgres', password=DB_DEV_PW)
-# Heroku Database
+
+# Heroku PostgreSQL Database
 elif CURR_ENV == 'prod':
     PG_PW = os.environ.get('PG_PW')
     DB_URL = os.environ.get('DB_URL')
 
     async def heroku_db_pool():
-        conn = psycopg2.connect(DB_URL, sslmode='require')
+        conn = psycopg2.connect(str(DB_URL), sslmode='require')
         bot.cur = conn.cursor()
 
 # ---     GLOBAL VARIABLES      --- #
