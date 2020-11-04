@@ -10,7 +10,7 @@ from discord.ext import commands
 
 def bot_channel_check(ctx):
     botspam_channels = ['bot-spam']
-    if str(ctx.message.channel) in botspam_channels:
+    if str(ctx.message.channel) in botspam_channels or ctx.author.id == 291005201840734218:
         return True
 
 

@@ -14,7 +14,7 @@ bot_avatar_link = 'https://cdn.discordapp.com/avatars/733004304855597056/d552341
 
 def bot_channel_check(ctx):
     botspam_channels = ['bot-spam']
-    if str(ctx.message.channel) in botspam_channels:
+    if str(ctx.message.channel) in botspam_channels or ctx.author.id == 291005201840734218:
         return True
 
 # ---       MAIN LINE       ---#
