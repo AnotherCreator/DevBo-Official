@@ -46,7 +46,7 @@ class Levels(commands.Cog):
         guild_id = str(message.guild.id)
 
         user = self.bot.cur.execute(
-            'SELECT user_id, guild_id FROM users'
+            'SELECT user_id, guild_id FROM users WHERE user_id = %s and guild_id = %s', author_id, guild_id
         )
 
         if not user:
