@@ -45,18 +45,18 @@ class Levels(commands.Cog):
         author_id = str(message.author.id)
         guild_id = str(message.guild.id)
 
-        user = self.bot.cur.execute(
+        user = bot.cur.execute(
             'SELECT user_id, guild_id FROM users WHERE user_id = %s and guild_id = %s', author_id, guild_id
         )
 
         if not user:
-            await self.bot.cur.execute(
+            await bot.cur.execute(
                 'INSERT INTO users (user_id, guild_id, user_level, user_exp) VALUES (%s, %s, 1, 0)', author_id, guild_id
             )
-        user = await self.bot.cur.execute(
+        user = await bot.cur.execute(
             'SELECT * FROM users WHERE user_id = $1 AND guild_id = $2', author_id, guild_id
         )
-        await self.bot.cur.execute(
+        await bot.cur.execute(
             'UPDATE users SET user_xp = $1 WHERE user_id = $2 and guild_id = $3',
             user["user_xp"] + 1, author_id, guild_id
         )
@@ -71,7 +71,7 @@ class Levels(commands.Cog):
         member_id = str(member.id)
         guild_id = str(ctx.guild.id)
 
-        user = await self.bot.cur.fetchrow(
+        user = await bot.cur.fetchrow(
             'SELECT * FROM users WHERE user_id = $1 AND guild_id = $2', member_id, guild_id
         )
 
