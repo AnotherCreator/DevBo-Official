@@ -5,6 +5,7 @@
 import discord
 from discord.ext import commands
 
+
 # ---     CUSTOM CHECKS     --- #
 
 
@@ -26,8 +27,10 @@ class Levels(commands.Cog):
         current_level = user["user_level"]
 
         if current_exp >= round((4 * (current_level ** 3)) / 5):
-            await self.bot.pg_con.execute('UPDATE users SET user_level = $1 WHERE user_id = $2 and guild_id = $3',
-                                          current_level + 1, user["user_id"], user["guild_id"])
+            await self.bot.pg_con.execute(
+                'UPDATE users SET user_level = $1 WHERE user_id = $2 and guild_id = $3',
+                current_level + 1, user["user_id"], user["guild_id"]
+            )
             return True
         else:
             return False
@@ -51,8 +54,10 @@ class Levels(commands.Cog):
         user = await self.bot.pg_con.fetchrow(
             'SELECT * FROM users WHERE user_id = $1 AND guild_id = $2', author_id, guild_id
         )
-        await self.bot.pg_con.execute('UPDATE users SET user_xp = $1 WHERE user_id = $2 and guild_id = $3',
-                                      user["user_xp"] + 1, author_id, guild_id)
+        await self.bot.pg_con.execute(
+            'UPDATE users SET user_xp = $1 WHERE user_id = $2 and guild_id = $3',
+            user["user_xp"] + 1, author_id, guild_id
+        )
         if await self.lvl_up(user):
             embed = discord.Embed(
                 title=f'{message.author} is now level {user["user_level"] + 1}',

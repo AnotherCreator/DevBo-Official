@@ -24,7 +24,7 @@ class Levels(commands.Cog):
 
     @commands.Cog.listener()
     async def lvl_up(self, user):
-        current_exp = user["user_xp"]
+        current_exp = user["user_exp"]
         current_level = user["user_level"]
 
         if current_exp >= round((4 * (current_level ** 3)) / 5):
@@ -58,7 +58,7 @@ class Levels(commands.Cog):
         )
         await self.bot.cur.execute(
             'UPDATE users SET user_xp = $1 WHERE user_id = $2 and guild_id = $3',
-            user["user_xp"] + 1, author_id, guild_id
+            user["user_exp"] + 1, author_id, guild_id
         )
         conn.commit()
         if await self.lvl_up(user):
@@ -84,7 +84,7 @@ class Levels(commands.Cog):
                 colour=discord.Colour.blurple()
             )
             embed.add_field(name='Level', value=user[0]["user_level"])
-            embed.add_field(name='EXP', value=user[0]["user_xp"])
+            embed.add_field(name='EXP', value=user[0]["user_exp"])
 
             await ctx.send(embed=embed)
 
