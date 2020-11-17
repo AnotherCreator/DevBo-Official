@@ -21,7 +21,7 @@ OWNER_ID = os.environ.get('OWNER_ID')
 
 # ---       DATABASE STUFF      --- #
 
-CURR_ENV = 'prod'
+CURR_ENV = 'dev'
 
 # Local PostgreSQL Database
 if CURR_ENV == 'dev':

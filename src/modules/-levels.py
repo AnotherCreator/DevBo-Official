@@ -4,7 +4,7 @@
 
 import discord
 from discord.ext import commands
-from pybo import conn, bot
+from pybo import conn
 
 
 # ---     CUSTOM CHECKS     --- #
