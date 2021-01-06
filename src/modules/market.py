@@ -97,7 +97,7 @@ class Market(commands.Cog):
         embed.set_footer(text=site)
         if 0 < int(coin_number) <= 50:
             embed.set_author(
-                name=f'{coin_number}. {str(coin_names.get(int(coin_number)))}',
+                name=f'{coin_number}.{str(coin_names.get(int(coin_number)))}',
                 icon_url=coin_icons.get(int(coin_number))
             )
         else:
