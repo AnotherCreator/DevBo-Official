@@ -27,7 +27,7 @@ class Templates(commands.Cog):
                 '/Self-potrait_Shading.png')
         embed.set_author(
             name=ctx.author,
-            icon_url='https://cdn.coinranking.com/bOabBYkcX/bitcoin_btc.svg'
+            icon_url='https://cdn.coinranking.com/bOabBYkcX/bitcoin_btc.png'
         )
         embed.add_field(name='Field Name', value='Field Value', inline=False)
         embed.add_field(name='Field Name', value='Field Value', inline=True)
