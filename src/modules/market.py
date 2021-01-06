@@ -11,92 +11,61 @@ from urllib.request import Request, urlopen
 
 
 # bs4
-site = "https://coinlib.io/coins"
-hdr = {'User-Agent': 'Mozilla/5.0'}
+site = "https://coinranking.com/"
+hdr = {'User-Agent': 'Mozilla/84.0'}
 req = Request(site, headers=hdr)
 page = urlopen(req)
 soup = BeautifulSoup(page, 'html.parser')
 
 # dicts
-coin_links = {}
 coin_icons = {}
 coin_names = {}
-coin_percent = {}
 coin_prices = {}
+coin_market_cap = {}
 
 # links
 bot_avatar_link = 'https://cdn.discordapp.com/avatars/733004304855597056/d55234172599dca4b11e6345078a32b0.png?size=128'
 
-# ---       FUNCTIONS        ---#
 
+# ---       FUNCTIONS        --- #
 
 def icons():
-    counter = 0
-    for png in soup.findAll('img'):
-        coin_links[counter] = png.get('src')
+    counter = 1
+    for png in soup.find_all('span', class_='profile__logo-background'):
+        coin_icons[counter] = png.img.get('src')
         counter += 1
 
-    counter2 = 10
-    counter3 = 0
-    while counter2 < 60:
-        coin_icons[counter3] = coin_links[counter2]
-        counter2 += 1
-        counter3 += 1
 
-
-def name():
-    counter = 0
-    for name in soup.find_all('div', class_='tbl-currency'):
+def names():
+    counter = 1
+    for name in soup.find_all('span', class_='profile__name'):
         name = name.text
-        clean_name = unicodedata.normalize("NFKD", name)
-        clean_name = clean_name.strip()
-        clean_name = clean_name.replace('\n', '')
+        name = name.strip()
+        clean_name = name.replace('\n     ', '')
         coin_names[counter] = clean_name
-        counter += 1
-
-
-def percent():
-    counter = 0
-    for percent in soup.find_all('td', class_='tbl-col-md change-period clickable-coin-td'):
-        percent = percent.text
-        clean_percent = unicodedata.normalize("NFKD", percent)
-        clean_percent = clean_percent.rstrip()
-        coin_percent[counter] = clean_percent
         counter += 1
 
 
 def prices():
     clean_prices = {}
 
-    counter = 0
-    for price in soup.find_all('td', class_='clickable-coin-td'):
+    counter = 1
+    for price in soup.find_all('div', class_='valuta valuta--light'):
         price = price.text
-        clean_price = unicodedata.normalize("NFKD", price)
-        clean_price = clean_price.strip('')
-        clean_price = clean_price.replace('\n', '')
-        if clean_price.find('Mkt') != -1 or clean_price.find('%') != -1 or clean_price.find('M') != -1 \
-                or clean_price.find('B') != -1 or clean_price.find('K') != -1 or clean_price.find('LEO') != -1:
-            pass
-        else:
-            clean_price = clean_price.replace('฿', ' \n฿')
-            clean_price = clean_price.replace('$', '$ ')
-            clean_price = clean_price.replace('USDC', ' \nUSDC')
-            clean_price = clean_price.replace('ETH', ' \nETH')
-            clean_price = clean_price.replace('DAI', ' \nDAI')
-            clean_price = clean_price.replace('$ 1ERD  46', '')
-            clean_prices[counter] = clean_price
-            counter += 1
+        price = price.strip()
+        clean_price = price.replace('\n  ', '')
+        clean_prices[counter] = clean_price
+        counter += 1
 
-    # Creates a new dict removing all the blank keys from 'clean_prices'
-    counter2 = 0    # Checks dict for even #'s and adds them to the new dict
-    counter3 = 0    # New dict starting from '0'
+    price_counter = 1
+    market_cap_counter = 1
     for price in clean_prices:
         if price % 2 == 1:
-            coin_prices[counter3] = clean_prices[counter2]
-            counter2 += 1
-            counter3 += 1
+            coin_prices[price_counter] = price
+            price_counter += 1
         else:
-            counter2 += 1
+            coin_market_cap[market_cap_counter] = price
+            market_cap_counter += 1
 
 # ---     CUSTOM CHECKS     --- #
 
@@ -117,10 +86,9 @@ class Market(commands.Cog):
     @commands.command()
     @commands.check(bot_channel_check)
     async def crypto(self, ctx, coin_number):
-        name()
+        names()
         icons()
         prices()
-        percent()
         emoji_list = ['◀', '▶']
 
         embed = discord.Embed(
@@ -134,7 +102,6 @@ class Market(commands.Cog):
                 name=f'{coin_number}. {str(coin_names.get(int(coin_number) + (-1)))}',
                 icon_url=f'https://coinlib.io/{str(coin_icons.get(int(coin_number) + (-1)))}'
             )
-            embed.add_field(name='24 Hour Change', value=str(coin_percent.get(int(coin_number) + (-1))), inline=False)
         else:
             embed = discord.Embed(
                 title='Invalid Number',
@@ -161,7 +128,7 @@ class Market(commands.Cog):
     @commands.command()
     @commands.check(bot_channel_check)
     async def cryptolist(self, ctx, page):
-        name()
+        names()
         prices()
         emoji_list = ['◀', '▶']
 
