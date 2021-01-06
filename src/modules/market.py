@@ -92,7 +92,7 @@ class Market(commands.Cog):
         emoji_list = ['◀', '▶']
 
         embed = discord.Embed(
-            title=str(coin_prices.get(int(coin_number) + 1)),
+            title=str(coin_prices.get(int(coin_number))),
             description=' ',
             colour=discord.Colour.blurple()
         )
@@ -100,7 +100,7 @@ class Market(commands.Cog):
         if 0 < int(coin_number) <= 50:
             embed.set_author(
                 name=f'{coin_number}. {str(coin_names.get(int(coin_number)))}',
-                icon_url=f'https://coinlib.io/{str(coin_icons.get(int(coin_number)))}'
+                icon_url=f'{str(coin_icons.get(int(coin_number)))}'
             )
         else:
             embed = discord.Embed(
