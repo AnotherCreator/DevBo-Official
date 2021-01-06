@@ -43,7 +43,7 @@ def names():
     for name in soup.find_all('span', class_='profile__name'):
         name = name.text
         name = name.strip()
-        clean_name = name.replace('\n     ', '')
+        clean_name = name.replace('\n     ', '|')
         coin_names[counter] = clean_name
         counter += 1
 
