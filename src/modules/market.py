@@ -98,7 +98,7 @@ class Market(commands.Cog):
         if 0 < int(coin_number) <= 50:
             embed.set_author(
                 name=f'{coin_number}. {str(coin_names.get(int(coin_number)))}',
-                icon_url=f'{str(coin_icons.get(int(coin_number)))}'
+                icon_url=coin_icons.get(int(coin_number))
             )
         else:
             embed = discord.Embed(
