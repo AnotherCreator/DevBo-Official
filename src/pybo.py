@@ -86,7 +86,7 @@ async def updateissues(ctx, *, message):
 
 # ---       LOAD MODULES        --- #
 
-if CURR_ENV == 'dev':
+'''if CURR_ENV == 'dev':
     for filename in os.listdir('./modules'):
         if filename.endswith('.py') and not filename.startswith('-'):
             bot.load_extension(f'modules.{filename[:-3]}')
@@ -94,7 +94,11 @@ elif CURR_ENV == 'prod':
     for filename in os.listdir('./modules'):
         if filename.endswith('.py') and not filename.startswith('_'):
             bot.load_extension(f'modules.{filename[:-3]}')
+'''
 
+for filename in os.listdir('./modules'):
+    if filename.endswith('.py') and not filename.startswith('-') and not filename.startswith('_'):
+        bot.load_extension(f'modules.{filename[:-3]}')
 
 @bot.command()
 @commands.is_owner()
