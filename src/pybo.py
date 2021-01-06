@@ -21,7 +21,7 @@ OWNER_ID = os.environ.get('OWNER_ID')
 
 # ---       DATABASE STUFF      --- #
 
-CURR_ENV = 'dev'
+'''CURR_ENV = ''
 
 # Local PostgreSQL Database
 if CURR_ENV == 'dev':
@@ -34,7 +34,7 @@ if CURR_ENV == 'dev':
 elif CURR_ENV == 'prod':
     DB_URL = os.environ.get('DB_URL')
     conn = psycopg2.connect(DB_URL, sslmode='require')
-    bot.cur = conn.cursor()
+    bot.cur = conn.cursor()'''
 
 # ---     GLOBAL VARIABLES      --- #
 
@@ -118,6 +118,6 @@ async def reload(ctx, extension):
 
 
 # ---       END MAIN            ---#
-if CURR_ENV == 'dev':
-    bot.loop.run_until_complete(create_db_pool())
+# if CURR_ENV == 'dev':
+#    bot.loop.run_until_complete(create_db_pool())
 bot.run(SECRET_KEY)
