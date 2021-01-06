@@ -92,7 +92,7 @@ class Market(commands.Cog):
         emoji_list = ['◀', '▶']
 
         embed = discord.Embed(
-            title=str(coin_prices.get(int(coin_number) + (-1))),
+            title=str(coin_prices.get(int(coin_number))),
             description=' ',
             colour=discord.Colour.blurple()
         )
