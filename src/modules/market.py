@@ -47,25 +47,23 @@ def names():
 
 
 def prices():
-    clean_prices = {}
-
     counter = 1
+    coin_prices_counter = 1
+    coin_market_cap_counter = 1
+
     for price in soup.find_all('div', class_='valuta valuta--light'):
         price = price.text
         price = price.strip()
         clean_price = price.replace('\n  ', '')
-        clean_prices[counter] = clean_price
-        counter += 1
 
-    price_counter = 1
-    market_cap_counter = 1
-    for price in clean_prices:
-        if price % 2 == 1:
-            coin_prices[price_counter] = price
-            price_counter += 1
+        if counter % 2 == 1:
+            coin_prices[coin_prices_counter] = clean_price
+            coin_prices_counter += 1
         else:
-            coin_market_cap[market_cap_counter] = price
-            market_cap_counter += 1
+            coin_market_cap[coin_market_cap_counter] = clean_price
+            coin_market_cap_counter += 1
+
+        counter += 1
 
 # ---     CUSTOM CHECKS     --- #
 
