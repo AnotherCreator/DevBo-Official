@@ -32,7 +32,9 @@ bot_avatar_link = 'https://cdn.discordapp.com/avatars/733004304855597056/d552341
 def icons():
     counter = 1
     for png in soup.find_all('span', class_='profile__logo-background'):
-        coin_icons[counter] = png.img.get('src')
+        png = png.img.get('src')
+        png = png.replace('.svg?size=30x30', '.png')
+        coin_icons[counter] = png
         counter += 1
 
 
@@ -97,7 +99,7 @@ class Market(commands.Cog):
         embed.set_footer(text=site)
         if 0 < int(coin_number) <= 50:
             embed.set_author(
-                name=f'{coin_number}.{str(coin_names.get(int(coin_number)))}',
+                name=f'{coin_number}. {str(coin_names.get(int(coin_number)))}',
                 icon_url=coin_icons.get(int(coin_number))
             )
         else:
