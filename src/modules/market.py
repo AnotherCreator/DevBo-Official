@@ -92,15 +92,15 @@ class Market(commands.Cog):
         emoji_list = ['◀', '▶']
 
         embed = discord.Embed(
-            title=str(coin_prices.get(int(coin_number))),
+            title=str(coin_prices.get(int(coin_number) + 1)),
             description=' ',
             colour=discord.Colour.blurple()
         )
         embed.set_footer(text=site)
         if 0 < int(coin_number) <= 50:
             embed.set_author(
-                name=f'{coin_number}. {str(coin_names.get(int(coin_number) + (-1)))}',
-                icon_url=f'https://coinlib.io/{str(coin_icons.get(int(coin_number) + (-1)))}'
+                name=f'{coin_number}. {str(coin_names.get(int(coin_number)))}',
+                icon_url=f'https://coinlib.io/{str(coin_icons.get(int(coin_number)))}'
             )
         else:
             embed = discord.Embed(
