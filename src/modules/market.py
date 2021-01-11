@@ -143,37 +143,37 @@ class Market(commands.Cog):
                          icon_url=bot_avatar_link)
         embed.set_footer(text=site)
         if page == '1':
-            counter = 0
-            while counter < 10:
-                embed.add_field(name=f'{counter + 1}. {str(coin_names.get(counter))}',
+            counter = 1
+            while counter < 11:
+                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))}',
                                 value=str(coin_prices.get(counter)),
                                 inline=False)
                 counter += 1
         elif page == '2':
-            counter = 10
-            while counter < 20:
-                embed.add_field(name=f'{counter + 1}. {str(coin_names.get(counter))}',
+            counter = 11
+            while counter < 21:
+                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))}',
                                 value=str(coin_prices.get(counter)),
                                 inline=False)
                 counter += 1
         elif page == '3':
-            counter = 20
-            while counter < 30:
-                embed.add_field(name=f'{counter + 1}. {str(coin_names.get(counter))}',
+            counter = 21
+            while counter < 31:
+                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))}',
                                 value=str(coin_prices.get(counter)),
                                 inline=False)
                 counter += 1
         elif page == '4':
-            counter = 30
-            while counter < 40:
-                embed.add_field(name=f'{counter + 1}. {str(coin_names.get(counter))}',
+            counter = 31
+            while counter < 41:
+                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))}',
                                 value=str(coin_prices.get(counter)),
                                 inline=False)
                 counter += 1
         elif page == '5':
-            counter = 40
-            while counter < 50:
-                embed.add_field(name=f'{counter + 1}. {str(coin_names.get(counter))}',
+            counter = 41
+            while counter < 51:
+                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))}',
                                 value=str(coin_prices.get(counter)),
                                 inline=False)
                 counter += 1
