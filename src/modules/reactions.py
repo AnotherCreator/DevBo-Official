@@ -17,7 +17,7 @@ class Reactions(Cog):
     @Cog.listener()
     async def on_reaction_add(self, reaction, user):
         pin_reaction = '👌'
-        channel = self.bot.get_channel(770414002429362176)
+        channel = self.bot.get_channel(798217221934809168)
 
         if str(reaction.emoji) == pin_reaction:
             print(f'{user.name} has reacted with {reaction.emoji}')
