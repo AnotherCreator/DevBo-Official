@@ -37,14 +37,7 @@ bot_avatar_link = 'https://cdn.discordapp.com/avatars/733004304855597056/d552341
 
 def icons():
     counter = 1
-    # for png in soup2.find_all('div', class_='sc-AxhCb sc-fznLPX BewUF'):
-    #     png = png.img.get('src')
-    #     png = png.strip('?size=30x3048x48')
-    #     png = png.replace('.svg', '.png')
-    #     coin_icons[counter] = png
-    #     counter += 1
-
-    for png in soup2.find_all('div', class_='sc-1kxikfi-0 fjclfm cmc-table__column-name'):
+    for png in soup2.find_all('div', class_='sc-AxhCb sc-fznLPX BewUF'):
         png = png.img.get('src')
         png = png.strip('?size=30x3048x48')
         png = png.replace('.svg', '.png')
