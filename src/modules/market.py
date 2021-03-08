@@ -27,7 +27,7 @@ soup2 = BeautifulSoup(page2, 'html.parser')
 coin_icons = {}
 coin_names = {}
 coin_prices = {}
-coin_market_cap = {}
+coin_percent_change = {}
 
 # links
 bot_avatar_link = 'https://cdn.discordapp.com/avatars/733004304855597056/d55234172599dca4b11e6345078a32b0.png?size=128'
@@ -44,6 +44,7 @@ def icons():
         coin_icons[counter] = png
         counter += 1
 
+
 def names():
     counter = 1
     for name in soup.find_all('div', class_='sc-1kxikfi-0 fjclfm cmc-table__column-name'):
@@ -58,6 +59,15 @@ def prices():
         price = price.text
         price = price.strip()
         coin_prices[counter] = price
+        counter += 1
+
+
+def percent_change():
+    counter = 1
+    for percent in soup.find_all('td', class_='cmc-table__cell cmc-table__cell--sortable cmc-table__cell--right '
+                                              'cmc-table__cell--sort-by__percent-change-24-h'):
+        percent = percent.div.text
+        coin_percent_change[counter] = percent
         counter += 1
 
 # ---     CUSTOM CHECKS     --- #
@@ -82,6 +92,7 @@ class Market(commands.Cog):
         names()
         icons()
         prices()
+        percent_change()
         emoji_list = ['◀', '▶']
 
         embed = discord.Embed(
@@ -95,10 +106,12 @@ class Market(commands.Cog):
                 name=f'{coin_number}. {str(coin_names.get(int(coin_number)))}',
                 icon_url=coin_icons.get(int(coin_number))
             )
+            embed.add_field(name='% 24h', value=str(coin_percent_change.get(int(coin_number))), inline=False)
         elif 11 <= int(coin_number) <= 50:
             embed.set_author(
                 name=f'{coin_number}. {str(coin_names.get(int(coin_number)))}'
             )
+            embed.add_field(name='% 24h', value=str(coin_percent_change.get(int(coin_number))), inline=False)
         else:
             embed = discord.Embed(
                 title='Invalid Number',
