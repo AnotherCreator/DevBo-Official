@@ -89,29 +89,32 @@ class Market(commands.Cog):
     @commands.command()
     @commands.check(bot_channel_check)
     async def crypto(self, ctx, coin_number):
+        # Function calls
         names()
         icons()
         prices()
         percent_change()
-        emoji_list = ['◀', '▶']
+        # Variables
+        # emoji_list = ['◀', '▶']
+        coin_number = int(coin_number)
 
         embed = discord.Embed(
-            title=str(coin_prices.get(int(coin_number))),
+            title=str(coin_prices.get(coin_number)),
             description=' ',
             colour=discord.Colour.blurple()
         )
         embed.set_footer(text=site)
         if 0 < int(coin_number) <= 10:
             embed.set_author(
-                name=f'{coin_number}. {str(coin_names.get(int(coin_number)))}',
+                name=f'{coin_number}. {str(coin_names.get(coin_number))}',
                 icon_url=coin_icons.get(int(coin_number))
             )
-            embed.add_field(name='% 24h', value=str(coin_percent_change.get(int(coin_number))), inline=False)
+            embed.add_field(name='% 24h', value=str(coin_percent_change.get(coin_number)), inline=False)
         elif 11 <= int(coin_number) <= 50:
             embed.set_author(
-                name=f'{coin_number}. {str(coin_names.get(int(coin_number)))}'
+                name=f'{coin_number}. {str(coin_names.get(coin_number))}'
             )
-            embed.add_field(name='% 24h', value=str(coin_percent_change.get(int(coin_number))), inline=False)
+            embed.add_field(name='24h % Change', value=str(coin_percent_change.get(coin_number)), inline=False)
         else:
             embed = discord.Embed(
                 title='Invalid Number',
@@ -120,8 +123,67 @@ class Market(commands.Cog):
             )
 
         message_embed = await ctx.send(embed=embed)
-        for emoji in emoji_list:
-            await message_embed.add_reaction(emoji)
+        # for emoji in emoji_list:
+        #     await message_embed.add_reaction(emoji)
+
+    @commands.command()
+    @commands.check(bot_channel_check)
+    async def cryptolist(self, ctx, page):
+        # Function Calls
+        names()
+        prices()
+        # Variables
+        # emoji_list = ['◀', '▶']
+        page = int(page)
+
+        embed = discord.Embed(
+            title=' ',
+            description=' ',
+            colour=discord.Colour.blurple()
+        )
+
+        embed.set_author(name=f'Top {10 * page} Crypto Coins',
+                         icon_url=bot_avatar_link)
+        embed.set_footer(text=site)
+        if page == 1:
+            counter = 1
+            while counter < 11:
+                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))}',
+                                value=str(coin_prices.get(counter)),
+                                inline=False)
+                counter += 1
+        elif page == 2:
+            counter = 11
+            while counter < 21:
+                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))}',
+                                value=str(coin_prices.get(counter)),
+                                inline=False)
+                counter += 1
+        elif page == 3:
+            counter = 21
+            while counter < 31:
+                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))}',
+                                value=str(coin_prices.get(counter)),
+                                inline=False)
+                counter += 1
+        elif page == 4:
+            counter = 31
+            while counter < 41:
+                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))}',
+                                value=str(coin_prices.get(counter)),
+                                inline=False)
+                counter += 1
+        elif page == 5:
+            counter = 41
+            while counter < 51:
+                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))}',
+                                value=str(coin_prices.get(counter)),
+                                inline=False)
+                counter += 1
+
+        message_embed = await ctx.send(embed=embed)
+        # for emoji in emoji_list:
+        #     await message_embed.add_reaction(emoji)
 
     @crypto.error
     async def crypto_error(self, ctx, error):
@@ -134,62 +196,6 @@ class Market(commands.Cog):
             embed.set_footer(text='ex => ;crypto 1')
 
             await ctx.send(embed=embed, delete_after=5)
-
-    @commands.command()
-    @commands.check(bot_channel_check)
-    async def cryptolist(self, ctx, page):
-        names()
-        prices()
-        emoji_list = ['◀', '▶']
-
-        embed = discord.Embed(
-            title=' ',
-            description=' ',
-            colour=discord.Colour.blurple()
-        )
-
-        embed.set_author(name=f'Top {10 * int(page)} Crypto Coins',
-                         icon_url=bot_avatar_link)
-        embed.set_footer(text=site)
-        if page == '1':
-            counter = 1
-            while counter < 11:
-                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))}',
-                                value=str(coin_prices.get(counter)),
-                                inline=False)
-                counter += 1
-        elif page == '2':
-            counter = 11
-            while counter < 21:
-                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))}',
-                                value=str(coin_prices.get(counter)),
-                                inline=False)
-                counter += 1
-        elif page == '3':
-            counter = 21
-            while counter < 31:
-                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))}',
-                                value=str(coin_prices.get(counter)),
-                                inline=False)
-                counter += 1
-        elif page == '4':
-            counter = 31
-            while counter < 41:
-                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))}',
-                                value=str(coin_prices.get(counter)),
-                                inline=False)
-                counter += 1
-        elif page == '5':
-            counter = 41
-            while counter < 51:
-                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))}',
-                                value=str(coin_prices.get(counter)),
-                                inline=False)
-                counter += 1
-
-        message_embed = await ctx.send(embed=embed)
-        for emoji in emoji_list:
-            await message_embed.add_reaction(emoji)
 
     @cryptolist.error
     async def cryptolist_error(self, ctx, error):
