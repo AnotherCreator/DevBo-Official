@@ -39,7 +39,8 @@ def icons():
     counter = 1
     for png in soup2.find_all('span', class_='profile__logo-background'):
         png = png.img.get('src')
-        print(png)
+        png = png.strip('?size=30x3048x48')
+        png = png.replace('.svg', '.png')
         coin_icons[counter] = png
         counter += 1
 
