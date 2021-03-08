@@ -1,6 +1,5 @@
 # ---       IMPORTS          ---#
 
-
 import discord
 import unicodedata
 from bs4 import BeautifulSoup

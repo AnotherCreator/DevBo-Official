@@ -11,7 +11,7 @@ from urllib.request import Request, urlopen
 
 
 # bs4
-site = "https://coinranking.com/"
+site = "https://coinmarketcap.com/all/views/all/"
 hdr = {'User-Agent': 'Mozilla/84.0'}
 req = Request(site, headers=hdr)
 page = urlopen(req)
@@ -51,21 +51,10 @@ def names():
 
 def prices():
     counter = 1
-    coin_prices_counter = 1
-    coin_market_cap_counter = 1
-
-    for price in soup.find_all('div', class_='valuta valuta--light'):
+    for price in soup.find_all('div', class_='price___3rj7O'):
         price = price.text
         price = price.strip()
-        clean_price = price.replace('\n  ', '')
-
-        if counter % 2 == 1:
-            coin_prices[coin_prices_counter] = clean_price
-            coin_prices_counter += 1
-        else:
-            coin_market_cap[coin_market_cap_counter] = clean_price
-            coin_market_cap_counter += 1
-
+        coin_prices[counter] = price
         counter += 1
 
 # ---     CUSTOM CHECKS     --- #
