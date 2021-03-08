@@ -39,7 +39,6 @@ def icons():
     counter = 1
     for png in soup2.find_all('div', class_='sc-AxhCb sc-fznLPX BewUF'):
         png = png.img.get('src')
-        print(png)
         png = png.strip('?size=30x3048x48')
         png = png.replace('.svg', '.png')
         coin_icons[counter] = png
@@ -91,10 +90,14 @@ class Market(commands.Cog):
             colour=discord.Colour.blurple()
         )
         embed.set_footer(text=site)
-        if 0 < int(coin_number) <= 50:
+        if 0 < int(coin_number) <= 10:
             embed.set_author(
                 name=f'{coin_number}. {str(coin_names.get(int(coin_number)))}',
                 icon_url=coin_icons.get(int(coin_number))
+            )
+        elif 11 <= int(coin_number) <= 50:
+            embed.set_author(
+                name=f'{coin_number}. {str(coin_names.get(int(coin_number)))}'
             )
         else:
             embed = discord.Embed(
