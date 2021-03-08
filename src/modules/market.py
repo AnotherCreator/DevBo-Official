@@ -17,7 +17,7 @@ req = Request(site, headers=hdr)
 page = urlopen(req)
 soup = BeautifulSoup(page, 'html.parser')
 
-site2 = "https://coinranking.com/"
+site2 = "https://coinmarketcap.com/"
 hdr2 = {'User-Agent': 'Mozilla/84.0'}
 req2 = Request(site2, headers=hdr2)
 page2 = urlopen(req2)
@@ -37,13 +37,13 @@ bot_avatar_link = 'https://cdn.discordapp.com/avatars/733004304855597056/d552341
 
 def icons():
     counter = 1
-    for png in soup2.find_all('span', class_='profile__logo-background'):
+    for png in soup2.find_all('div', class_='sc-AxhCb sc-fznLPX BewUF'):
         png = png.img.get('src')
+        print(png)
         png = png.strip('?size=30x3048x48')
         png = png.replace('.svg', '.png')
         coin_icons[counter] = png
         counter += 1
-
 
 def names():
     counter = 1
