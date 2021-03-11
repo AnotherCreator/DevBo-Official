@@ -106,7 +106,7 @@ class Market(commands.Cog):
         prices()
         percent_change()
         # Variables
-        # emoji_list = ['◀', '▶']
+        emoji_list = ['◀', '▶']
         coin_number = int(coin_number)
 
         embed = discord.Embed(
@@ -134,8 +134,11 @@ class Market(commands.Cog):
             )
 
         message_embed = await ctx.send(embed=embed)
-        # for emoji in emoji_list:
-        #     await message_embed.add_reaction(emoji)
+        for emoji in emoji_list:
+            await message_embed.add_reaction(emoji)
+
+        if message_embed.on_raw_reaction_add() == emoji_list:
+            print('test')
 
     @commands.command()
     @commands.check(bot_channel_check)
@@ -157,6 +160,7 @@ class Market(commands.Cog):
         embed.set_author(name=f'Top {10 * page} Crypto Coins',
                          icon_url=bot_avatar_link)
         embed.set_footer(text=site)
+
         if page == 1:
             counter = 1
             while counter < 11:

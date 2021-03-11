@@ -58,9 +58,16 @@ async def on_ready():
 
 @bot.command()
 @commands.is_owner()
+async def botmessage(ctx, *, message):
+    channel = bot.get_channel(666873106857721869)
+    await channel.send(message)
+
+
+@bot.command()
+@commands.is_owner()
 async def updatelogs(ctx, *, message):
     # 'update-notes' channel
-    channel = bot.get_channel(768626068629880902)
+    channel = bot.get_channel(798217221934809168)
 
     embed = discord.Embed(
         title='',
