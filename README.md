@@ -6,7 +6,8 @@ If you want to see the bot in action and play around with it you can [join here!
 * [Technologies](#technologies)
 
 ## Current Features
-- Cryptocurrency tracker that displays the top 50 coins 
+- Cryptocurrency tracker that displays the top 50 coins
+
 ![](README_assets/images/Crypto_Commands.png)
 
 ## Technologies
