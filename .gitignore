@@ -1,8 +1,12 @@
+# Bot specific modules
 /pybo-discord-bot/src/modules/experimental.py
 /modules/templates.py
+# Heroku files
 /modules/Procfile
 /modules/requirements.txt
 /modules/runtime.txt
+# IDE Files
 /venv
 /.idea
+# heh
 .env
