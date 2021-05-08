@@ -1,5 +1,8 @@
 /pybo-discord-bot/src/modules/experimental.py
 /modules/templates.py
+/modules/Procfile
+/modules/requirements.txt
+/modules/runtime.txt
 /venv
 /.idea
 .env
