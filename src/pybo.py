@@ -67,7 +67,7 @@ async def botmessage(ctx, *, message):
 @commands.is_owner()
 async def updatelogs(ctx, *, message):
     # 'update-notes' channel
-    channel = bot.get_channel(798217221934809168)
+    channel = bot.get_channel(768626068629880902)
 
     embed = discord.Embed(
         title='',
