@@ -15,7 +15,7 @@ bot.remove_command('help')
 # ---       ENV VARIABLES       --- #
 
 # Bot / Bot Owner related
-load_env(read_file('.env'))
+load_env(read_file('../.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
 
