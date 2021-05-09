@@ -3,6 +3,7 @@
 /modules/templates.py
 # Heroku files
 /modules/Procfile
+/modules/__pycache__
 /modules/requirements.txt
 /modules/runtime.txt
 # IDE Files
