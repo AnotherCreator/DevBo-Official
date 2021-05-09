@@ -3,11 +3,11 @@
 /modules/templates.py
 # Heroku files
 /modules/Procfile
-/modules/__pycache__
 /modules/requirements.txt
 /modules/runtime.txt
 # IDE Files
 /venv
 /.idea
+/modules/__pycache__
 # heh
 .env
