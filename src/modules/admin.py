@@ -120,26 +120,47 @@ class Admin(commands.Cog):
     @commands.has_guild_permissions(manage_messages=True)
     async def prune(self, ctx, amount=5):
         if int(amount) > 0:
-            await ctx.channel.purge(limit=int(amount) + 1)
-            embed = discord.Embed(
-                title=f'Successfully removed {amount} messages',
-                description=' ',
-                colour=discord.Colour.blurple()
-            )
-            await ctx.send(embed=embed, delete_after=2)
-
             audit_channel = self.bot.get_channel(772860738796650537)
-            embed2 = discord.Embed(
-                title=f'Successfully removed {amount} messages in #{ctx.channel}',
-                description=' ',
-                colour=discord.Colour.red()
-            )
-            embed2.set_author(
-                name=ctx.author,
-                icon_url=ctx.author.avatar_url
-            )
-            await audit_channel.send(embed=embed2)
-
+            if int(amount) == 1:
+                # Send embed in channel where command was called
+                await ctx.channel.purge(limit=int(amount) + 1) # Shifted +1 to account for command call
+                embed = discord.Embed(
+                    title=f'Successfully removed {amount} message',
+                    description=' ',
+                    colour=discord.Colour.blurple()
+                )
+                await ctx.send(embed=embed, delete_after=2)
+                # Send embed to audit channel
+                embed2 = discord.Embed(
+                    title=f'Successfully removed {amount} message in #{ctx.channel}',
+                    description=' ',
+                    colour=discord.Colour.red()
+                )
+                embed2.set_author(
+                    name=ctx.author,
+                    icon_url=ctx.author.avatar_url
+                )
+                await audit_channel.send(embed=embed2)
+            else:
+                # Send embed in channel where command was called
+                await ctx.channel.purge(limit=int(amount) + 1) # Shifted +1 to account for command call
+                embed = discord.Embed(
+                    title=f'Successfully removed {amount} messages',
+                    description=' ',
+                    colour=discord.Colour.blurple()
+                )
+                await ctx.send(embed=embed, delete_after=2)
+                # Send embed to audit channel
+                embed2 = discord.Embed(
+                    title=f'Successfully removed {amount} messages in #{ctx.channel}',
+                    description=' ',
+                    colour=discord.Colour.red()
+                )
+                embed2.set_author(
+                    name=ctx.author,
+                    icon_url=ctx.author.avatar_url
+                )
+                await audit_channel.send(embed=embed2)
         elif int(amount) <= 0:
             embed = discord.Embed(
                 title='Error: The amount must be greater than 0',
