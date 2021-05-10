@@ -1,84 +1,35 @@
-# ---       IMPORTS          ---#
-
-
+# ---       IMPORTS          --- #
 import discord
-import unicodedata
-from bs4 import BeautifulSoup
+import os
+
 from discord.ext import commands
-from urllib.request import Request, urlopen
+from dotenvy import load_env, read_file
+from requests import Request, Session
+from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
+import json
 
-# ---       GLOBAL VARIABLES          ---#
+# ---       LOAD API         --- #
+load_env(read_file('../../.env'))
+API_KEY = os.environ.get('CMC_API_KEY')
 
+headers = {
+    'Accepts': 'application/json',
+    'X-CMC_PRO_API_KEY': API_KEY,
+}
 
-# bs4
-site = "https://coinmarketcap.com/all/views/all/"
-hdr = {'User-Agent': 'Mozilla/84.0'}
-req = Request(site, headers=hdr)
-page = urlopen(req)
-soup = BeautifulSoup(page, 'html.parser')
+session = Session()
+session.headers.update(headers)
 
-site2 = "https://coinmarketcap.com/"
-hdr2 = {'User-Agent': 'Mozilla/84.0'}
-req2 = Request(site2, headers=hdr2)
-page2 = urlopen(req2)
-soup2 = BeautifulSoup(page2, 'html.parser')
-
-# dicts
-coin_icons = {}
-coin_names = {}
-coin_abbreviation = {}
-coin_prices = {}
-coin_percent_change = {}
-
-# links
+# ---       LINKS        --- #
+coin_url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
 bot_avatar_link = 'https://cdn.discordapp.com/avatars/733004304855597056/d55234172599dca4b11e6345078a32b0.png?size=128'
 
-
-# ---       FUNCTIONS        --- #
-
-def icons():
-    counter = 1
-    for png in soup2.find_all('div', class_='sc-AxhCb sc-fznLPX BewUF'):
-        png = png.img.get('src')
-        png = png.strip('?size=30x3048x48')
-        png = png.replace('.svg', '.png')
-        coin_icons[counter] = png
-        counter += 1
-
-
-def names():
-    counter = 1
-    for name in soup.find_all('div', class_='sc-1kxikfi-0 fjclfm cmc-table__column-name'):
-        name = name.text
-        coin_names[counter] = name
-        counter += 1
-
-
-def abbreviations():
-    counter = 1
-    for abb in soup.find_all('td', class_='cmc-table__cell cmc-table__cell--sortable '
-                                          'cmc-table__cell--left cmc-table__cell--sort-by__symbol'):
-        abb = abb.text
-        coin_abbreviation[counter] = abb
-        counter += 1
-
-
-def prices():
-    counter = 1
-    for price in soup.find_all('div', class_='price___3rj7O'):
-        price = price.text
-        price = price.strip()
-        coin_prices[counter] = price
-        counter += 1
-
-
-def percent_change():
-    counter = 1
-    for percent in soup.find_all('td', class_='cmc-table__cell cmc-table__cell--sortable cmc-table__cell--right '
-                                              'cmc-table__cell--sort-by__percent-change-24-h'):
-        percent = percent.div.text
-        coin_percent_change[counter] = percent
-        counter += 1
+# ---       API PARAMS        --- #
+coin_parameters = {  # Retrieves coins listed 1-50
+    'start': '1',
+    'limit': '50',
+    'convert': 'USD'
+}
 
 # ---     CUSTOM CHECKS     --- #
 
@@ -90,7 +41,6 @@ def bot_channel_check(ctx):
 
 
 # ---       MAIN LINE       ---#
-
 
 class Market(commands.Cog):
     def __init__(self, bot):
