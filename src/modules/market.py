@@ -1,6 +1,5 @@
 # ---       IMPORTS          --- #
 import datetime
-
 import discord
 import json
 import os
@@ -8,22 +7,20 @@ import psycopg2
 import schedule
 import time
 
-from psycopg2 import errors
-
 from discord.ext import commands
 from dotenvy import load_env, read_file
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
+from pybo import API_KEY, DB_DEV_PW
+
 
 # ---       LINKS        --- #
+
 coin_url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
+coin_url2 = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/info'
 bot_avatar_link = 'https://cdn.discordapp.com/avatars/733004304855597056/d55234172599dca4b11e6345078a32b0.png?size=128'
 
 # ---       LOAD API         --- #
-
-load_env(read_file('../../.env'))
-API_KEY = os.environ.get('CMC_API_KEY')
-DB_DEV_PW = os.environ.get('DB_DEV_PW')
 
 headers = {
     'Accepts': 'application/json',
@@ -34,6 +31,7 @@ session = Session()
 session.headers.update(headers)
 
 # ---       API PARAMS        --- #
+
 coin_parameters = {  # Retrieves coins listed 1-50
     'start': '1',
     'limit': '50',
@@ -48,13 +46,13 @@ con = psycopg2.connect(
     user='postgres',
     password=DB_DEV_PW
 )
+cur = con.cursor()
 
-# ---        INIT DATA IN DB        --- #
+# ---        DATABASE        --- #
 
 
-def cache_coins():
+def cache_coins():  # Run this once to init db values
     try:
-        cur = con.cursor()
         coin_response = session.get(coin_url, params=coin_parameters)
         coin_data = json.loads(coin_response.text)
         coins = coin_data['data']
@@ -74,13 +72,10 @@ def cache_coins():
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
 
-# ---       UPDATE DATA IN DB       --- #
-
 
 def update_coins():
     try:
-        cur = con.cursor()
-        TNOW = datetime.datetime.now().replace(microsecond=0)
+        time_stamp = datetime.datetime.now().replace(microsecond=0)
         coin_response = session.get(coin_url, params=coin_parameters)
         coin_data = json.loads(coin_response.text)
         coins = coin_data['data']
@@ -95,7 +90,7 @@ def update_coins():
                         (price, id))
 
             con.commit()  # Commit transaction
-        print(f'{TNOW}: Updates data every minute')
+        print(f'{time_stamp}: Updates data every minute')
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
 
@@ -115,51 +110,53 @@ class Market(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command()
+    @commands.check(bot_channel_check)
+    async def crypto(self, ctx, *, name):
+        # Variables
+        emoji_list = ['◀', '▶']
 
-#     @commands.command()
-#     @commands.check(bot_channel_check)
-#     async def crypto(self, ctx, coin_number):
-#         # Function calls
-#         abbreviations()
-#         names()
-#         icons()
-#         prices()
-#         percent_change()
-#         # Variables
-#         emoji_list = ['◀', '▶']
-#         coin_number = int(coin_number)
-#
-#         embed = discord.Embed(
-#             title=str(coin_prices.get(coin_number)),
-#             description=' ',
-#             colour=discord.Colour.blurple()
-#         )
-#         embed.set_footer(text=site)
-#         if 0 < int(coin_number) <= 10:
-#             embed.set_author(
-#                 name=f'{coin_number}. {str(coin_names.get(coin_number))} / {str(coin_abbreviation.get(coin_number))}',
-#                 icon_url=coin_icons.get(int(coin_number))
-#             )
-#             embed.add_field(name='24h % Change', value=str(coin_percent_change.get(coin_number)), inline=False)
-#         elif 11 <= int(coin_number) <= 50:
-#             embed.set_author(
-#                 name=f'{coin_number}. {str(coin_names.get(coin_number))} / {str(coin_abbreviation.get(coin_number))}'
-#             )
-#             embed.add_field(name='24h % Change', value=str(coin_percent_change.get(coin_number)), inline=False)
-#         else:
-#             embed = discord.Embed(
-#                 title='Invalid Number',
-#                 description=' ',
-#                 colour=discord.Colour.red()
-#             )
-#
-#         message_embed = await ctx.send(embed=embed)
-#         for emoji in emoji_list:
-#             await message_embed.add_reaction(emoji)
-#
-#         if message_embed.on_raw_reaction_add() == emoji_list:
-#             print('test')
-#
+        cur.execute('SELECT * FROM coin_info')
+        rows = cur.fetchall()
+
+        for x in rows:
+            #  ID: x[0]
+            #  Name: x[1]
+            #  Symbol: x[2]
+            #  Price: x[3]
+            if x[1] == name:
+                print("It matches")
+                embed = discord.Embed(
+                    title=x[1],
+                    description=' ',
+                    colour=discord.Colour.blurple()
+                )
+                embed.set_footer(text="Test")
+                await ctx.send(embed=embed)
+        # if 0 < int(coin_number) <= 10:
+        #     embed.set_author(
+        #         name=f'{coin_number}. {str(coin_names.get(coin_number))} / {str(coin_abbreviation.get(coin_number))}',
+        #         icon_url=coin_icons.get(int(coin_number))
+        #     )
+        #     embed.add_field(name='24h % Change', value=str(coin_percent_change.get(coin_number)), inline=False)
+        # elif 11 <= int(coin_number) <= 50:
+        #     embed.set_author(
+        #         name=f'{coin_number}. {str(coin_names.get(coin_number))} / {str(coin_abbreviation.get(coin_number))}'
+        #     )
+        #     embed.add_field(name='24h % Change', value=str(coin_percent_change.get(coin_number)), inline=False)
+        # else:
+        #     embed = discord.Embed(
+        #         title='Invalid Number',
+        #         description=' ',
+        #         colour=discord.Colour.red()
+        #     )
+
+        # for emoji in emoji_list:
+        #     await message_embed.add_reaction(emoji)
+        #
+        # if message_embed.on_raw_reaction_add() == emoji_list:
+        #     print('test')
+
 #     @commands.command()
 #     @commands.check(bot_channel_check)
 #     async def cryptolist(self, ctx, page):
@@ -251,9 +248,7 @@ def setup(bot):
     bot.add_cog(Market(bot))
 
 
-# ---       CACHES DATA IN DB        ---#
-schedule.every(1).minutes.do(update_coins)
-while True:
-    schedule.run_pending()
-    time.sleep(1)
-
+# schedule.every(1).minutes.do(update_coins)  # Updates DB every minute
+# while True:
+#     schedule.run_pending()
+#     time.sleep(1)
