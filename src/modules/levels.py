@@ -46,11 +46,14 @@ class Levels(commands.Cog):
 
         if not user:
             await self.bot.pg_con.execute(
-                'INSERT INTO user_info (user_id, guild_id, user_level, user_xp) VALUES ($1, $2, 1, 0)', author_id, guild_id
+                'INSERT INTO user_info (user_id, guild_id, user_level, user_xp)'
+                'VALUES ($1, $2, 1, 0)', author_id, guild_id
             )
+
         user = await self.bot.pg_con.fetchrow(
             'SELECT * FROM user_info WHERE user_id = $1 AND guild_id = $2', author_id, guild_id
         )
+
         await self.bot.pg_con.execute(
             'UPDATE user_info SET user_xp = $1 WHERE user_id = $2 and guild_id = $3',
             user["user_xp"] + 1, author_id, guild_id
