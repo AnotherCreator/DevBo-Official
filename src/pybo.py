@@ -19,6 +19,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
 # Database
 DB_DEV_PW = os.environ.get('DB_DEV_PW')
+API_KEY = os.environ.get('CMC_API_KEY')
+
 
 # ---       DATABASE STUFF      --- #
 
