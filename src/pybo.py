@@ -2,7 +2,6 @@
 import asyncpg
 import discord
 import os
-import psycopg2
 from discord.ext import commands, tasks
 from dotenvy import load_env, read_file
 from itertools import cycle
@@ -18,21 +17,19 @@ bot.remove_command('help')
 load_env(read_file('../.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
+# Database
+DB_DEV_PW = os.environ.get('DB_DEV_PW')
 
 # ---       DATABASE STUFF      --- #
-DB_DEV_PW = os.environ.get('DB_DEV_PW')
 
 
 async def create_db_pool():
     # 'self.bot.pg_con' to connect to db
     bot.pg_con = await asyncpg.create_pool(database='PyBo_Local', user='postgres', password=DB_DEV_PW)
 
-# ---     GLOBAL VARIABLES      --- #
-
+# ---       BACKGROUND STUFF    --- #
 status = cycle(['For more info | ;help', 'Under development! | ;help'])
 
-
-# ---       BACKGROUND STUFF    --- #
 
 @tasks.loop(seconds=30)
 async def change_status():
