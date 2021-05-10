@@ -20,21 +20,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
 
 # ---       DATABASE STUFF      --- #
+DB_DEV_PW = os.environ.get('DB_DEV_PW')
 
-CURR_ENV = 'dev'
 
-# Local PostgreSQL Database
-if CURR_ENV == 'dev':
-    DB_DEV_PW = os.environ.get('DB_DEV_PW')
-
-    async def create_db_pool():
-        bot.pg_con = await asyncpg.create_pool(database='PyBo_Local', user='postgres', password=DB_DEV_PW)
-
-# Heroku PostgreSQL Database
-# elif CURR_ENV == 'prod':
-#     DB_URL = os.environ.get('DB_URL')
-#     conn = psycopg2.connect(DB_URL, sslmode='require')
-#     bot.cur = conn.cursor()
+async def create_db_pool():
+    # 'self.bot.pg_con' to connect to db
+    bot.pg_con = await asyncpg.create_pool(database='PyBo_Local', user='postgres', password=DB_DEV_PW)
 
 # ---     GLOBAL VARIABLES      --- #
 
@@ -90,22 +81,12 @@ async def updateissues(ctx, *, message):
     )
     await channel.send(embed=embed)
 
-
 # ---       LOAD MODULES        --- #
 
-if CURR_ENV == 'dev':
-    for filename in os.listdir('modules'):
-        if filename.endswith('.py'):
-            bot.load_extension(f'modules.{filename[:-3]}')
-# elif CURR_ENV == 'prod':
-#     for filename in os.listdir('./modules'):
-#         if filename.endswith('.py') and not filename.startswith('_'):
-#             bot.load_extension(f'modules.{filename[:-3]}')
+for filename in os.listdir('modules'):
+    if filename.endswith('.py'):
+        bot.load_extension(f'modules.{filename[:-3]}')
 
-
-# for filename in os.listdir('./modules'):
-#     if filename.endswith('.py') and not filename.startswith('-') and not filename.startswith('_'):
-#         bot.load_extension(f'modules.{filename[:-3]}')
 
 @bot.command()
 @commands.is_owner()
@@ -129,6 +110,5 @@ async def reload(ctx, extension):
 
 
 # ---       END MAIN            ---#
-if CURR_ENV == 'dev':
-    bot.loop.run_until_complete(create_db_pool())
+bot.loop.run_until_complete(create_db_pool())
 bot.run(SECRET_KEY)
