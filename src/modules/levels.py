@@ -1,5 +1,3 @@
-# THIS IS FOR LOCAL DEVELOPMENT
-
 # ---       IMPORTS          ---#
 
 import discord
@@ -7,7 +5,6 @@ from discord.ext import commands
 
 
 # ---     CUSTOM CHECKS     --- #
-
 
 def bot_channel_check(ctx):
     botspam_channels = ['bot-spam']
@@ -28,7 +25,7 @@ class Levels(commands.Cog):
 
         if current_exp >= round((4 * (current_level ** 3)) / 5):
             await self.bot.pg_con.execute(
-                'UPDATE user_info SET user_level = $1 WHERE user_id = $2 and guild_id = $3',
+                'UPDATE user_info SET user_level = $1 WHERE user_id = $2 AND guild_id = $3',
                 current_level + 1, user["user_id"], user["guild_id"]
             )
             return True
