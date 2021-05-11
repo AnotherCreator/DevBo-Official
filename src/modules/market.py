@@ -1,11 +1,9 @@
 # ---       IMPORTS          --- #
 import discord
 import json
-import os
 import psycopg2
 
 from discord.ext import commands
-from dotenvy import load_env, read_file
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 from pybo import API_KEY, DB_DEV_PW
@@ -108,6 +106,39 @@ def update_coins():
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
 
+
+def query_coins(rank):
+    cur.execute('SELECT * FROM coin_info ORDER BY coin_rank asc')
+    rows = cur.fetchall()
+
+    if rank < 11:
+        min = 1
+        max = 10
+    else:
+        min = rank - 10
+        max = rank
+        if max > 100:
+            max = 100
+
+    embed = discord.Embed(
+        title=' ',
+        description=' ',
+        colour=discord.Colour.blurple()
+    )
+    embed.set_footer(text="")
+
+    #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
+    for x in rows:
+        if min <= x[5] <= max:
+            embed.set_author(name=f'Top {max} Crypto Coins',
+                             icon_url=bot_avatar_link)
+            embed.add_field(
+                name=f'{x[5]}. {x[1]} / {x[2]}',
+                value=f'${x[3]}',
+                inline=False)
+    return embed
+
+
 # ---     CUSTOM CHECKS     --- #
 
 
@@ -125,7 +156,7 @@ class Market(commands.Cog):
 
     @commands.command()
     @commands.check(bot_channel_check)
-    async def crypto(self, ctx, *, name):
+    async def coin(self, ctx, *, name):  # Accepts either name or current rank
         # Variables
         emoji_list = ['◀', '▶']
 
@@ -133,126 +164,62 @@ class Market(commands.Cog):
         rows = cur.fetchall()
 
         for x in rows:
-            #  ID: x[0]
-            #  Name: x[1]
-            #  Symbol: x[2]
-            #  Price: x[3]
-            if x[1] == name:
+            #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
+            if x[1] == name or x[5] == int(name):
                 embed = discord.Embed(
-                    title=x[1],
+                    title=f'${str(x[3])}',
                     description=' ',
                     colour=discord.Colour.blurple()
                 )
+                embed.set_author(
+                    name=f'{x[5]}. {x[1]} / {x[2]}',
+                    icon_url=x[4]
+                )
                 embed.set_footer(text="")
-                await ctx.send(embed=embed)
-        # if 0 < int(coin_number) <= 10:
-        #     embed.set_author(
-        #         name=f'{coin_number}. {str(coin_names.get(coin_number))} / {str(coin_abbreviation.get(coin_number))}',
-        #         icon_url=coin_icons.get(int(coin_number))
-        #     )
-        #     embed.add_field(name='24h % Change', value=str(coin_percent_change.get(coin_number)), inline=False)
-        # elif 11 <= int(coin_number) <= 50:
-        #     embed.set_author(
-        #         name=f'{coin_number}. {str(coin_names.get(coin_number))} / {str(coin_abbreviation.get(coin_number))}'
-        #     )
-        #     embed.add_field(name='24h % Change', value=str(coin_percent_change.get(coin_number)), inline=False)
-        # else:
-        #     embed = discord.Embed(
-        #         title='Invalid Number',
-        #         description=' ',
-        #         colour=discord.Colour.red()
-        #     )
+                message_embed = await ctx.send(embed=embed)
 
-        # for emoji in emoji_list:
-        #     await message_embed.add_reaction(emoji)
-        #
+        for emoji in emoji_list:
+            await message_embed.add_reaction(emoji)
+
         # if message_embed.on_raw_reaction_add() == emoji_list:
         #     print('test')
 
-#     @commands.command()
-#     @commands.check(bot_channel_check)
-#     async def cryptolist(self, ctx, page):
-#         # Function Calls
-#         abbreviations()
-#         names()
-#         prices()
-#         # Variables
-#         # emoji_list = ['◀', '▶']
-#         page = int(page)
-#
-#         embed = discord.Embed(
-#             title=' ',
-#             description=' ',
-#             colour=discord.Colour.blurple()
-#         )
-#
-#         embed.set_author(name=f'Top {10 * page} Crypto Coins',
-#                          icon_url=bot_avatar_link)
-#         embed.set_footer(text=site)
-#
-#         if page == 1:
-#             counter = 1
-#             while counter < 11:
-#                 embed.add_field(name=f'{counter}. {str(coin_names.get(counter))} / {str(coin_abbreviation.get(counter))}',
-#                                 value=str(coin_prices.get(counter)),
-#                                 inline=False)
-#                 counter += 1
-#         elif page == 2:
-#             counter = 11
-#             while counter < 21:
-#                 embed.add_field(name=f'{counter}. {str(coin_names.get(counter))} / {str(coin_abbreviation.get(counter))}',
-#                                 value=str(coin_prices.get(counter)),
-#                                 inline=False)
-#                 counter += 1
-#         elif page == 3:
-#             counter = 21
-#             while counter < 31:
-#                 embed.add_field(name=f'{counter}. {str(coin_names.get(counter))} / {str(coin_abbreviation.get(counter))}',
-#                                 value=str(coin_prices.get(counter)),
-#                                 inline=False)
-#                 counter += 1
-#         elif page == 4:
-#             counter = 31
-#             while counter < 41:
-#                 embed.add_field(name=f'{counter}. {str(coin_names.get(counter))} / {str(coin_abbreviation.get(counter))}',
-#                                 value=str(coin_prices.get(counter)),
-#                                 inline=False)
-#                 counter += 1
-#         elif page == 5:
-#             counter = 41
-#             while counter < 51:
-#                 embed.add_field(name=f'{counter}. {str(coin_names.get(counter))} / {str(coin_abbreviation.get(counter))}',
-#                                 value=str(coin_prices.get(counter)),
-#                                 inline=False)
-#                 counter += 1
-#
-#         message_embed = await ctx.send(embed=embed)
-#         # for emoji in emoji_list:
-#         #     await message_embed.add_reaction(emoji)
-#
-#     @crypto.error
-#     async def crypto_error(self, ctx, error):
-#         if isinstance(error, commands.MissingRequiredArgument):
-#             embed = discord.Embed(
-#                 title='Error: Specify crypto #',
-#                 description=' ',
-#                 colour=discord.Colour.red()
-#             )
-#             embed.set_footer(text='ex => ;crypto 1')
-#
-#             await ctx.send(embed=embed, delete_after=5)
-#
-#     @cryptolist.error
-#     async def cryptolist_error(self, ctx, error):
-#         if isinstance(error, commands.MissingRequiredArgument):
-#             embed = discord.Embed(
-#                 title='Error: Specify cryptolist #',
-#                 description=' ',
-#                 colour=discord.Colour.red()
-#             )
-#             embed.set_footer(text='ex => ;cryptolist 1')
-#
-#             await ctx.send(embed=embed, delete_after=5)
+    @commands.command()
+    @commands.check(bot_channel_check)
+    async def top(self, ctx, rank):
+        # Variables
+        emoji_list = ['◀', '▶']
+        rank = int(rank)
+
+        embed = query_coins(rank)
+
+        message_embed = await ctx.send(embed=embed)
+        for emoji in emoji_list:
+            await message_embed.add_reaction(emoji)
+
+    @coin.error
+    async def coin_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = discord.Embed(
+                title='Error: Specify coin rank or name',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            embed.set_footer(text='ex => ;coin 4\nex => ;coin Bitcoin')
+
+            await ctx.send(embed=embed, delete_after=5)
+
+    @top.error
+    async def top_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = discord.Embed(
+                title='Error: Specify top #',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            embed.set_footer(text='ex => ;top 45')
+
+            await ctx.send(embed=embed, delete_after=5)
 
 
 # ---       END MAIN        ---#
