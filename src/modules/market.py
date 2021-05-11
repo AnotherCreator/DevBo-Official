@@ -31,9 +31,9 @@ session.headers.update(headers)
 
 # ---       API PARAMS        --- #
 
-coin_parameters = {  # Retrieves coins listed 1-50
+coin_parameters = {  # Retrieves coins listed 1-100
     'start': '1',
-    'limit': '50',
+    'limit': '100',
     'convert': 'USD'
 }
 
@@ -68,10 +68,10 @@ def cache_coins():  # Run this once to init db values
                         "VALUES (%s, %s, %s, %s)", (ids, name, symbol, price))
             con.commit()  # Commit transaction
 
-        joined_id = ','.join(map(str, id_list))  # Comma seperated string
+        joined_id = ','.join(map(str, id_list))
 
-        metadata_parameters = {  # Retrieves coin_metadata listed 1-50
-            'id': joined_id,  # Must use a comma separated string
+        metadata_parameters = {  # Retrieves coin_metadata listed 1-100
+            'id': joined_id,
             'aux': 'logo'
         }
         metadata_response = session.get(api_metadata, params=metadata_parameters)
@@ -80,11 +80,12 @@ def cache_coins():  # Run this once to init db values
 
         for unique_id in id_list:
             logo_url = metadata[str(unique_id)]['logo']
-            print(logo_url)
 
-            # cur.execute("INSERT INTO coin_info (coin_logo)"
-            #             "VALUES (%s)", logo_url)
-            # con.commit()  # Commit transaction
+            cur.execute("UPDATE coin_info "  # Uses UPDATE instead of INSERT since first insertion init coin_logo column
+                        "SET coin_logo = %s "
+                        "WHERE coin_id = %s ",
+                        (logo_url, unique_id))
+            con.commit()  # Commit transaction
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
 
