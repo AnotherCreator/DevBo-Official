@@ -1,15 +1,15 @@
-# ---       IMPORTS             ---#
+# ---       IMPORTS             --- #
+import asyncio
+import time
+
 import asyncpg
 import discord
 import os
+
+import schedule
 from discord.ext import commands, tasks
 from dotenvy import load_env, read_file
 from itertools import cycle
-
-# ---     BOT INITIALIZATION    --- #
-
-bot = commands.Bot(command_prefix=';')
-bot.remove_command('help')
 
 # ---       ENV VARIABLES       --- #
 
@@ -21,6 +21,18 @@ OWNER_ID = os.environ.get('OWNER_ID')
 DB_DEV_PW = os.environ.get('DB_DEV_PW')
 API_KEY = os.environ.get('CMC_API_KEY')
 
+# ---     BOT INITIALIZATION    --- #
+
+bot = commands.Bot(command_prefix=';')
+bot.remove_command('help')
+
+for filename in os.listdir('modules'):  # Load modules
+    if filename.endswith('.py'):
+        bot.load_extension(f'modules.{filename[:-3]}')
+
+# ---       MODULE IMPORTS             --- #
+# Module imports cant be at the top because 'pybo.py' has to first load all the modules
+from modules.market import update_coins
 
 # ---       DATABASE STUFF      --- #
 
@@ -29,7 +41,9 @@ async def create_db_pool():
     # 'self.bot.pg_con' to connect to db
     bot.pg_con = await asyncpg.create_pool(database='PyBo_Local', user='postgres', password=DB_DEV_PW)
 
+
 # ---       BACKGROUND STUFF    --- #
+
 status = cycle(['For more info | ;help', 'Under development! | ;help'])
 
 
@@ -38,7 +52,14 @@ async def change_status():
     await bot.change_presence(status=discord.Status.online, activity=discord.Game(next(status)))
 
 
+async def refresh_coins():
+    await bot.wait_until_ready()
+    while not bot.is_closed():
+        update_coins()
+        await asyncio.sleep(60)
+
 # ---       MAIN LINE           --- #
+
 
 @bot.event
 async def on_ready():
@@ -80,11 +101,7 @@ async def updateissues(ctx, *, message):
     )
     await channel.send(embed=embed)
 
-# ---       LOAD MODULES        --- #
-
-for filename in os.listdir('modules'):
-    if filename.endswith('.py'):
-        bot.load_extension(f'modules.{filename[:-3]}')
+# ---       MODULE HANDLING        --- #
 
 
 @bot.command()
@@ -110,4 +127,5 @@ async def reload(ctx, extension):
 
 # ---       END MAIN            ---#
 bot.loop.run_until_complete(create_db_pool())
+bot.loop.create_task(refresh_coins())
 bot.run(SECRET_KEY)
