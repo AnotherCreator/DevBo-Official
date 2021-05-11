@@ -1,6 +1,5 @@
 # ---       IMPORTS         --- #
 
-
 import discord
 from discord.ext import commands
 
@@ -78,27 +77,13 @@ class Help(commands.Cog):
                 colour=discord.Colour.blurple()
             )
             embed.set_author(name='Commands List', icon_url=bot_avatar_link)
-            embed.add_field(name=';crypto __1-50__',
-                            value='Displays Name / Current Price / Percent Change',
+            embed.add_field(name=';coin __1-100__ or ;coin __name__',
+                            value='Displays Name / Current Price',
                             inline=False)
-            embed.add_field(name=';cryptolist __1-5__',
-                            value='Displays the top 50 coins',
+            embed.add_field(name=';top __1-100__',
+                            value='Displays the top # coins',
                             inline=False)
 
-            await ctx.send(embed=embed)
-        elif module == 'Experimental' or module == 'experimental' or module == 'Experiment' or module == 'experiment':
-            embed = discord.Embed(
-                title='Experimental',
-                description=' ',
-                colour=discord.Colour.blurple()
-            )
-            embed.set_author(name='Commands List', icon_url=bot_avatar_link)
-            embed.add_field(name=';pic',
-                            value='Displays a randomly AI generated character',
-                            inline=False)
-            # embed.add_field(name=';stool',
-            #                 value='Your portable high-ground',
-            #                 inline=False)
             await ctx.send(embed=embed)
         else:
             embed = discord.Embed(
