@@ -91,7 +91,6 @@ def cache_coins():  # Run this once to init db values
 
 def update_coins():
     try:
-        time_stamp = datetime.datetime.now().replace(microsecond=0)
         coin_response = session.get(api_data, params=coin_parameters)
         coin_data = json.loads(coin_response.text)
         coins = coin_data['data']
@@ -106,7 +105,6 @@ def update_coins():
                         (price, id))
 
             con.commit()  # Commit transaction
-        print(f'{time_stamp}: Updates data every minute')
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
 
@@ -141,13 +139,12 @@ class Market(commands.Cog):
             #  Symbol: x[2]
             #  Price: x[3]
             if x[1] == name:
-                print("It matches")
                 embed = discord.Embed(
                     title=x[1],
                     description=' ',
                     colour=discord.Colour.blurple()
                 )
-                embed.set_footer(text="Test")
+                embed.set_footer(text="")
                 await ctx.send(embed=embed)
         # if 0 < int(coin_number) <= 10:
         #     embed.set_author(
@@ -262,7 +259,6 @@ class Market(commands.Cog):
 # ---       END MAIN        ---#
 def setup(bot):
     bot.add_cog(Market(bot))
-
 
 # schedule.every(1).minutes.do(update_coins)  # Updates DB every minute
 # while True:
