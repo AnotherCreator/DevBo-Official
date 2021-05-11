@@ -1,11 +1,8 @@
 # ---       IMPORTS          --- #
-import datetime
 import discord
 import json
 import os
 import psycopg2
-import schedule
-import time
 
 from discord.ext import commands
 from dotenvy import load_env, read_file
@@ -261,8 +258,3 @@ class Market(commands.Cog):
 # ---       END MAIN        ---#
 def setup(bot):
     bot.add_cog(Market(bot))
-
-# schedule.every(1).minutes.do(update_coins)  # Updates DB every minute
-# while True:
-#     schedule.run_pending()
-#     time.sleep(1)
