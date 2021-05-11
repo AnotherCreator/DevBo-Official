@@ -13,11 +13,6 @@ from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 from pybo import API_KEY, DB_DEV_PW
 
-# load_env(read_file('../../.env'))
-# # Database
-# DB_DEV_PW = os.environ.get('DB_DEV_PW')
-# API_KEY = os.environ.get('CMC_API_KEY')
-
 # ---       LINKS        --- #
 
 api_data = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
@@ -105,17 +100,16 @@ def update_coins():
 
         for x in coins:
             id = x['id']
+            rank = x['cmc_rank']
             price = x['quote']['USD']['price']
 
             cur.execute("UPDATE coin_info "
-                        "SET coin_price = %s "
+                        "SET coin_price = %s, coin_rank = %s "
                         "WHERE coin_id = %s ",
-                        (price, id))
-
+                        (price, rank, id))
             con.commit()  # Commit transaction
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
-
 
 # ---     CUSTOM CHECKS     --- #
 
