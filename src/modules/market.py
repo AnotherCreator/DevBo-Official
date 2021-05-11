@@ -13,11 +13,10 @@ from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 from pybo import API_KEY, DB_DEV_PW
 
-
 # ---       LINKS        --- #
 
-coin_url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
-coin_url2 = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/info'
+api_data = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
+api_metadata = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/info'
 bot_avatar_link = 'https://cdn.discordapp.com/avatars/733004304855597056/d55234172599dca4b11e6345078a32b0.png?size=128'
 
 # ---       LOAD API         --- #
@@ -53,22 +52,39 @@ cur = con.cursor()
 
 def cache_coins():  # Run this once to init db values
     try:
-        coin_response = session.get(coin_url, params=coin_parameters)
+        id_list = []
+        coin_response = session.get(api_data, params=coin_parameters)
         coin_data = json.loads(coin_response.text)
         coins = coin_data['data']
 
         for x in coins:
-            id = x['id']
+            id_list.append(x['id'])
+            ids = x['id']
             name = x['name']
             symbol = x['symbol']
             price = x['quote']['USD']['price']
 
             cur.execute("INSERT INTO coin_info (coin_id, coin_name, coin_symbol, coin_price)"
-                        "VALUES (%s, %s, %s, %s)", (id, name, symbol, price))
+                        "VALUES (%s, %s, %s, %s)", (ids, name, symbol, price))
             con.commit()  # Commit transaction
 
-            cur.close()  # Close cursor
-            con.close()  # Close connection
+        joined_id = ','.join(map(str, id_list))  # Comma seperated string
+
+        metadata_parameters = {  # Retrieves coin_metadata listed 1-50
+            'id': joined_id,  # Must use a comma separated string
+            'aux': 'logo'
+        }
+        metadata_response = session.get(api_metadata, params=metadata_parameters)
+        metadata_data = json.loads(metadata_response.text)
+        metadata = metadata_data['data']
+
+        for unique_id in id_list:
+            logo_url = metadata[str(unique_id)]['logo']
+            print(logo_url)
+
+            # cur.execute("INSERT INTO coin_info (coin_logo)"
+            #             "VALUES (%s)", logo_url)
+            # con.commit()  # Commit transaction
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
 
@@ -76,7 +92,7 @@ def cache_coins():  # Run this once to init db values
 def update_coins():
     try:
         time_stamp = datetime.datetime.now().replace(microsecond=0)
-        coin_response = session.get(coin_url, params=coin_parameters)
+        coin_response = session.get(api_data, params=coin_parameters)
         coin_data = json.loads(coin_response.text)
         coins = coin_data['data']
 
