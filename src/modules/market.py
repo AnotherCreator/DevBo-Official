@@ -13,6 +13,11 @@ from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 from pybo import API_KEY, DB_DEV_PW
 
+# load_env(read_file('../../.env'))
+# # Database
+# DB_DEV_PW = os.environ.get('DB_DEV_PW')
+# API_KEY = os.environ.get('CMC_API_KEY')
+
 # ---       LINKS        --- #
 
 api_data = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
@@ -34,7 +39,8 @@ session.headers.update(headers)
 coin_parameters = {  # Retrieves coins listed 1-100
     'start': '1',
     'limit': '100',
-    'convert': 'USD'
+    'convert': 'USD',
+    'aux': 'cmc_rank'
 }
 
 # ---       CONNECT TO DB       --- #
@@ -60,12 +66,13 @@ def cache_coins():  # Run this once to init db values
         for x in coins:
             id_list.append(x['id'])
             ids = x['id']
+            rank = x['cmc_rank']
             name = x['name']
             symbol = x['symbol']
             price = x['quote']['USD']['price']
 
-            cur.execute("INSERT INTO coin_info (coin_id, coin_name, coin_symbol, coin_price)"
-                        "VALUES (%s, %s, %s, %s)", (ids, name, symbol, price))
+            cur.execute("INSERT INTO coin_info (coin_id, coin_name, coin_symbol, coin_price, coin_rank)"
+                        "VALUES (%s, %s, %s, %s, %s)", (ids, name, symbol, price, rank))
             con.commit()  # Commit transaction
 
         joined_id = ','.join(map(str, id_list))
