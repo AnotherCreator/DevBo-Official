@@ -52,11 +52,11 @@ async def change_status():
     await bot.change_presence(status=discord.Status.online, activity=discord.Game(next(status)))
 
 
-async def refresh_coins():
+async def refresh_coins():  # Refreshes every 3 minutes
     await bot.wait_until_ready()
     while not bot.is_closed():
         update_coins()
-        await asyncio.sleep(60)
+        await asyncio.sleep(180)
 
 # ---       MAIN LINE           --- #
 
@@ -126,6 +126,6 @@ async def reload(ctx, extension):
 
 
 # ---       END MAIN            ---#
-bot.loop.run_until_complete(create_db_pool())
 bot.loop.create_task(refresh_coins())
+bot.loop.run_until_complete(create_db_pool())
 bot.run(SECRET_KEY)
