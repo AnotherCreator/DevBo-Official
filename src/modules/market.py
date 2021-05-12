@@ -225,7 +225,7 @@ class Market(commands.Cog):
 
     @commands.command()
     @commands.check(bot_channel_check)
-    async def coin(self, ctx, *, name):  # Accepts either name or current rank
+    async def coin(self, ctx, *, name):  # Accepts current rank TODO: Accept coin name
         # Variables
         emoji_list = ['◀', '▶']
 
