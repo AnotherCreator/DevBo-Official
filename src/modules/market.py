@@ -143,7 +143,7 @@ def query_coins(rank):
 
 
 def get_left_coin(current_page):
-    cur.execute("SELECT * FROM coin_info WHERE coin_rank = %s", (current_page,))  # 1,2,3...,100
+    cur.execute("SELECT * FROM coin_info WHERE coin_rank = %s", (current_page,))
     rows = cur.fetchall()
 
     # ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
@@ -158,11 +158,11 @@ def get_left_coin(current_page):
             icon_url=x[4]
         )
         embed.set_footer(text="")
-    return embed
+        return embed
 
 
 def get_right_coin(current_page):
-    cur.execute("SELECT * FROM coin_info WHERE coin_rank = %s", (current_page,))  # 1,2,3...,100
+    cur.execute("SELECT * FROM coin_info WHERE coin_rank = %s", (current_page,))
     rows = cur.fetchall()
 
     # ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
@@ -260,7 +260,11 @@ class Market(commands.Cog):
                         if reaction.emoji == emoji_list[0]:  # Left page
                             await message.delete()  # Deletes embed before sending a new one
                             current_page = current_page - 1
-                            embed = get_left_coin(current_page)
+                            if current_page <= 0:
+                                current_page = 1
+                                embed = get_left_coin(1)
+                            else:
+                                embed = get_left_coin(current_page)
                             message = await ctx.send(embed=embed)
 
                             for emoji in emoji_list:
@@ -272,7 +276,11 @@ class Market(commands.Cog):
                         elif reaction.emoji == emoji_list[1]:  # Right page
                             await message.delete()  # Deletes embed before sending a new one
                             current_page = current_page + 1
-                            embed = get_right_coin(current_page)
+                            if current_page >= 100:
+                                current_page = 100
+                                embed = get_right_coin(100)
+                            else:
+                                embed = get_right_coin(current_page)
                             message = await ctx.send(embed=embed)
 
                             for emoji in emoji_list:
