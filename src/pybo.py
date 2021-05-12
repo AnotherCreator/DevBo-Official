@@ -28,7 +28,7 @@ if CURR_ENV == 'dev':
     DB_DEV_PW = os.environ.get('DB_DEV_PW')
 
     async def create_db_pool():
-        bot.pg_con = await asyncpg.create_pool(database='PyCharmPyBoDB', user='postgres', password=DB_DEV_PW)
+        bot.pg_con = await asyncpg.create_pool(database='PyBo_Local', user='postgres', password=DB_DEV_PW)
 
 # Heroku PostgreSQL Database
 elif CURR_ENV == 'prod':
@@ -106,6 +106,7 @@ elif CURR_ENV == 'prod':
 for filename in os.listdir('./modules'):
     if filename.endswith('.py') and not filename.startswith('-') and not filename.startswith('_'):
         bot.load_extension(f'modules.{filename[:-3]}')
+
 
 @bot.command()
 @commands.is_owner()
