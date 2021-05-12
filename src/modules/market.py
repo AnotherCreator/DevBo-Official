@@ -1,8 +1,11 @@
 # ---       IMPORTS          --- #
+import asyncio
+
 import discord
 import json
 import psycopg2
 
+from collections.abc import Sequence
 from discord.ext import commands
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
@@ -148,6 +151,34 @@ def bot_channel_check(ctx):
         return True
 
 
+def make_sequence(seq):
+    if seq is None:
+        return ()
+    if isinstance(seq, Sequence) and not isinstance(seq, str):
+        return seq
+    else:
+        return seq,
+
+
+def reaction_check(message=None, emoji=None, author=None, ignore_bot=True):
+    message = make_sequence(message)
+    message = tuple(m.id for m in message)
+    emoji = make_sequence(emoji)
+    author = make_sequence(author)
+
+    def check(reaction, user):
+        if ignore_bot and user.bot:
+            return False
+        if message and reaction.message.id not in message:
+            return False
+        if emoji and reaction.emoji not in emoji:
+            return False
+        if author and user not in author:
+            return False
+        return True
+    return check
+
+
 # ---       MAIN LINE       ---#
 
 class Market(commands.Cog):
@@ -176,13 +207,31 @@ class Market(commands.Cog):
                     icon_url=x[4]
                 )
                 embed.set_footer(text="")
-                message_embed = await ctx.send(embed=embed)
+                message = await ctx.send(embed=embed)
 
-        for emoji in emoji_list:
-            await message_embed.add_reaction(emoji)
+                for emoji in emoji_list:
+                    await message.add_reaction(emoji)
 
-        # if message_embed.on_raw_reaction_add() == emoji_list:
-        #     print('test')
+                check = reaction_check(message=message, author=ctx.author, emoji=(emoji_list[0], emoji_list[1]))
+                while True:
+                    try:
+                        reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+                        if reaction.emoji == emoji_list[0]:
+                            embed = discord.Embed(
+                                title=f'Left',
+                                description=' ',
+                                colour=discord.Colour.blurple()
+                            )
+                            await message.edit(content=None, embed=embed)
+                        elif reaction.emoji == emoji_list[1]:
+                            embed = discord.Embed(
+                                title=f'right',
+                                description=' ',
+                                colour=discord.Colour.blurple()
+                            )
+                            await message.edit(content=None, embed=embed)
+                    except TimeoutError:
+                        print('Timeout')
 
     @commands.command()
     @commands.check(bot_channel_check)
