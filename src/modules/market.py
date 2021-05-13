@@ -286,9 +286,6 @@ class Market(commands.Cog):
                 embed.set_footer(text="")
 
                 message = await ctx.send(embed=embed)
-                # for emoji in emoji_list:
-                #     await message.add_reaction(emoji)
-
                 if current_page <= 1:  # Adds / Removes emoji if it passes threshold
                     await message.add_reaction(emoji_list[1])
                 elif current_page >= 100:
