@@ -62,9 +62,12 @@ def cache_coins():  # Run this once to init db values
             name = x['name']
             symbol = x['symbol']
             price = x['quote']['USD']['price']
+            daily_change = x['quote']['USD']['percent_change_24h']
 
-            cur.execute("INSERT INTO coin_info (coin_id, coin_name, coin_symbol, coin_price, coin_rank)"
-                        "VALUES (%s, %s, %s, %s, %s)", (ids, name, symbol, price, rank))
+            cur.execute("INSERT INTO coin_info"
+                        "(coin_id, coin_name, coin_symbol, coin_price, coin_rank, coin_daily_change)"
+                        "VALUES (%s, %s, %s, %s, %s, %s)",
+                        (ids, name, symbol, price, rank, daily_change))
             con.commit()  # Commit transaction
 
         joined_id = ','.join(map(str, id_list))  # Creates comma-separated string
@@ -99,11 +102,12 @@ def update_coins():
             id = x['id']
             rank = x['cmc_rank']
             price = x['quote']['USD']['price']
+            daily_change = x['quote']['USD']['percent_change_24h']
 
             cur.execute("UPDATE coin_info "
-                        "SET coin_price = %s, coin_rank = %s "
-                        "WHERE coin_id = %s ",
-                        (price, rank, id))
+                        "SET coin_price = %s, coin_rank = %s, coin_daily_change = %s "
+                        "WHERE coin_id = %s",
+                        (price, rank, id, daily_change))
             con.commit()  # Commit transaction
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
@@ -113,7 +117,7 @@ def get_left_coin(current_page):
     cur.execute("SELECT * FROM coin_info WHERE coin_rank = %s", (current_page,))
     rows = cur.fetchall()
 
-    # ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
+    #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5] || Change: x[6]
     for x in rows:
         embed = discord.Embed(
             title=f'${str(x[3])}',
@@ -124,6 +128,10 @@ def get_left_coin(current_page):
             name=f'{x[5]}. {x[1]} / {x[2]}',
             icon_url=x[4]
         )
+        embed.add_field(
+            name='24h %',
+            value=f'{x[6]:.2f}%',
+            inline=False)
         embed.set_footer(text="")
         return embed
 
@@ -132,7 +140,7 @@ def get_right_coin(current_page):
     cur.execute("SELECT * FROM coin_info WHERE coin_rank = %s", (current_page,))
     rows = cur.fetchall()
 
-    # ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
+    #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5] || Change: x[6]
     for x in rows:
         embed = discord.Embed(
             title=f'${str(x[3])}',
@@ -143,6 +151,10 @@ def get_right_coin(current_page):
             name=f'{x[5]}. {x[1]} / {x[2]}',
             icon_url=x[4]
         )
+        embed.add_field(
+            name='24h %',
+            value=f'{x[6]:.2f}%',
+            inline=False)
         embed.set_footer(text="")
     return embed
 
@@ -217,7 +229,7 @@ def get_right_10_coins(current_rank):
     return embed
 
 
-# ---     CUSTOM CHECKS     --- #
+# ---     CHECKS / FUNCTIONS    --- #
 
 
 def bot_channel_check(ctx):
@@ -266,12 +278,13 @@ class Market(commands.Cog):
         # Variables
         emoji_list = ['◀', '▶']
 
-        cur.execute('SELECT * FROM coin_info')
+        # Database
+        cur.execute('SELECT * FROM coin_info ORDER BY coin_rank asc')
         rows = cur.fetchall()
 
         await ctx.message.delete()  # Deletes command call
         for x in rows:
-            #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
+            #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5] || Change: x[6]
             if x[1] == name or x[5] == int(name):
                 current_page = x[5]
                 embed = discord.Embed(
@@ -283,6 +296,10 @@ class Market(commands.Cog):
                     name=f'{x[5]}. {x[1]} / {x[2]}',
                     icon_url=x[4]
                 )
+                embed.add_field(
+                    name='24h %',
+                    value=f'{x[6]:.2f}%',
+                    inline=False)
                 embed.set_footer(text="")
 
                 message = await ctx.send(embed=embed)
@@ -348,6 +365,7 @@ class Market(commands.Cog):
         emoji_list = ['◀', '▶']
         rank = int(rank)
 
+        # Database
         cur.execute('SELECT * FROM coin_info ORDER BY coin_rank asc')  # 1,2,3...,100
         rows = cur.fetchall()
 
@@ -365,7 +383,7 @@ class Market(commands.Cog):
             description=' ',
             colour=discord.Colour.blurple()
         )
-        #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
+        #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5] || Change: x[6]
         for x in rows:
             if min <= x[5] <= max:
                 embed.set_author(name=f'Top {max} Crypto Coins',
@@ -377,8 +395,13 @@ class Market(commands.Cog):
                 embed.set_footer(text="")
 
         message = await ctx.send(embed=embed)
-        for emoji in emoji_list:
-            await message.add_reaction(emoji)
+        if rank <= 10:  # Adds / Removes emoji if it passes threshold
+            await message.add_reaction(emoji_list[1])
+        elif rank >= 100:
+            await message.add_reaction(emoji_list[0])
+        else:
+            for emoji in emoji_list:
+                await message.add_reaction(emoji)
 
         check = reaction_check(message=message, author=ctx.author, emoji=(emoji_list[0], emoji_list[1]))
         current_page = max
@@ -395,8 +418,13 @@ class Market(commands.Cog):
                         embed = get_left_10_coins(current_page)
 
                     message = await ctx.send(embed=embed)
-                    for emoji in emoji_list:
-                        await message.add_reaction(emoji)
+                    if current_page <= 10:  # Adds / Removes emoji if it passes threshold
+                        await message.add_reaction(emoji_list[1])
+                    elif current_page >= 100:
+                        await message.add_reaction(emoji_list[0])
+                    else:
+                        for emoji in emoji_list:
+                            await message.add_reaction(emoji)
 
                     check = reaction_check(message=message, author=ctx.author,
                                            emoji=(emoji_list[0], emoji_list[1]))
@@ -411,8 +439,13 @@ class Market(commands.Cog):
                         embed = get_right_10_coins(current_page)
                     message = await ctx.send(embed=embed)
 
-                    for emoji in emoji_list:
-                        await message.add_reaction(emoji)
+                    if current_page <= 1:  # Adds / Removes emoji if it passes threshold
+                        await message.add_reaction(emoji_list[1])
+                    elif current_page >= 100:
+                        await message.add_reaction(emoji_list[0])
+                    else:
+                        for emoji in emoji_list:
+                            await message.add_reaction(emoji)
 
                     check = reaction_check(message=message, author=ctx.author,
                                            emoji=(emoji_list[0], emoji_list[1]))
