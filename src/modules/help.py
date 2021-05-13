@@ -3,11 +3,8 @@
 import discord
 from discord.ext import commands
 
-# ---   GLOBAL VARIABLES    --- #
-
-bot_avatar_link = 'https://cdn.discordapp.com/avatars/733004304855597056/d55234172599dca4b11e6345078a32b0.png?size=128'
-
 # ---     CUSTOM CHECKS     --- #
+from pybo import BOT_AVATAR
 
 
 def bot_channel_check(ctx):
@@ -34,7 +31,7 @@ class Help(commands.Cog):
             colour=discord.Colour.blurple()
         )
         embed.set_author(name='Commands List',
-                         icon_url=bot_avatar_link)
+                         icon_url=BOT_AVATAR)
 
         await ctx.send(embed=embed)
 
@@ -47,7 +44,7 @@ class Help(commands.Cog):
                 description=' ',
                 colour=discord.Colour.blurple()
             )
-            embed.set_author(name='Commands List', icon_url=bot_avatar_link)
+            embed.set_author(name='Commands List', icon_url=BOT_AVATAR)
             embed.add_field(name=';prune __Amount__',
                             value='Removes the amount of messages specified',
                             inline=False)
@@ -66,7 +63,7 @@ class Help(commands.Cog):
                 description=' ',
                 colour=discord.Colour.blurple()
             )
-            embed.set_author(name='Commands List', icon_url=bot_avatar_link)
+            embed.set_author(name='Commands List', icon_url=BOT_AVATAR)
             embed.add_field(name=';ping', value='pong!',
                             inline=False)
             await ctx.send(embed=embed)
@@ -76,7 +73,7 @@ class Help(commands.Cog):
                 description=' ',
                 colour=discord.Colour.blurple()
             )
-            embed.set_author(name='Commands List', icon_url=bot_avatar_link)
+            embed.set_author(name='Commands List', icon_url=BOT_AVATAR)
             embed.add_field(name=';coin __1-100__ or ;coin __name__',
                             value='Displays Name / Current Price',
                             inline=False)

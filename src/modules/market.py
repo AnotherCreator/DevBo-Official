@@ -9,13 +9,12 @@ from collections.abc import Sequence
 from discord.ext import commands
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
-from pybo import API_KEY, DB_DEV_PW
+from pybo import API_KEY, DB_DEV_PW, BOT_AVATAR
 
 # ---       LINKS        --- #
 
 api_data = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
 api_metadata = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/info'
-bot_avatar_link = 'https://cdn.discordapp.com/avatars/733004304855597056/d55234172599dca4b11e6345078a32b0.png?size=128'
 
 # ---       LOAD API         --- #
 
@@ -68,7 +67,7 @@ def cache_coins():  # Run this once to init db values
                         "VALUES (%s, %s, %s, %s, %s)", (ids, name, symbol, price, rank))
             con.commit()  # Commit transaction
 
-        joined_id = ','.join(map(str, id_list))
+        joined_id = ','.join(map(str, id_list))  # Creates comma-separated string
 
         metadata_parameters = {  # Retrieves coin_metadata listed 1-100
             'id': joined_id,
@@ -175,7 +174,7 @@ def get_left_10_coins(current_rank):
     for x in rows:
         if min <= x[5] <= max:
             embed.set_author(name=f'Top {max} Crypto Coins',
-                             icon_url=bot_avatar_link)
+                             icon_url=BOT_AVATAR)
             embed.add_field(
                 name=f'{x[5]}. {x[1]} / {x[2]}',
                 value=f'${x[3]}',
@@ -210,12 +209,13 @@ def get_right_10_coins(current_rank):
     for x in rows:
         if min <= x[5] <= max:
             embed.set_author(name=f'Top {max} Crypto Coins',
-                             icon_url=bot_avatar_link)
+                             icon_url=BOT_AVATAR)
             embed.add_field(
                 name=f'{x[5]}. {x[1]} / {x[2]}',
                 value=f'${x[3]}',
                 inline=False)
     return embed
+
 
 # ---     CUSTOM CHECKS     --- #
 
@@ -369,7 +369,7 @@ class Market(commands.Cog):
         for x in rows:
             if min <= x[5] <= max:
                 embed.set_author(name=f'Top {max} Crypto Coins',
-                                 icon_url=bot_avatar_link)
+                                 icon_url=BOT_AVATAR)
                 embed.add_field(
                     name=f'{x[5]}. {x[1]} / {x[2]}',
                     value=f'${x[3]}',

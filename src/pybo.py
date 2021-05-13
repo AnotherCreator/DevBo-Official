@@ -17,6 +17,7 @@ from itertools import cycle
 load_env(read_file('../.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
+BOT_AVATAR = os.environ.get('BOT_AVATAR')
 # Database
 DB_DEV_PW = os.environ.get('DB_DEV_PW')
 API_KEY = os.environ.get('CMC_API_KEY')
