@@ -173,10 +173,6 @@ def get_left_10_coins(current_rank):
             max = 100
             min = 90
 
-    print(f'Current: {current_rank}\n'
-          f'Max: {max}\n'
-          f'Min: {min}')
-
     embed = discord.Embed(
         title=' ',
         description=' ',
@@ -207,10 +203,6 @@ def get_right_10_coins(current_rank):
         if max > 100:
             max = 100
             min = 90
-
-    print(f'Current: {current_rank}\n'
-          f'Max: {max}\n'
-          f'Min: {min}')
 
     embed = discord.Embed(
         title=' ',
