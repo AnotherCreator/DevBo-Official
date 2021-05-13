@@ -32,7 +32,6 @@ class Help(commands.Cog):
         )
         embed.set_author(name='Commands List',
                          icon_url=BOT_AVATAR)
-
         await ctx.send(embed=embed)
 
     @commands.command()
