@@ -1,20 +1,17 @@
 # ---       IMPORTS         --- #
-
 import discord
 from discord.ext import commands
-
-# ---     CUSTOM CHECKS     --- #
 from pybo import BOT_AVATAR
 
 
+# ---     CUSTOM CHECKS     --- #
 def bot_channel_check(ctx):
     botspam_channels = ['bot-spam', 'bot-commands']
     if str(ctx.message.channel) in botspam_channels or ctx.author.id == 291005201840734218:
         return True
 
+
 # ---       MAIN LINE       --- #
-
-
 class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

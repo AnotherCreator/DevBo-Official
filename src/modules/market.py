@@ -12,12 +12,10 @@ from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 from pybo import API_KEY, DB_DEV_PW, BOT_AVATAR
 
 # ---       LINKS        --- #
-
 api_data = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
 api_metadata = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/info'
 
 # ---       LOAD API         --- #
-
 headers = {
     'Accepts': 'application/json',
     'X-CMC_PRO_API_KEY': API_KEY,
@@ -27,7 +25,6 @@ session = Session()
 session.headers.update(headers)
 
 # ---       API PARAMS        --- #
-
 coin_parameters = {  # Retrieves coins listed 1-100
     'start': '1',
     'limit': '100',
@@ -36,7 +33,6 @@ coin_parameters = {  # Retrieves coins listed 1-100
 }
 
 # ---       CONNECT TO DB       --- #
-
 con = psycopg2.connect(
     host='localhost',
     database='PyBo_Local',
@@ -45,9 +41,8 @@ con = psycopg2.connect(
 )
 cur = con.cursor()
 
+
 # ---        DATABASE        --- #
-
-
 def cache_coins():  # Run this once to init db values
     try:
         id_list = []
@@ -222,8 +217,6 @@ def get_right_10_coins(current_rank):
 
 
 # ---     CHECKS / FUNCTIONS    --- #
-
-
 def bot_channel_check(ctx):
     botspam_channels = ['bot-spam']
     if str(ctx.message.channel) in botspam_channels or ctx.author.id == 291005201840734218:
@@ -259,7 +252,6 @@ def reaction_check(message=None, emoji=None, author=None, ignore_bot=True):
 
 
 # ---       MAIN LINE       ---#
-
 class Market(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

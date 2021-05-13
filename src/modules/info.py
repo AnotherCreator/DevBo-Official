@@ -1,22 +1,19 @@
 # ---       IMPORTS          ---#
-
 import discord
 import unicodedata
 from bs4 import BeautifulSoup
 from discord.ext import commands
 from urllib.request import Request, urlopen
 
+
 # ---     CUSTOM CHECKS     --- #
-
-
 def bot_channel_check(ctx):
     botspam_channels = ['bot-spam']
     if str(ctx.message.channel) in botspam_channels or ctx.author.id == 291005201840734218:
         return True
 
+
 # ---       MAIN LINE       ---#
-
-
 class Info(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

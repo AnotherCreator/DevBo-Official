@@ -23,7 +23,6 @@ DB_DEV_PW = os.environ.get('DB_DEV_PW')
 API_KEY = os.environ.get('CMC_API_KEY')
 
 # ---     BOT INITIALIZATION    --- #
-
 bot = commands.Bot(command_prefix=';')
 bot.remove_command('help')
 
@@ -35,16 +34,14 @@ for filename in os.listdir('modules'):  # Load modules
 # Module imports cant be at the top because 'pybo.py' has to first load all the modules
 from modules.market import update_coins
 
+
 # ---       DATABASE STUFF      --- #
-
-
 async def create_db_pool():
     # 'self.bot.pg_con' to connect to db
     bot.pg_con = await asyncpg.create_pool(database='PyBo_Local', user='postgres', password=DB_DEV_PW)
 
 
 # ---       BACKGROUND STUFF    --- #
-
 status = cycle(['For more info | ;help', 'Under development! | ;help'])
 
 
@@ -59,9 +56,8 @@ async def refresh_coins():  # Refreshes every 3 minute(s)
         update_coins()
         await asyncio.sleep(180)
 
+
 # ---       MAIN LINE           --- #
-
-
 @bot.event
 async def on_ready():
     change_status.start()
@@ -102,9 +98,8 @@ async def updateissues(ctx, *, message):
     )
     await channel.send(embed=embed)
 
+
 # ---       MODULE HANDLING        --- #
-
-
 @bot.command()
 @commands.is_owner()
 async def load(ctx, extension):
