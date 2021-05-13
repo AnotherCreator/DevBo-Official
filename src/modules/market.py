@@ -187,7 +187,7 @@ def get_right_10_coins(current_rank):
     cur.execute("SELECT * FROM coin_info ORDER BY coin_rank asc")
     rows = cur.fetchall()
 
-    if current_rank > 90:
+    if current_rank > 100:
         max = 100
         min = 90
     else:
@@ -273,6 +273,7 @@ class Market(commands.Cog):
         for x in rows:
             #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
             if x[1] == name or x[5] == int(name):
+                current_page = x[5]
                 embed = discord.Embed(
                     title=f'${str(x[3])}',
                     description=' ',
@@ -283,14 +284,20 @@ class Market(commands.Cog):
                     icon_url=x[4]
                 )
                 embed.set_footer(text="")
-                message = await ctx.send(embed=embed)
 
-                for emoji in emoji_list:
-                    await message.add_reaction(emoji)
+                message = await ctx.send(embed=embed)
+                # for emoji in emoji_list:
+                #     await message.add_reaction(emoji)
+
+                if current_page <= 1:  # Adds / Removes emoji if it passes threshold
+                    await message.add_reaction(emoji_list[1])
+                elif current_page >= 100:
+                    await message.add_reaction(emoji_list[0])
+                else:
+                    for emoji in emoji_list:
+                        await message.add_reaction(emoji)
 
                 check = reaction_check(message=message, author=ctx.author, emoji=(emoji_list[0], emoji_list[1]))
-                current_page = x[5]
-
                 while True:
                     try:
                         reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
@@ -302,11 +309,15 @@ class Market(commands.Cog):
                                 embed = get_left_coin(1)
                             else:
                                 embed = get_left_coin(current_page)
+
                             message = await ctx.send(embed=embed)
-
-                            for emoji in emoji_list:
-                                await message.add_reaction(emoji)
-
+                            if current_page <= 1:  # Adds / Removes emoji if it passes threshold
+                                await message.add_reaction(emoji_list[1])
+                            elif current_page >= 100:
+                                await message.add_reaction(emoji_list[0])
+                            else:
+                                for emoji in emoji_list:
+                                    await message.add_reaction(emoji)
                             check = reaction_check(message=message, author=ctx.author,
                                                    emoji=(emoji_list[0], emoji_list[1]))
 
@@ -318,10 +329,15 @@ class Market(commands.Cog):
                                 embed = get_right_coin(100)
                             else:
                                 embed = get_right_coin(current_page)
-                            message = await ctx.send(embed=embed)
 
-                            for emoji in emoji_list:
-                                await message.add_reaction(emoji)
+                            message = await ctx.send(embed=embed)
+                            if current_page <= 1:  # Adds / Removes emoji if it passes threshold
+                                await message.add_reaction(emoji_list[1])
+                            elif current_page >= 100:
+                                await message.add_reaction(emoji_list[0])
+                            else:
+                                for emoji in emoji_list:
+                                    await message.add_reaction(emoji)
 
                             check = reaction_check(message=message, author=ctx.author,
                                                    emoji=(emoji_list[0], emoji_list[1]))
@@ -369,7 +385,6 @@ class Market(commands.Cog):
 
         check = reaction_check(message=message, author=ctx.author, emoji=(emoji_list[0], emoji_list[1]))
         current_page = max
-
         while True:
             try:
                 reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
@@ -381,8 +396,8 @@ class Market(commands.Cog):
                         embed = get_left_10_coins(10)
                     else:
                         embed = get_left_10_coins(current_page)
-                    message = await ctx.send(embed=embed)
 
+                    message = await ctx.send(embed=embed)
                     for emoji in emoji_list:
                         await message.add_reaction(emoji)
 
