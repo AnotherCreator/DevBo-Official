@@ -2,7 +2,7 @@
 If you want to see the bot in action and play around with it, you can [join here!](https://discord.gg/6YCm7mSPDu)
 
 ## Current Features
-- Cryptocurrency tracker that displays the top 50 coins
+- Cryptocurrency tracker that displays the top 100 coins
 
 ![](README_assets/images/Crypto_Commands.png)
 
