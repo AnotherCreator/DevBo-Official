@@ -110,38 +110,6 @@ def update_coins():
         print(e)
 
 
-def query_coins(rank):
-    cur.execute('SELECT * FROM coin_info ORDER BY coin_rank asc')  # 1,2,3...,100
-    rows = cur.fetchall()
-
-    if rank < 11:
-        min = 1
-        max = 10
-    else:
-        min = rank - 10
-        max = rank
-        if max > 100:
-            max = 100
-
-    embed = discord.Embed(
-        title=' ',
-        description=' ',
-        colour=discord.Colour.blurple()
-    )
-    embed.set_footer(text="")
-
-    #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
-    for x in rows:
-        if min <= x[5] <= max:
-            embed.set_author(name=f'Top {max} Crypto Coins',
-                             icon_url=bot_avatar_link)
-            embed.add_field(
-                name=f'{x[5]}. {x[1]} / {x[2]}',
-                value=f'${x[3]}',
-                inline=False)
-    return embed
-
-
 def get_left_coin(current_page):
     cur.execute("SELECT * FROM coin_info WHERE coin_rank = %s", (current_page,))
     rows = cur.fetchall()
@@ -179,6 +147,75 @@ def get_right_coin(current_page):
         embed.set_footer(text="")
     return embed
 
+
+def get_left_10_coins(current_rank):
+    cur.execute("SELECT * FROM coin_info ORDER BY coin_rank asc")
+    rows = cur.fetchall()
+
+    if current_rank < 11:
+        max = 10
+        min = 1
+    else:
+        max = current_rank
+        min = max - 10
+        if max > 100:
+            max = 100
+            min = 90
+
+    print(f'Current: {current_rank}\n'
+          f'Max: {max}\n'
+          f'Min: {min}')
+
+    embed = discord.Embed(
+        title=' ',
+        description=' ',
+        colour=discord.Colour.blurple()
+    )
+    # ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
+    for x in rows:
+        if min <= x[5] <= max:
+            embed.set_author(name=f'Top {max} Crypto Coins',
+                             icon_url=bot_avatar_link)
+            embed.add_field(
+                name=f'{x[5]}. {x[1]} / {x[2]}',
+                value=f'${x[3]}',
+                inline=False)
+    return embed
+
+
+def get_right_10_coins(current_rank):
+    cur.execute("SELECT * FROM coin_info ORDER BY coin_rank asc")
+    rows = cur.fetchall()
+
+    if current_rank > 90:
+        max = 100
+        min = 90
+    else:
+        max = current_rank
+        min = current_rank - 10
+        if max > 100:
+            max = 100
+            min = 90
+
+    print(f'Current: {current_rank}\n'
+          f'Max: {max}\n'
+          f'Min: {min}')
+
+    embed = discord.Embed(
+        title=' ',
+        description=' ',
+        colour=discord.Colour.blurple()
+    )
+    # ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
+    for x in rows:
+        if min <= x[5] <= max:
+            embed.set_author(name=f'Top {max} Crypto Coins',
+                             icon_url=bot_avatar_link)
+            embed.add_field(
+                name=f'{x[5]}. {x[1]} / {x[2]}',
+                value=f'${x[3]}',
+                inline=False)
+    return embed
 
 # ---     CUSTOM CHECKS     --- #
 
@@ -298,11 +335,77 @@ class Market(commands.Cog):
         emoji_list = ['◀', '▶']
         rank = int(rank)
 
-        embed = query_coins(rank)
+        cur.execute('SELECT * FROM coin_info ORDER BY coin_rank asc')  # 1,2,3...,100
+        rows = cur.fetchall()
 
-        message_embed = await ctx.send(embed=embed)
+        if rank < 11:
+            min = 1
+            max = 10
+        else:
+            min = rank - 10
+            max = rank
+            if max > 100:
+                max = 100
+
+        embed = discord.Embed(
+            title=' ',
+            description=' ',
+            colour=discord.Colour.blurple()
+        )
+        #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
+        for x in rows:
+            if min <= x[5] <= max:
+                embed.set_author(name=f'Top {max} Crypto Coins',
+                                 icon_url=bot_avatar_link)
+                embed.add_field(
+                    name=f'{x[5]}. {x[1]} / {x[2]}',
+                    value=f'${x[3]}',
+                    inline=False)
+                embed.set_footer(text="")
+
+        message = await ctx.send(embed=embed)
         for emoji in emoji_list:
-            await message_embed.add_reaction(emoji)
+            await message.add_reaction(emoji)
+
+        check = reaction_check(message=message, author=ctx.author, emoji=(emoji_list[0], emoji_list[1]))
+        current_page = max
+
+        while True:
+            try:
+                reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+                if reaction.emoji == emoji_list[0]:  # Left page
+                    await message.delete()  # Deletes embed before sending a new one
+                    current_page = current_page - 10
+                    if current_page <= 0:
+                        current_page = 10
+                        embed = get_left_10_coins(10)
+                    else:
+                        embed = get_left_10_coins(current_page)
+                    message = await ctx.send(embed=embed)
+
+                    for emoji in emoji_list:
+                        await message.add_reaction(emoji)
+
+                    check = reaction_check(message=message, author=ctx.author,
+                                           emoji=(emoji_list[0], emoji_list[1]))
+
+                elif reaction.emoji == emoji_list[1]:  # Right page
+                    await message.delete()  # Deletes embed before sending a new one
+                    current_page = current_page + 10
+                    if current_page >= 100:
+                        current_page = 100
+                        embed = get_right_10_coins(100)
+                    else:
+                        embed = get_right_10_coins(current_page)
+                    message = await ctx.send(embed=embed)
+
+                    for emoji in emoji_list:
+                        await message.add_reaction(emoji)
+
+                    check = reaction_check(message=message, author=ctx.author,
+                                           emoji=(emoji_list[0], emoji_list[1]))
+            except TimeoutError:
+                print('Timeout')
 
     @coin.error
     async def coin_error(self, ctx, error):
