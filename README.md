@@ -4,7 +4,7 @@ If you want to see the bot in action and play around with it, you can [join here
 ## Current Features
 - Cryptocurrency tracker that displays the top 100 coins
 
-![](README_assets/images/Crypto_Commands.png)
+![](images/Crypto_Commands.png)
 
 ## Technologies
 Pybo is built using:
