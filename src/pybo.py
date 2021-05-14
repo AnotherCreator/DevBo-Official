@@ -37,7 +37,8 @@ async def create_db_pool():
     # 'self.bot.pg_con' to connect to db in /module files
     bot.pg_con = await asyncpg.create_pool(database='PyBo_Local', user='postgres', password=DB_DEV_PW)
 
-
+    con = psycopg2.connect(DB_URL, sslmode='require')
+    cur = con.cursor()
 # ---       BACKGROUND STUFF    --- #
 status = cycle(['For more info | ;help', 'Under development! | ;help'])
 
