@@ -7,49 +7,54 @@ from discord.ext import commands, tasks
 from dotenvy import load_env, read_file
 from itertools import cycle
 
-# ---     BOT INITIALIZATION    --- #
-
-bot = commands.Bot(command_prefix=';')
-bot.remove_command('help')
-
 # ---       ENV VARIABLES       --- #
 
 # Bot / Bot Owner related
-load_env(read_file('.env'))
+load_env(read_file('../.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
+BOT_AVATAR = os.environ.get('BOT_AVATAR')
+# Database
+DB_URL = os.environ.get('HEROKU_DB_URL')
+# API
+API_KEY = os.environ.get('CMC_API_KEY')
+
+# ---     BOT INITIALIZATION    --- #
+bot = commands.Bot(command_prefix=';')
+bot.remove_command('help')
+
+for filename in os.listdir('modules'):  # Load modules
+    if filename.endswith('.py'):
+        bot.load_extension(f'modules.{filename[:-3]}')
+
+# ---       MODULE IMPORTS             --- #
+# Module imports cant be at the top because 'pybo.py' has to first load all the modules
+# from modules.market import update_coins
+
 
 # ---       DATABASE STUFF      --- #
-
-'''CURR_ENV = ''
-
-# Local PostgreSQL Database
-if CURR_ENV == 'dev':
-    DB_DEV_PW = os.environ.get('DB_DEV_PW')
-
-    async def create_db_pool():
-        bot.pg_con = await asyncpg.create_pool(database='PyBo_Local', user='postgres', password=DB_DEV_PW)
-
-# Heroku PostgreSQL Database
-elif CURR_ENV == 'prod':
-    DB_URL = os.environ.get('DB_URL')
-    conn = psycopg2.connect(DB_URL, sslmode='require')
-    bot.cur = conn.cursor()'''
-
-# ---     GLOBAL VARIABLES      --- #
-
-status = cycle(['For more info | ;help', 'Under development! | ;help'])
+async def create_db_pool():
+    # 'self.bot.pg_con' to connect to db in /module files
+    bot.pg_con = await asyncpg.create_pool(database='PyBo_Local', user='postgres', password=DB_DEV_PW)
 
 
 # ---       BACKGROUND STUFF    --- #
+status = cycle(['For more info | ;help', 'Under development! | ;help'])
+
 
 @tasks.loop(seconds=30)
 async def change_status():
     await bot.change_presence(status=discord.Status.online, activity=discord.Game(next(status)))
 
 
-# ---       MAIN LINE           --- #
+# async def refresh_coins():  # Refreshes every 3 minute(s)
+#     await bot.wait_until_ready()
+#     while not bot.is_closed():
+#         update_coins()
+#         await asyncio.sleep(180)
 
+
+# ---       MAIN LINE           --- #
 @bot.event
 async def on_ready():
     change_status.start()
@@ -67,7 +72,7 @@ async def botmessage(ctx, *, message):
 @commands.is_owner()
 async def updatelogs(ctx, *, message):
     # 'update-notes' channel
-    channel = bot.get_channel(798217221934809168)
+    channel = bot.get_channel(768626068629880902)
 
     embed = discord.Embed(
         title='',
@@ -91,23 +96,7 @@ async def updateissues(ctx, *, message):
     await channel.send(embed=embed)
 
 
-# ---       LOAD MODULES        --- #
-
-'''if CURR_ENV == 'dev':
-    for filename in os.listdir('./modules'):
-        if filename.endswith('.py') and not filename.startswith('-'):
-            bot.load_extension(f'modules.{filename[:-3]}')
-elif CURR_ENV == 'prod':
-    for filename in os.listdir('./modules'):
-        if filename.endswith('.py') and not filename.startswith('_'):
-            bot.load_extension(f'modules.{filename[:-3]}')
-'''
-
-for filename in os.listdir('modules'):
-    if filename.endswith('.py') and not filename.startswith('-') and not filename.startswith('_'):
-        bot.load_extension(f'modules.{filename[:-3]}')
-
-
+# ---       MODULE HANDLING        --- #
 @bot.command()
 @commands.is_owner()
 async def load(ctx, extension):
@@ -130,6 +119,6 @@ async def reload(ctx, extension):
 
 
 # ---       END MAIN            ---#
-# if CURR_ENV == 'dev':
-#    bot.loop.run_until_complete(create_db_pool())
+bot.loop.create_task(refresh_coins())
+bot.loop.run_until_complete(create_db_pool())
 bot.run(SECRET_KEY)

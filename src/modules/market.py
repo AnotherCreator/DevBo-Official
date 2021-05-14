@@ -1,227 +1,454 @@
 # ---       IMPORTS          ---#
-
-
+import json
 import discord
-import unicodedata
-from bs4 import BeautifulSoup
+import psycopg2
+
+from collections import Sequence
 from discord.ext import commands
-from urllib.request import Request, urlopen
+from requests import Timeout, TooManyRedirects, Session
+from pybo import DB_URL, API_KEY, BOT_AVATAR
 
-# ---       GLOBAL VARIABLES          ---#
+# ---       LINKS        --- #
+api_data = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
+api_metadata = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/info'
+
+# ---       LOAD API         --- #
+headers = {
+    'Accepts': 'application/json',
+    'X-CMC_PRO_API_KEY': API_KEY,
+}
+
+session = Session()
+session.headers.update(headers)
+
+# ---       API PARAMS        --- #
+coin_parameters = {  # Retrieves coins listed 1-100
+    'start': '1',
+    'limit': '100',
+    'convert': 'USD',
+    'aux': 'cmc_rank'
+}
+
+# ---       CONNECT TO DB       --- #
+con = psycopg2.connect(DB_URL, sslmode='require')
+cur = con.cursor()
+
+# ---        DATABASE        --- #
+def cache_coins():  # Run this once to init db values
+    try:
+        id_list = []
+        coin_response = session.get(api_data, params=coin_parameters)
+        coin_data = json.loads(coin_response.text)
+        coins = coin_data['data']
+
+        for x in coins:
+            id_list.append(x['id'])
+            ids = x['id']
+            rank = x['cmc_rank']
+            name = x['name']
+            symbol = x['symbol']
+            price = x['quote']['USD']['price']
+            daily_change = x['quote']['USD']['percent_change_24h']
+
+            cur.execute("INSERT INTO coin_info"
+                        "(coin_id, coin_name, coin_symbol, coin_price, coin_rank, coin_daily_change)"
+                        "VALUES (%s, %s, %s, %s, %s, %s)",
+                        (ids, name, symbol, price, rank, daily_change))
+            con.commit()  # Commit transaction
+
+        joined_id = ','.join(map(str, id_list))  # Creates comma-separated string
+
+        metadata_parameters = {  # Retrieves coin_metadata listed 1-100
+            'id': joined_id,
+            'aux': 'logo'
+        }
+        metadata_response = session.get(api_metadata, params=metadata_parameters)
+        metadata_data = json.loads(metadata_response.text)
+        metadata = metadata_data['data']
+
+        for unique_id in id_list:
+            logo_url = metadata[str(unique_id)]['logo']
+
+            cur.execute("UPDATE coin_info "  # Uses UPDATE instead of INSERT since first insertion init coin_logo column
+                        "SET coin_logo = %s "
+                        "WHERE coin_id = %s ",
+                        (logo_url, unique_id))
+            con.commit()  # Commit transaction
+    except (ConnectionError, Timeout, TooManyRedirects) as e:
+        print(e)
+
+cache_coins()
+
+def update_coins():
+    try:
+        coin_response = session.get(api_data, params=coin_parameters)
+        coin_data = json.loads(coin_response.text)
+        coins = coin_data['data']
+
+        for x in coins:
+            id = x['id']
+            rank = x['cmc_rank']
+            price = x['quote']['USD']['price']
+            daily_change = x['quote']['USD']['percent_change_24h']
+
+            cur.execute("UPDATE coin_info "
+                        "SET coin_price = %s, coin_rank = %s, coin_daily_change = %s "
+                        "WHERE coin_id = %s",
+                        (price, rank, id, daily_change))
+            con.commit()  # Commit transaction
+    except (ConnectionError, Timeout, TooManyRedirects) as e:
+        print(e)
 
 
-# bs4
-site = "https://coinmarketcap.com/all/views/all/"
-hdr = {'User-Agent': 'Mozilla/84.0'}
-req = Request(site, headers=hdr)
-page = urlopen(req)
-soup = BeautifulSoup(page, 'html.parser')
+def get_left_coin(current_page):
+    cur.execute("SELECT * FROM coin_info WHERE coin_rank = %s", (current_page,))
+    rows = cur.fetchall()
 
-site2 = "https://coinmarketcap.com/"
-hdr2 = {'User-Agent': 'Mozilla/84.0'}
-req2 = Request(site2, headers=hdr2)
-page2 = urlopen(req2)
-soup2 = BeautifulSoup(page2, 'html.parser')
-
-# dicts
-coin_icons = {}
-coin_names = {}
-coin_abbreviation = {}
-coin_prices = {}
-coin_percent_change = {}
-
-# links
-bot_avatar_link = 'https://cdn.discordapp.com/avatars/733004304855597056/d55234172599dca4b11e6345078a32b0.png?size=128'
-
-
-# ---       FUNCTIONS        --- #
-
-def icons():
-    counter = 1
-    for png in soup2.find_all('div', class_='sc-AxhCb sc-fznLPX BewUF'):
-        png = png.img.get('src')
-        png = png.strip('?size=30x3048x48')
-        png = png.replace('.svg', '.png')
-        coin_icons[counter] = png
-        counter += 1
+    #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5] || Change: x[6]
+    for x in rows:
+        embed = discord.Embed(
+            title=f'${str(x[3])}',
+            description=' ',
+            colour=discord.Colour.blurple()
+        )
+        embed.set_author(
+            name=f'{x[5]}. {x[1]} / {x[2]}',
+            icon_url=x[4]
+        )
+        embed.add_field(
+            name='24h %',
+            value=f'{x[6]:.2f}%',
+            inline=False)
+        embed.set_footer(text="")
+        return embed
 
 
-def names():
-    counter = 1
-    for name in soup.find_all('div', class_='sc-1kxikfi-0 fjclfm cmc-table__column-name'):
-        name = name.text
-        coin_names[counter] = name
-        counter += 1
+def get_right_coin(current_page):
+    cur.execute("SELECT * FROM coin_info WHERE coin_rank = %s", (current_page,))
+    rows = cur.fetchall()
+
+    #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5] || Change: x[6]
+    for x in rows:
+        embed = discord.Embed(
+            title=f'${str(x[3])}',
+            description=' ',
+            colour=discord.Colour.blurple()
+        )
+        embed.set_author(
+            name=f'{x[5]}. {x[1]} / {x[2]}',
+            icon_url=x[4]
+        )
+        embed.add_field(
+            name='24h %',
+            value=f'{x[6]:.2f}%',
+            inline=False)
+        embed.set_footer(text="")
+    return embed
 
 
-def abbreviations():
-    counter = 1
-    for abb in soup.find_all('td', class_='cmc-table__cell cmc-table__cell--sortable '
-                                          'cmc-table__cell--left cmc-table__cell--sort-by__symbol'):
-        abb = abb.text
-        coin_abbreviation[counter] = abb
-        counter += 1
+def get_left_10_coins(current_rank):
+    cur.execute("SELECT * FROM coin_info ORDER BY coin_rank asc")
+    rows = cur.fetchall()
+
+    if current_rank < 11:
+        max = 10
+        min = 1
+    else:
+        max = current_rank
+        min = max - 10
+        if max > 100:
+            max = 100
+            min = 90
+
+    embed = discord.Embed(
+        title=' ',
+        description=' ',
+        colour=discord.Colour.blurple()
+    )
+    # ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
+    for x in rows:
+        if min <= x[5] <= max:
+            embed.set_author(name=f'Top {max} Crypto Coins',
+                             icon_url=BOT_AVATAR)
+            embed.add_field(
+                name=f'{x[5]}. {x[1]} / {x[2]}',
+                value=f'${x[3]}',
+                inline=False)
+    return embed
 
 
-def prices():
-    counter = 1
-    for price in soup.find_all('div', class_='price___3rj7O'):
-        price = price.text
-        price = price.strip()
-        coin_prices[counter] = price
-        counter += 1
+def get_right_10_coins(current_rank):
+    cur.execute("SELECT * FROM coin_info ORDER BY coin_rank asc")
+    rows = cur.fetchall()
+
+    if current_rank > 100:
+        max = 100
+        min = 90
+    else:
+        max = current_rank
+        min = current_rank - 10
+        if max > 100:
+            max = 100
+            min = 90
+
+    embed = discord.Embed(
+        title=' ',
+        description=' ',
+        colour=discord.Colour.blurple()
+    )
+    # ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
+    for x in rows:
+        if min <= x[5] <= max:
+            embed.set_author(name=f'Top {max} Crypto Coins',
+                             icon_url=BOT_AVATAR)
+            embed.add_field(
+                name=f'{x[5]}. {x[1]} / {x[2]}',
+                value=f'${x[3]}',
+                inline=False)
+    return embed
 
 
-def percent_change():
-    counter = 1
-    for percent in soup.find_all('td', class_='cmc-table__cell cmc-table__cell--sortable cmc-table__cell--right '
-                                              'cmc-table__cell--sort-by__percent-change-24-h'):
-        percent = percent.div.text
-        coin_percent_change[counter] = percent
-        counter += 1
-
-# ---     CUSTOM CHECKS     --- #
-
-
+# ---     CHECKS / FUNCTIONS    --- #
 def bot_channel_check(ctx):
     botspam_channels = ['bot-spam']
     if str(ctx.message.channel) in botspam_channels or ctx.author.id == 291005201840734218:
         return True
 
 
+def make_sequence(seq):
+    if seq is None:
+        return ()
+    if isinstance(seq, Sequence) and not isinstance(seq, str):
+        return seq
+    else:
+        return seq,
+
+
+def reaction_check(message=None, emoji=None, author=None, ignore_bot=True):
+    message = make_sequence(message)
+    message = tuple(m.id for m in message)
+    emoji = make_sequence(emoji)
+    author = make_sequence(author)
+
+    def check(reaction, user):
+        if ignore_bot and user.bot:
+            return False
+        if message and reaction.message.id not in message:
+            return False
+        if emoji and reaction.emoji not in emoji:
+            return False
+        if author and user not in author:
+            return False
+        return True
+    return check
+
+
 # ---       MAIN LINE       ---#
-
-
 class Market(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.command()
     @commands.check(bot_channel_check)
-    async def crypto(self, ctx, coin_number):
-        # Function calls
-        abbreviations()
-        names()
-        icons()
-        prices()
-        percent_change()
+    async def coin(self, ctx, *, name):  # Accepts current rank TODO: Accept coin name
         # Variables
-        # emoji_list = ['◀', '▶']
-        coin_number = int(coin_number)
+        emoji_list = ['◀', '▶']
 
-        embed = discord.Embed(
-            title=str(coin_prices.get(coin_number)),
-            description=' ',
-            colour=discord.Colour.blurple()
-        )
-        embed.set_footer(text=site)
-        if 0 < int(coin_number) <= 10:
-            embed.set_author(
-                name=f'{coin_number}. {str(coin_names.get(coin_number))} / {str(coin_abbreviation.get(coin_number))}',
-                icon_url=coin_icons.get(int(coin_number))
-            )
-            embed.add_field(name='24h % Change', value=str(coin_percent_change.get(coin_number)), inline=False)
-        elif 11 <= int(coin_number) <= 50:
-            embed.set_author(
-                name=f'{coin_number}. {str(coin_names.get(coin_number))} / {str(coin_abbreviation.get(coin_number))}'
-            )
-            embed.add_field(name='24h % Change', value=str(coin_percent_change.get(coin_number)), inline=False)
+        # Database
+        cur.execute('SELECT * FROM coin_info ORDER BY coin_rank asc')
+        rows = cur.fetchall()
+
+        await ctx.message.delete()  # Deletes command call
+        for x in rows:
+            #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5] || Change: x[6]
+            if x[1] == name or x[5] == int(name):
+                current_page = x[5]
+                embed = discord.Embed(
+                    title=f'${str(x[3])}',
+                    description=' ',
+                    colour=discord.Colour.blurple()
+                )
+                embed.set_author(
+                    name=f'{x[5]}. {x[1]} / {x[2]}',
+                    icon_url=x[4]
+                )
+                embed.add_field(
+                    name='24h %',
+                    value=f'{x[6]:.2f}%',
+                    inline=False)
+                embed.set_footer(text="")
+
+        message = await ctx.send(embed=embed)
+        if current_page <= 1:  # Adds / Removes emoji if it passes threshold
+            await message.add_reaction(emoji_list[1])
+        elif current_page >= 100:
+            await message.add_reaction(emoji_list[0])
         else:
-            embed = discord.Embed(
-                title='Invalid Number',
-                description=' ',
-                colour=discord.Colour.red()
-            )
+            for emoji in emoji_list:
+                await message.add_reaction(emoji)
 
-        # message_embed = await ctx.send(embed=embed)
-        # for emoji in emoji_list:
-        #     await message_embed.add_reaction(emoji)
-        #
-        # if message_embed.on_raw_reaction_add() == emoji_list:
-        #     print('test')
+        check = reaction_check(message=message, author=ctx.author, emoji=(emoji_list[0], emoji_list[1]))
+        while True:
+            try:
+                reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+                if reaction.emoji == emoji_list[0]:  # Left page
+                    await message.delete()  # Deletes embed before sending a new one
+                    current_page = current_page - 1
+                    if current_page <= 0:
+                        current_page = 1
+                        embed = get_left_coin(1)
+                    else:
+                        embed = get_left_coin(current_page)
+
+                    message = await ctx.send(embed=embed)
+                    if current_page <= 1:  # Adds / Removes emoji if it passes threshold
+                        await message.add_reaction(emoji_list[1])
+                    elif current_page >= 100:
+                        await message.add_reaction(emoji_list[0])
+                    else:
+                        for emoji in emoji_list:
+                            await message.add_reaction(emoji)
+                    check = reaction_check(message=message, author=ctx.author,
+                                           emoji=(emoji_list[0], emoji_list[1]))
+
+                elif reaction.emoji == emoji_list[1]:  # Right page
+                    await message.delete()  # Deletes embed before sending a new one
+                    current_page = current_page + 1
+                    if current_page >= 100:
+                        current_page = 100
+                        embed = get_right_coin(100)
+                    else:
+                        embed = get_right_coin(current_page)
+
+                    message = await ctx.send(embed=embed)
+                    if current_page <= 1:  # Adds / Removes emoji if it passes threshold
+                        await message.add_reaction(emoji_list[1])
+                    elif current_page >= 100:
+                        await message.add_reaction(emoji_list[0])
+                    else:
+                        for emoji in emoji_list:
+                            await message.add_reaction(emoji)
+
+                    check = reaction_check(message=message, author=ctx.author,
+                                           emoji=(emoji_list[0], emoji_list[1]))
+            except TimeoutError:
+                print('Timeout')
 
     @commands.command()
     @commands.check(bot_channel_check)
-    async def cryptolist(self, ctx, page):
-        # Function Calls
-        abbreviations()
-        names()
-        prices()
+    async def top(self, ctx, rank):
         # Variables
-        # emoji_list = ['◀', '▶']
-        page = int(page)
+        emoji_list = ['◀', '▶']
+        rank = int(rank)
+
+        # Database
+        cur.execute('SELECT * FROM coin_info ORDER BY coin_rank asc')  # 1,2,3...,100
+        rows = cur.fetchall()
+
+        if rank < 11:
+            min = 1
+            max = 10
+        else:
+            min = rank - 10
+            max = rank
+            if max > 100:
+                max = 100
 
         embed = discord.Embed(
             title=' ',
             description=' ',
             colour=discord.Colour.blurple()
         )
+        #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5] || Change: x[6]
+        for x in rows:
+            if min <= x[5] <= max:
+                embed.set_author(name=f'Top {max} Crypto Coins',
+                                 icon_url=BOT_AVATAR)
+                embed.add_field(
+                    name=f'{x[5]}. {x[1]} / {x[2]}',
+                    value=f'${x[3]}',
+                    inline=False)
+                embed.set_footer(text="")
 
-        embed.set_author(name=f'Top {10 * page} Crypto Coins',
-                         icon_url=bot_avatar_link)
-        embed.set_footer(text=site)
+        message = await ctx.send(embed=embed)
+        if rank <= 10:  # Adds / Removes emoji if it passes threshold
+            await message.add_reaction(emoji_list[1])
+        elif rank >= 100:
+            await message.add_reaction(emoji_list[0])
+        else:
+            for emoji in emoji_list:
+                await message.add_reaction(emoji)
 
-        if page == 1:
-            counter = 1
-            while counter < 11:
-                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))} / {str(coin_abbreviation.get(counter))}',
-                                value=str(coin_prices.get(counter)),
-                                inline=False)
-                counter += 1
-        elif page == 2:
-            counter = 11
-            while counter < 21:
-                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))} / {str(coin_abbreviation.get(counter))}',
-                                value=str(coin_prices.get(counter)),
-                                inline=False)
-                counter += 1
-        elif page == 3:
-            counter = 21
-            while counter < 31:
-                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))} / {str(coin_abbreviation.get(counter))}',
-                                value=str(coin_prices.get(counter)),
-                                inline=False)
-                counter += 1
-        elif page == 4:
-            counter = 31
-            while counter < 41:
-                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))} / {str(coin_abbreviation.get(counter))}',
-                                value=str(coin_prices.get(counter)),
-                                inline=False)
-                counter += 1
-        elif page == 5:
-            counter = 41
-            while counter < 51:
-                embed.add_field(name=f'{counter}. {str(coin_names.get(counter))} / {str(coin_abbreviation.get(counter))}',
-                                value=str(coin_prices.get(counter)),
-                                inline=False)
-                counter += 1
+        check = reaction_check(message=message, author=ctx.author, emoji=(emoji_list[0], emoji_list[1]))
+        current_page = max
+        while True:
+            try:
+                reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+                if reaction.emoji == emoji_list[0]:  # Left page
+                    await message.delete()  # Deletes embed before sending a new one
+                    current_page = current_page - 10
+                    if current_page <= 0:
+                        current_page = 10
+                        embed = get_left_10_coins(10)
+                    else:
+                        embed = get_left_10_coins(current_page)
 
-        message_embed = await ctx.send(embed=embed)
-        # for emoji in emoji_list:
-        #     await message_embed.add_reaction(emoji)
+                    message = await ctx.send(embed=embed)
+                    if current_page <= 10:  # Adds / Removes emoji if it passes threshold
+                        await message.add_reaction(emoji_list[1])
+                    elif current_page >= 100:
+                        await message.add_reaction(emoji_list[0])
+                    else:
+                        for emoji in emoji_list:
+                            await message.add_reaction(emoji)
 
-    @crypto.error
-    async def crypto_error(self, ctx, error):
+                    check = reaction_check(message=message, author=ctx.author,
+                                           emoji=(emoji_list[0], emoji_list[1]))
+
+                elif reaction.emoji == emoji_list[1]:  # Right page
+                    await message.delete()  # Deletes embed before sending a new one
+                    current_page = current_page + 10
+                    if current_page >= 100:
+                        current_page = 100
+                        embed = get_right_10_coins(100)
+                    else:
+                        embed = get_right_10_coins(current_page)
+                    message = await ctx.send(embed=embed)
+
+                    if current_page <= 1:  # Adds / Removes emoji if it passes threshold
+                        await message.add_reaction(emoji_list[1])
+                    elif current_page >= 100:
+                        await message.add_reaction(emoji_list[0])
+                    else:
+                        for emoji in emoji_list:
+                            await message.add_reaction(emoji)
+
+                    check = reaction_check(message=message, author=ctx.author,
+                                           emoji=(emoji_list[0], emoji_list[1]))
+            except TimeoutError:
+                print('Timeout')
+
+    @coin.error
+    async def coin_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             embed = discord.Embed(
-                title='Error: Specify crypto #',
+                title='Error: Specify coin rank or name',
                 description=' ',
                 colour=discord.Colour.red()
             )
-            embed.set_footer(text='ex => ;crypto 1')
+            embed.set_footer(text='ex => ;coin 4\nex => ;coin Bitcoin')
 
             await ctx.send(embed=embed, delete_after=5)
 
-    @cryptolist.error
-    async def cryptolist_error(self, ctx, error):
+    @top.error
+    async def top_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             embed = discord.Embed(
-                title='Error: Specify cryptolist #',
+                title='Error: Specify top #',
                 description=' ',
                 colour=discord.Colour.red()
             )
-            embed.set_footer(text='ex => ;cryptolist 1')
+            embed.set_footer(text='ex => ;top 45')
 
             await ctx.send(embed=embed, delete_after=5)
 
