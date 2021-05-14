@@ -1,6 +1,4 @@
 # ---       IMPORTS          --- #
-import asyncio
-
 import discord
 import json
 import psycopg2
@@ -10,6 +8,18 @@ from discord.ext import commands
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 from pybo import API_KEY, DB_DEV_PW, BOT_AVATAR
+
+# ---       WHEN RUNNING JUST THIS MODULE        --- #
+# # # Bot / Bot Owner related
+# import os
+# from dotenvy import load_env, read_file
+# load_env(read_file('../../.env'))
+# SECRET_KEY = os.environ.get('SECRET_KEY')
+# OWNER_ID = os.environ.get('OWNER_ID')
+# BOT_AVATAR = os.environ.get('BOT_AVATAR')
+# # # Database
+# DB_DEV_PW = os.environ.get('DB_DEV_PW')
+# API_KEY = os.environ.get('CMC_API_KEY')
 
 # ---       LINKS        --- #
 api_data = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
@@ -35,7 +45,7 @@ coin_parameters = {  # Retrieves coins listed 1-100
 # ---       CONNECT TO DB       --- #
 con = psycopg2.connect(
     host='localhost',
-    database='PyBo_Local',
+    database='postgres',
     user='postgres',
     password=DB_DEV_PW
 )
@@ -49,6 +59,8 @@ def cache_coins():  # Run this once to init db values
         coin_response = session.get(api_data, params=coin_parameters)
         coin_data = json.loads(coin_response.text)
         coins = coin_data['data']
+
+        print(coin_data)
 
         for x in coins:
             id_list.append(x['id'])
@@ -93,6 +105,8 @@ def update_coins():
         coin_data = json.loads(coin_response.text)
         coins = coin_data['data']
 
+        print(coin_data)
+
         for x in coins:
             id = x['id']
             rank = x['cmc_rank']
@@ -112,20 +126,21 @@ def get_left_coin(current_page):
     cur.execute("SELECT * FROM coin_info WHERE coin_rank = %s", (current_page,))
     rows = cur.fetchall()
 
-    #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5] || Change: x[6]
+    #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Rank: x[4] || Change: x[5] || Logo: x[6]
     for x in rows:
+        print(x)
         embed = discord.Embed(
             title=f'${str(x[3])}',
             description=' ',
             colour=discord.Colour.blurple()
         )
         embed.set_author(
-            name=f'{x[5]}. {x[1]} / {x[2]}',
-            icon_url=x[4]
+            name=f'{x[4]}. {x[1]} / {x[2]}',
+            icon_url=x[6]
         )
         embed.add_field(
             name='24h %',
-            value=f'{x[6]:.2f}%',
+            value=f'{x[5]:.2f}%',
             inline=False)
         embed.set_footer(text="")
         return embed
@@ -135,7 +150,7 @@ def get_right_coin(current_page):
     cur.execute("SELECT * FROM coin_info WHERE coin_rank = %s", (current_page,))
     rows = cur.fetchall()
 
-    #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5] || Change: x[6]
+    #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Rank: x[4] || Change: x[5] || Logo: x[6]
     for x in rows:
         embed = discord.Embed(
             title=f'${str(x[3])}',
@@ -143,12 +158,12 @@ def get_right_coin(current_page):
             colour=discord.Colour.blurple()
         )
         embed.set_author(
-            name=f'{x[5]}. {x[1]} / {x[2]}',
-            icon_url=x[4]
+            name=f'{x[4]}. {x[1]} / {x[2]}',
+            icon_url=x[6]
         )
         embed.add_field(
             name='24h %',
-            value=f'{x[6]:.2f}%',
+            value=f'{x[5]:.2f}%',
             inline=False)
         embed.set_footer(text="")
     return embed
@@ -173,13 +188,13 @@ def get_left_10_coins(current_rank):
         description=' ',
         colour=discord.Colour.blurple()
     )
-    # ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
+    #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Rank: x[4] || Change: x[5] || Logo: x[6]
     for x in rows:
-        if min <= x[5] <= max:
+        if min <= x[4] <= max:
             embed.set_author(name=f'Top {max} Crypto Coins',
                              icon_url=BOT_AVATAR)
             embed.add_field(
-                name=f'{x[5]}. {x[1]} / {x[2]}',
+                name=f'{x[4]}. {x[1]} / {x[2]}',
                 value=f'${x[3]}',
                 inline=False)
     return embed
@@ -206,11 +221,11 @@ def get_right_10_coins(current_rank):
     )
     # ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5]
     for x in rows:
-        if min <= x[5] <= max:
+        if min <= x[4] <= max:
             embed.set_author(name=f'Top {max} Crypto Coins',
                              icon_url=BOT_AVATAR)
             embed.add_field(
-                name=f'{x[5]}. {x[1]} / {x[2]}',
+                name=f'{x[4]}. {x[1]} / {x[2]}',
                 value=f'${x[3]}',
                 inline=False)
     return embed
@@ -268,21 +283,21 @@ class Market(commands.Cog):
 
         await ctx.message.delete()  # Deletes command call
         for x in rows:
-            #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5] || Change: x[6]
-            if x[1] == name or x[5] == int(name):
-                current_page = x[5]
+            #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Rank: x[4] || Change: x[5] || Logo: x[6]
+            if x[1] == name or x[4] == int(name):
+                current_page = x[4]
                 embed = discord.Embed(
                     title=f'${str(x[3])}',
                     description=' ',
                     colour=discord.Colour.blurple()
                 )
                 embed.set_author(
-                    name=f'{x[5]}. {x[1]} / {x[2]}',
-                    icon_url=x[4]
+                    name=f'{x[4]}. {x[1]} / {x[2]}',
+                    icon_url=x[6]
                 )
                 embed.add_field(
                     name='24h %',
-                    value=f'{x[6]:.2f}%',
+                    value=f'{x[5]:.2f}%',
                     inline=False)
                 embed.set_footer(text="")
 
@@ -367,13 +382,13 @@ class Market(commands.Cog):
             description=' ',
             colour=discord.Colour.blurple()
         )
-        #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Logo: x[4] || Rank: x[5] || Change: x[6]
+        #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Rank: x[4] || Change: x[5] || Logo: x[6]
         for x in rows:
-            if min <= x[5] <= max:
+            if min <= x[4] <= max:
                 embed.set_author(name=f'Top {max} Crypto Coins',
                                  icon_url=BOT_AVATAR)
                 embed.add_field(
-                    name=f'{x[5]}. {x[1]} / {x[2]}',
+                    name=f'{x[4]}. {x[1]} / {x[2]}',
                     value=f'${x[3]}',
                     inline=False)
                 embed.set_footer(text="")
