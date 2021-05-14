@@ -11,6 +11,11 @@ from itertools import cycle
 
 # ---       ENV VARIABLES       --- #
 
+# WHEN RUNNING PSQL COMMANDS IN LOCAL CMD
+# CMD MAY NOT REGISTER CERTAIN CHARACTERS
+# GO TO REGEDIT Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor
+# NEW STRING > NAME Autorun > CHANGE VALUE TO chcp 1252
+
 # Bot / Bot Owner related
 
 load_env(read_file('.env'))
@@ -39,9 +44,9 @@ from modules.market import update_coins
 
 
 # ---       DATABASE STUFF      --- #
-async def create_db_pool():
+# async def create_db_pool():
     # 'self.bot.pg_con' to connect to db in /module files
-    bot.pg_con = await asyncpg.create_pool(database=DB_NAME, user=DB_USER, password=DB_PW)
+    # bot.pg_con = await asyncpg.create_pool(database=DB_NAME, user=DB_USER, password=DB_PW)
 
 # ---       BACKGROUND STUFF    --- #
 status = cycle(['For more info | ;help', 'Under development! | ;help'])
@@ -125,5 +130,5 @@ async def reload(ctx, extension):
 
 # ---       END MAIN            ---#
 bot.loop.create_task(refresh_coins())
-bot.loop.run_until_complete(create_db_pool())
+# bot.loop.run_until_complete(create_db_pool())
 bot.run(SECRET_KEY)
