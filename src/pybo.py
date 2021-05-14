@@ -10,7 +10,7 @@ from itertools import cycle
 # ---       ENV VARIABLES       --- #
 
 # Bot / Bot Owner related
-load_env(read_file('src/.env'))
+load_env(read_file('.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
 BOT_AVATAR = os.environ.get('BOT_AVATAR')
