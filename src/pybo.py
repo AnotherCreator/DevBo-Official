@@ -1,4 +1,6 @@
 # ---       IMPORTS             ---#
+import asyncio
+
 import asyncpg
 import discord
 import os
@@ -10,6 +12,7 @@ from itertools import cycle
 # ---       ENV VARIABLES       --- #
 
 # Bot / Bot Owner related
+
 load_env(read_file('.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
@@ -29,7 +32,7 @@ for filename in os.listdir('modules'):  # Load modules
 
 # ---       MODULE IMPORTS             --- #
 # Module imports cant be at the top because 'pybo.py' has to first load all the modules
-# from modules.market import update_coins
+from modules.market import update_coins
 
 
 # ---       DATABASE STUFF      --- #
@@ -48,11 +51,11 @@ async def change_status():
     await bot.change_presence(status=discord.Status.online, activity=discord.Game(next(status)))
 
 
-# async def refresh_coins():  # Refreshes every 3 minute(s)
-#     await bot.wait_until_ready()
-#     while not bot.is_closed():
-#         update_coins()
-#         await asyncio.sleep(180)
+async def refresh_coins():  # Refreshes every 3 minute(s)
+    await bot.wait_until_ready()
+    while not bot.is_closed():
+        update_coins()
+        await asyncio.sleep(180)
 
 
 # ---       MAIN LINE           --- #
