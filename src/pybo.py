@@ -19,6 +19,9 @@ OWNER_ID = os.environ.get('OWNER_ID')
 BOT_AVATAR = os.environ.get('BOT_AVATAR')
 # Database
 DB_URL = os.environ.get('HEROKU_DB_URL')
+DB_NAME = os.environ.get('HEROKU_DB_NAME')
+DB_USER = os.environ.get('HEROKU_DB_USER')
+DB_PW = os.environ.get('HEROKU_DB_PW')
 # API
 API_KEY = os.environ.get('CMC_API_KEY')
 
@@ -38,10 +41,8 @@ from modules.market import update_coins
 # ---       DATABASE STUFF      --- #
 async def create_db_pool():
     # 'self.bot.pg_con' to connect to db in /module files
-    # bot.pg_con = await asyncpg.create_pool(database='PyBo_Local', user='postgres', password=DB_DEV_PW)
+    bot.pg_con = await asyncpg.create_pool(database=DB_NAME, user=DB_USER, password=DB_PW)
 
-    con = psycopg2.connect(DB_URL, sslmode='require')
-    cur = con.cursor()
 # ---       BACKGROUND STUFF    --- #
 status = cycle(['For more info | ;help', 'Under development! | ;help'])
 
@@ -124,5 +125,5 @@ async def reload(ctx, extension):
 
 # ---       END MAIN            ---#
 bot.loop.create_task(refresh_coins())
-# bot.loop.run_until_complete(create_db_pool())
+bot.loop.run_until_complete(create_db_pool())
 bot.run(SECRET_KEY)
