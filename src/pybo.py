@@ -38,7 +38,7 @@ from modules.market import update_coins
 # ---       DATABASE STUFF      --- #
 async def create_db_pool():
     # 'self.bot.pg_con' to connect to db in /module files
-    bot.pg_con = await asyncpg.create_pool(database='PyBo_Local', user='postgres', password=DB_DEV_PW)
+    # bot.pg_con = await asyncpg.create_pool(database='PyBo_Local', user='postgres', password=DB_DEV_PW)
 
     con = psycopg2.connect(DB_URL, sslmode='require')
     cur = con.cursor()
@@ -124,5 +124,5 @@ async def reload(ctx, extension):
 
 # ---       END MAIN            ---#
 bot.loop.create_task(refresh_coins())
-bot.loop.run_until_complete(create_db_pool())
+# bot.loop.run_until_complete(create_db_pool())
 bot.run(SECRET_KEY)
