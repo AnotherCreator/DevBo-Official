@@ -1,6 +1,6 @@
 # IDE Files
-/venv
-/.idea
+../venv
+../.idea
 /modules/__pycache__
 # heh
 .env
