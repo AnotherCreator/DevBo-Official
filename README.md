@@ -12,19 +12,55 @@ Pybo (paɪ boʊ) is a [Discord](https://discord.com/brand-new) bot that integrat
 
 # Table of contents
 - [Usage](#usage)
-- [Install](#install)
+- [Install](#local-installation)
 - [License](#license)
 
 # Usage
 
-# Install
+# Local Installation
 
 ### Requirements:
 [Python >= 3.8](https://www.python.org/downloads/ "Python Download Page")  
 [PostgreSQL >= 12.7](https://www.postgresql.org/download/ "PostgreSQL Download Page")  
 [psycopg2 >= 2.8.6](https://pypi.org/project/psycopg2/ "Library Download")  
-[Discord.py >= 1.7.2](https://discordpy.readthedocs.io/en/stable/intro.html "Library Download")  
-[Optional] [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install "Heroku CLI")
+[Discord.py >= 1.7.2](https://discordpy.readthedocs.io/en/stable/intro.html "Library Download")
+
+### PostgreSQL: 
+
+SQL Script to initialize local database tables:  
+``` PostgreSQL
+create table coin_info
+(
+    coin_id           integer not null,
+    coin_name         varchar,
+    coin_symbol       varchar,
+    coin_price        real,
+    coin_rank         integer,
+    coin_daily_change real,
+    coin_logo         varchar
+);
+
+alter table coin_info
+    owner to postgres;
+
+create unique index coin_info_coin_id_uindex
+    on coin_info (coin_id);
+
+create table user_info
+(
+    user_id    varchar not null,
+    guild_id   varchar,
+    user_level integer,
+    user_xp    integer
+);
+
+alter table user_info
+    owner to postgres;
+```
+
+Before running the bot, it is important to run __src/modules/market.py__ and call 'cache_coins()' in order to properly
+initialize your coin data. After that, you can remove the function call and run [PyBo](src/pybo.py) by itself to turn
+on the bot.
 
 # License
 [MIT](../LICENSE) © 2021 AnotherCreator

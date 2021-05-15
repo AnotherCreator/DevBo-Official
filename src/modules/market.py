@@ -7,17 +7,14 @@ from collections.abc import Sequence
 from discord.ext import commands
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
-from pybo import API_KEY, DB_DEV_PW, BOT_AVATAR
 
+# ---            WHEN RUNNING THE BOT            --- #
+from pybo import API_KEY, DB_DEV_PW, BOT_AVATAR
 # ---       WHEN RUNNING JUST THIS MODULE        --- #
-# # # Bot / Bot Owner related
 # import os
 # from dotenvy import load_env, read_file
 # load_env(read_file('../../.env'))
 # SECRET_KEY = os.environ.get('SECRET_KEY')
-# OWNER_ID = os.environ.get('OWNER_ID')
-# BOT_AVATAR = os.environ.get('BOT_AVATAR')
-# # # Database
 # DB_DEV_PW = os.environ.get('DB_DEV_PW')
 # API_KEY = os.environ.get('CMC_API_KEY')
 
