@@ -1,7 +1,7 @@
 # Pybo - A Crypto Discord Bot
 
 <p align="center">Tracks and displays the top 100 coins ranked by CoinMarketCap</p>
-<img src="images/Pybo_Banner.png" alt="">
+<img align="center" src="images/Pybo_Banner.png" alt="">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![License: MIT](https://img.shields.io/badge/Discord-PyBo-blue.svg)](https://discord.gg/25wb7AbaV5)
