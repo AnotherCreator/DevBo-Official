@@ -19,10 +19,10 @@ class Help(commands.Cog):
     @commands.command()
     @commands.check(bot_channel_check)
     async def help(self, ctx, module=None):
-        await ctx.message.delete() # Deletes command call
+        await ctx.message.delete()  # Deletes command call
         if module is None:
             embed = discord.Embed(
-                title='Use *;more* __*Module Name*__ to get more info',
+                title='Use *;help* __*Module Name*__ to get more info',
                 description='• Administration\n'
                             '• Info\n'
                             '• Market\n'
