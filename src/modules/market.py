@@ -231,7 +231,7 @@ def get_right_10_coins(current_rank):
 
 # ---     CHECKS / FUNCTIONS    --- #
 def bot_channel_check(ctx):
-    botspam_channels = ['bot-spam']
+    botspam_channels = ['bot-spam', 'bot-commands']
     if str(ctx.message.channel) in botspam_channels or ctx.author.id == 291005201840734218:
         return True
 

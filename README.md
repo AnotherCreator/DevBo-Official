@@ -12,12 +12,15 @@ Pybo (paɪ boʊ) is a [Discord](https://discord.com/brand-new) bot that integrat
 
 # Table of contents
 - [Usage](#usage)
-- [Install](#local-installation)
+- [Install](#install)
 - [License](#license)
 
 # Usage
 
-# Local Installation
+After inviting PyBo to your server, simply create a text channel called __bot-spam__ and type __;help__ into the
+text bar to get a detailed list of commands. 
+
+# Install
 
 ### Requirements:
 [Python >= 3.8](https://www.python.org/downloads/ "Python Download Page")  
