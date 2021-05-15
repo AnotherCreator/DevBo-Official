@@ -1,6 +1,7 @@
 ![](images/Pybo_Banner.png)
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/Discord-PyBo-blue.svg)](https://discord.gg/25wb7AbaV5)
+
 # Table of contents
 - [General Info](#general-info)
 - [Local Installation](#local-installation)
