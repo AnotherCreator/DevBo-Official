@@ -51,11 +51,11 @@ async def change_status():
     await bot.change_presence(status=discord.Status.online, activity=discord.Game(next(status)))
 
 
-async def refresh_coins():  # Refreshes every 3 minute(s)
-    await bot.wait_until_ready()
-    while not bot.is_closed():
-        update_coins()
-        await asyncio.sleep(180)
+# async def refresh_coins():  # Refreshes every 3 minute(s)
+#     await bot.wait_until_ready()
+#     while not bot.is_closed():
+#         update_coins()
+#         await asyncio.sleep(180)
 
 
 # ---       MAIN LINE           --- #
