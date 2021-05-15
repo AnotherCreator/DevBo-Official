@@ -1,7 +1,6 @@
 # Pybo - A Crypto Discord Bot [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![License: MIT](https://img.shields.io/badge/Discord-PyBo-blue.svg)](https://discord.gg/25wb7AbaV5)  
 
-# Introduction
-
+<img src="images/Pybo_Banner.png" alt="">
 
 
 # Table of contents
