@@ -108,6 +108,7 @@ def update_coins():
         print(coin_data)
 
         for x in coins:
+            print(x)
             id = x['id']
             rank = x['cmc_rank']
             price = x['quote']['USD']['price']
@@ -116,7 +117,7 @@ def update_coins():
             cur.execute("UPDATE coin_info "
                         "SET coin_price = %s, coin_rank = %s, coin_daily_change = %s "
                         "WHERE coin_id = %s",
-                        (price, rank, id, daily_change))
+                        (price, rank, daily_change, id))
             con.commit()  # Commit transaction
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
