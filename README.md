@@ -1,7 +1,9 @@
 # Pybo - A Crypto Inspired Discord Bot 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![License: MIT](https://img.shields.io/badge/Dev_Server-PyBo-blue.svg)](https://discord.gg/25wb7AbaV5) [![License: MIT](https://img.shields.io/badge/Bot_Invite-PyBo-blue.svg)](https://discord.com/api/oauth2/authorize?client_id=733004304855597056&permissions=2435968598&scope=bot%20applications.commands)
 
-<img src="images/Pybo_Banner.png" alt="">
+<p align="center">
+  <img width="676" height="267" src="https://github.com/AnotherCreator/Pybo-Discord-Bot/blob/master/images/Pybo_Banner.png">
+</p>
 
 Pybo (paɪ boʊ) is a [Discord](https://discord.com/brand-new) bot that integrates the 
 [CoinMarketCap API](https://coinmarketcap.com/) to track and display the top 100 cryptocurrencies.
