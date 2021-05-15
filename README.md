@@ -5,6 +5,7 @@
   <img width="676" height="267" src="https://github.com/AnotherCreator/Pybo-Discord-Bot/blob/master/images/Pybo_Banner.png">
 </p>
 
+
 Pybo (paɪ boʊ) is a [Discord](https://discord.com/brand-new) bot that integrates the 
 [CoinMarketCap API](https://coinmarketcap.com/) to track and display the top 100 cryptocurrencies.
 
@@ -20,7 +21,10 @@ Pybo (paɪ boʊ) is a [Discord](https://discord.com/brand-new) bot that integrat
 
 ### Requirements:
 [Python >= 3.8](https://www.python.org/downloads/ "Python Download Page")  
-[PostgreSQL >= 12.7](https://www.postgresql.org/download/ "PostgreSQL Download Page")
+[PostgreSQL >= 12.7](https://www.postgresql.org/download/ "PostgreSQL Download Page")  
+[psycopg2 >= 2.8.6](https://pypi.org/project/psycopg2/ "Library Download")  
+[Discord.py >= 1.7.2](https://discordpy.readthedocs.io/en/stable/intro.html "Library Download")  
+[Optional] [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install "Heroku CLI")
 
 # License
 [MIT](../LICENSE) © 2021 AnotherCreator
