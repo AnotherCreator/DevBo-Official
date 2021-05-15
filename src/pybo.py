@@ -10,12 +10,6 @@ from dotenvy import load_env, read_file
 from itertools import cycle
 
 # ---       ENV VARIABLES       --- #
-
-# WHEN RUNNING PSQL COMMANDS IN LOCAL CMD
-# CMD MAY NOT REGISTER CERTAIN CHARACTERS
-# GO TO REGEDIT Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor
-# NEW STRING > NAME Autorun > CHANGE VALUE TO chcp 1252
-
 # Bot / Bot Owner related
 
 load_env(read_file('.env'))

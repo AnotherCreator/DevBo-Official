@@ -33,6 +33,7 @@ coin_parameters = {  # Retrieves coins listed 1-100
 con = psycopg2.connect(DB_URL, sslmode='require')
 cur = con.cursor()
 
+
 # ---        DATABASE        --- #
 def cache_coins():  # Run this once to init db values
     try:
@@ -77,6 +78,7 @@ def cache_coins():  # Run this once to init db values
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
 
+
 def update_coins():
     try:
         coin_response = session.get(api_data, params=coin_parameters)
@@ -92,7 +94,7 @@ def update_coins():
             cur.execute("UPDATE coin_info "
                         "SET coin_price = %s, coin_rank = %s, coin_daily_change = %s "
                         "WHERE coin_id = %s",
-                        (price, rank, id, daily_change))
+                        (price, rank, daily_change, id))
             con.commit()  # Commit transaction
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
