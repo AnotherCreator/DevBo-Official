@@ -1,31 +1,30 @@
-![](images/Pybo_Banner.png)
+# Pybo - A Crypto Discord Bot
+
+<p align="center">Tracks and displays the top 100 coins ranked by CoinMarketCap</p>
+<img src="images/Pybo_Banner.png" alt="">
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![License: MIT](https://img.shields.io/badge/Discord-PyBo-blue.svg)](https://discord.gg/25wb7AbaV5)
 
 # Table of contents
-- [General Info](#general-info)
-- [Local Installation](#local-installation)
+- [Install](#install)
 - [Current Features](#current-features)
-- [Technologies](#technologies)
-
-# Pybo Cryptocurrency Discord Bot
-If you want to see the bot in action and play around with it, you can [join here!](https://discord.gg/6YCm7mSPDu)
-
-![](images/Crypto_Commands.png)
+- [License](#license)
 
 
-## Local Installation
+# Install
 
 ### Requirements:
-[Python](https://www.python.org/downloads/ "Python Download Page")  
-[PostgreSQL](https://www.postgresql.org/download/ "PostgreSQL Download Page")
+[Python >= 3.8](https://www.python.org/downloads/ "Python Download Page")  
+[PostgreSQL >= 12.7](https://www.postgresql.org/download/ "PostgreSQL Download Page")
 
 
 
-## Current Features
+
+# Current Features
 - Cryptocurrency tracker that displays the top 100 coins
 
 
-## License
+# License
 [MIT](../LICENSE) © 2021 AnotherCreator
 
