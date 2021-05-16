@@ -57,8 +57,6 @@ def cache_coins():  # Run this once to init db values
         coin_data = json.loads(coin_response.text)
         coins = coin_data['data']
 
-        print(coin_data)
-
         for x in coins:
             id_list.append(x['id'])
             ids = x['id']
@@ -102,8 +100,6 @@ def update_coins():
         coin_data = json.loads(coin_response.text)
         coins = coin_data['data']
 
-        print(coin_data)
-
         for x in coins:
             print(x)
             id = x['id']
@@ -126,7 +122,6 @@ def get_left_coin(current_page):
 
     #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Rank: x[4] || Change: x[5] || Logo: x[6]
     for x in rows:
-        print(x)
         embed = discord.Embed(
             title=f'${str(x[3])}',
             description=' ',
