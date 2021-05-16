@@ -101,7 +101,6 @@ def update_coins():
         coins = coin_data['data']
 
         for x in coins:
-            print(x)
             id = x['id']
             rank = x['cmc_rank']
             price = x['quote']['USD']['price']
