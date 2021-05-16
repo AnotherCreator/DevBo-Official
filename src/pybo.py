@@ -37,11 +37,6 @@ if __name__ == '__main__':
     # Module imports cant be at the top because 'pybo.py' has to first load all the modules
     from modules.market import update_coins
 
-    # ---       DATABASE STUFF      --- #
-    # async def create_db_pool():
-        # 'self.bot.pg_con' to connect to db in /module files
-        # bot.pg_con = await asyncpg.create_pool(database=DB_NAME, user=DB_USER, password=DB_PW)
-
     # ---       BACKGROUND STUFF    --- #
     status = cycle(['For more info | ;help', 'Under development! | ;help'])
 
@@ -114,5 +109,4 @@ if __name__ == '__main__':
 
     # ---       END MAIN            ---#
     bot.loop.create_task(refresh_coins())
-    # bot.loop.run_until_complete(create_db_pool())
     bot.run(SECRET_KEY)
