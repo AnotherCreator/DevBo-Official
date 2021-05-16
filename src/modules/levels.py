@@ -4,11 +4,6 @@ import psycopg2
 from discord.ext import commands
 from pybo import DB_URL
 
-# ---       CONNECT TO DB       --- #
-con = psycopg2.connect(DB_URL, sslmode='require')
-cur = con.cursor()
-
-
 # ---     CUSTOM CHECKS     --- #
 def bot_channel_check(ctx):
     botspam_channels = ['bot-spam']
@@ -20,6 +15,10 @@ def bot_channel_check(ctx):
 class Levels(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    # ---       CONNECT TO DB       --- #
+    con = psycopg2.connect(DB_URL, sslmode='require')
+    cur = con.cursor()
 
     @commands.Cog.listener()
     async def lvl_up(self, user):
