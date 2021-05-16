@@ -69,7 +69,7 @@ if __name__ == '__main__':
     @bot.command()
     @commands.is_owner()
     async def botmessage(ctx, *, message):
-        channel = bot.get_channel(666873106857721869)
+        channel = bot.get_channel(770411428779786240)
         await channel.send(message)
 
 
