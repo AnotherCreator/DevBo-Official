@@ -122,7 +122,14 @@ async def reload(ctx, extension):
     bot.load_extension(f'modules.{extension}')
 
 
+if __name__ == '__main__':
+    async def refresh_coins():  # Refreshes every 3 minute(s)
+        await bot.wait_until_ready()
+        while not bot.is_closed():
+            update_coins()
+            await asyncio.sleep(180)
+
 # ---       END MAIN            ---#
-# bot.loop.create_task(refresh_coins())
+bot.loop.create_task(refresh_coins())
 # bot.loop.run_until_complete(create_db_pool())
 bot.run(SECRET_KEY)
