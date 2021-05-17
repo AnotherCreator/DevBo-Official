@@ -112,6 +112,6 @@ if __name__ == '__main__':
         bot.load_extension(f'modules.{extension}')
 
     # ---       END MAIN            ---#
-    bot.loop.run_until_complete(create_db_pool())
+    # bot.loop.run_until_complete(create_db_pool())
     bot.loop.create_task(refresh_coins())
     bot.run(SECRET_KEY)
