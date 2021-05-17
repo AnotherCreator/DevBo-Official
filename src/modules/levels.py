@@ -1,19 +1,19 @@
-# # ---       IMPORTS          ---#
-# import discord
-# from discord.ext import commands
-#
-#
-# # ---     CUSTOM CHECKS     --- #
-# def bot_channel_check(ctx):
-#     botspam_channels = ['bot-spam']
-#     if str(ctx.message.channel) in botspam_channels or ctx.author.id == 291005201840734218:
-#         return True
-#
-#
-# # ---       MAIN LINE       ---#
-# class Levels(commands.Cog):
-#     def __init__(self, bot):
-#         self.bot = bot
+# ---       IMPORTS          ---#
+import discord
+from discord.ext import commands
+
+
+# ---     CUSTOM CHECKS     --- #
+def bot_channel_check(ctx):
+    botspam_channels = ['bot-spam']
+    if str(ctx.message.channel) in botspam_channels or ctx.author.id == 291005201840734218:
+        return True
+
+
+# ---       MAIN LINE       ---#
+class Levels(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 #
 #     @commands.Cog.listener()
 #     async def lvl_up(self, user):
@@ -82,5 +82,5 @@
 #
 #
 # # ---       END MAIN        ---#
-# def setup(bot):
-#     bot.add_cog(Levels(bot))
+def setup(bot):
+    bot.add_cog(Levels(bot))
