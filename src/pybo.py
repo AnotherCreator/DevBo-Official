@@ -33,6 +33,10 @@ if __name__ == '__main__':
         if filename.endswith('.py'):
             bot.load_extension(f'modules.{filename[:-3]}')
 
+    async def create_db_pool():
+        # 'self.bot.pg_con' to connect to db in /module files
+        bot.pg_con = await asyncpg.create_pool(database='DB_NAME', user='DB_USER', password=DB_PW)
+
     # ---       MODULE IMPORTS             --- #
     # Module imports cant be at the top because 'pybo.py' has to first load all the modules
     from modules.market import update_coins
