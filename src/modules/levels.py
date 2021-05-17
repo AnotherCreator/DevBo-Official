@@ -1,8 +1,6 @@
 # ---       IMPORTS          ---#
 import discord
-import psycopg2
 from discord.ext import commands
-from pybo import DB_URL
 
 
 # ---     CUSTOM CHECKS     --- #
@@ -23,7 +21,7 @@ class Levels(commands.Cog):
         current_level = user["user_level"]
 
         if current_exp >= round((4 * (current_level ** 3)) / 5):
-            await self.bot.cur.execute(
+            await self.bot.pg_con.execute(
                 'UPDATE user_info set user_level = %s WHERE user_id = %s and guild_id = %s',
                 current_level + 1, user["user_id"], user["guild_id"]
             )
@@ -39,19 +37,19 @@ class Levels(commands.Cog):
         author_id = str(message.author.id)
         guild_id = str(message.guild.id)
 
-        user = self.bot.cur.execute(
+        user = self.bot.pg_con.execute(
             'SELECT user_id, guild_id FROM user_info'
         )
 
         if not user:
-            await self.bot.cur.execute(
+            await self.bot.pg_con.execute(
                 'INSERT INTO user_info (user_id, guild_id, user_level, user_xp) VALUES (%s, %s, 1, 0)',
                 author_id, guild_id
             )
-        user = await self.bot.cur.execute(
+        user = await self.bot.pg_con.execute(
             'SELECT * FROM user_info WHERE user_id = $1 AND guild_id = $2', author_id, guild_id
         )
-        await self.bot.cur.execute(
+        await self.bot.pg_con.execute(
             'UPDATE user_info SET user_xp = $1 WHERE user_id = $2 and guild_id = $3',
             user["user_exp"] + 1, author_id, guild_id
         )
@@ -65,7 +63,7 @@ class Levels(commands.Cog):
         member_id = str(member.id)
         guild_id = str(ctx.guild.id)
 
-        user = await self.bot.cur.fetchrow(
+        user = await self.bot.pg_con.fetchrow(
             'SELECT * FROM user_info WHERE user_id = $1 AND guild_id = $2', member_id, guild_id
         )
 
