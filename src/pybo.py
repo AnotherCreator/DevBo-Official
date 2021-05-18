@@ -113,5 +113,5 @@ if __name__ == '__main__':
 
     # ---       END MAIN            ---#
     bot.loop.create_task(refresh_coins())
-    bot.loop.run_until_complete(create_db_pool())
+    # bot.loop.run_until_complete(create_db_pool())
     bot.run(SECRET_KEY)
