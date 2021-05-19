@@ -11,9 +11,20 @@ Pybo (paɪ boʊ) is a [Discord](https://discord.com/brand-new) bot that integrat
 
 
 # Table of contents
+- [Future Features](#future-features)
 - [Usage](#usage)
 - [Install](#install)
 - [License](#license)
+
+# Future Features
+
+- [ ] Server leveling
+- [ ] Server economy
+- [ ] Increased interaction with cryptocurrency data
+    - [ ] Personal 'portfolio' of simulated gains and losses of coins you 'own.'
+    - [ ] Ability to buy/sell/trade coins based on current data
+    - [ ] Interaction between users with their coins / fiat
+- [ ] More admin commands
 
 # Usage
 
