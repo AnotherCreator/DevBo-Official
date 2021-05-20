@@ -41,7 +41,7 @@ text bar to get a detailed list of commands. If you happen to join my personal d
 
 ### PostgreSQL: 
 
-Sample SQL script to initialize local database tables:  
+Sample SQL script to initialize database tables:  
 ``` PostgreSQL
 create table coin_info
 (
