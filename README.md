@@ -41,7 +41,7 @@ text bar to get a detailed list of commands.
 
 ### PostgreSQL: 
 
-SQL Script to initialize local database tables:  
+Sample SQL script to initialize local database tables:  
 ``` PostgreSQL
 create table coin_info
 (
