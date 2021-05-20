@@ -17,7 +17,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
 BOT_AVATAR = os.environ.get('BOT_AVATAR')
 # Database
-DB_URL = check_output(os.environ.get('HEROKU_DB_URL'))
+DB_URL = os.environ.get('HEROKU_DB_URL')
 DB_NAME = os.environ.get('HEROKU_DB_NAME')
 DB_USER = os.environ.get('HEROKU_DB_USER')
 DB_PW = os.environ.get('HEROKU_DB_PW')
