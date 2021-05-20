@@ -29,7 +29,7 @@ Pybo (paɪ boʊ) is a [Discord](https://discord.com/brand-new) bot that integrat
 # Usage
 
 After inviting PyBo to your server, simply create a text channel called __bot-spam__ and type __;help__ into the
-text bar to get a detailed list of commands. 
+text bar to get a detailed list of commands. If you happen to join my personal development server, feel free to '@iTakeDonations#8077'  
 
 # Install
 
