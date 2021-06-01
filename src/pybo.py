@@ -10,8 +10,8 @@ from itertools import cycle
 from subprocess import check_output
 
 # ---       ENV VARIABLES       --- #
-# Bot / Bot Owner related
 
+# Bot / Bot Owner related
 load_env(read_file('.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
