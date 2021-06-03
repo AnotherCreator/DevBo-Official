@@ -1,12 +1,8 @@
 # ---       IMPORTS             --- #
 import asyncio
-import time
-
 import asyncpg
 import discord
 import os
-
-import schedule
 from discord.ext import commands, tasks
 from dotenvy import load_env, read_file
 from itertools import cycle
@@ -35,7 +31,7 @@ if __name__ == '__main__':
     # Module imports cant be at the top because 'pybo.py' has to first load all the modules
     from modules.market import update_coins
 
-    # ---       DATABASE STUFF      --- #
+    # ---       LEVELING DATABASE STUFF      --- #
     async def create_db_pool():
         # 'self.bot.pg_con' to connect to db in /module files
         bot.pg_con = await asyncpg.create_pool(database='postgres', user='postgres', password=DB_DEV_PW)
@@ -113,5 +109,5 @@ if __name__ == '__main__':
 
     # ---       END MAIN            ---#
     bot.loop.create_task(refresh_coins())
-    bot.loop.run_until_complete(create_db_pool())
+    bot.loop.run_until_complete(create_db_pool())  # This has to be under '.create_task'
     bot.run(SECRET_KEY)
