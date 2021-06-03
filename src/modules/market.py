@@ -265,7 +265,7 @@ class Market(commands.Cog):
 
     @commands.command()
     @commands.check(bot_channel_check)
-    async def coin(self, ctx, *, name):  # Accepts current rank TODO: Accept coin name
+    async def coin(self, ctx, *, name):  # Accepts current rank or coin name
         # Variables
         emoji_list = ['◀', '▶']
 
@@ -274,80 +274,158 @@ class Market(commands.Cog):
         rows = cur.fetchall()
 
         await ctx.message.delete()  # Deletes command call
-        for x in rows:
-            #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Rank: x[4] || Change: x[5] || Logo: x[6]
-            if x[1] == name or x[4] == int(name):
-                current_page = x[4]
-                embed = discord.Embed(
-                    title=f'${str(x[3])}',
-                    description=' ',
-                    colour=discord.Colour.blurple()
-                )
-                embed.set_author(
-                    name=f'{x[4]}. {x[1]} / {x[2]}',
-                    icon_url=x[6]
-                )
-                embed.add_field(
-                    name='24h %',
-                    value=f'{x[5]:.2f}%',
-                    inline=False)
-                embed.set_footer(text="")
+        try:  # Checks to see if user input 'name' is a rank
+            coin_number = int(name)
+            for x in rows:
+                #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Rank: x[4] || Change: x[5] || Logo: x[6]
+                if x[4] == coin_number:
+                    current_page = x[4]
+                    embed = discord.Embed(
+                        title=f'${str(x[3])}',
+                        description=' ',
+                        colour=discord.Colour.blurple()
+                    )
+                    embed.set_author(
+                        name=f'{x[4]}. {x[1]} / {x[2]}',
+                        icon_url=x[6]
+                    )
+                    embed.add_field(
+                        name='24h %',
+                        value=f'{x[5]:.2f}%',
+                        inline=False)
+                    embed.set_footer(text="")
+            message = await ctx.send(embed=embed)
 
-        message = await ctx.send(embed=embed)
-        if current_page <= 1:  # Adds / Removes emoji if it passes threshold
-            await message.add_reaction(emoji_list[1])
-        elif current_page >= 100:
-            await message.add_reaction(emoji_list[0])
-        else:
-            for emoji in emoji_list:
-                await message.add_reaction(emoji)
+            if current_page <= 1:  # Adds / Removes emoji if it passes threshold
+                await message.add_reaction(emoji_list[1])
+            elif current_page >= 100:
+                await message.add_reaction(emoji_list[0])
+            else:
+                for emoji in emoji_list:
+                    await message.add_reaction(emoji)
 
-        check = reaction_check(message=message, author=ctx.author, emoji=(emoji_list[0], emoji_list[1]))
-        while True:
-            try:
-                reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
-                if reaction.emoji == emoji_list[0]:  # Left page
-                    await message.delete()  # Deletes embed before sending a new one
-                    current_page = current_page - 1
-                    if current_page <= 0:
-                        current_page = 1
-                        embed = get_left_coin(1)
-                    else:
-                        embed = get_left_coin(current_page)
+            check = reaction_check(message=message, author=ctx.author, emoji=(emoji_list[0], emoji_list[1]))
+            while True:
+                try:
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+                    if reaction.emoji == emoji_list[0]:  # Left page
+                        await message.delete()  # Deletes embed before sending a new one
+                        current_page = current_page - 1
+                        if current_page <= 0:
+                            current_page = 1
+                            embed = get_left_coin(1)
+                        else:
+                            embed = get_left_coin(current_page)
 
-                    message = await ctx.send(embed=embed)
-                    if current_page <= 1:  # Adds / Removes emoji if it passes threshold
-                        await message.add_reaction(emoji_list[1])
-                    elif current_page >= 100:
-                        await message.add_reaction(emoji_list[0])
-                    else:
-                        for emoji in emoji_list:
-                            await message.add_reaction(emoji)
-                    check = reaction_check(message=message, author=ctx.author,
-                                           emoji=(emoji_list[0], emoji_list[1]))
+                        message = await ctx.send(embed=embed)
+                        if current_page <= 1:  # Adds / Removes emoji if it passes threshold
+                            await message.add_reaction(emoji_list[1])
+                        elif current_page >= 100:
+                            await message.add_reaction(emoji_list[0])
+                        else:
+                            for emoji in emoji_list:
+                                await message.add_reaction(emoji)
+                        check = reaction_check(message=message, author=ctx.author,
+                                               emoji=(emoji_list[0], emoji_list[1]))
 
-                elif reaction.emoji == emoji_list[1]:  # Right page
-                    await message.delete()  # Deletes embed before sending a new one
-                    current_page = current_page + 1
-                    if current_page >= 100:
-                        current_page = 100
-                        embed = get_right_coin(100)
-                    else:
-                        embed = get_right_coin(current_page)
+                    elif reaction.emoji == emoji_list[1]:  # Right page
+                        await message.delete()  # Deletes embed before sending a new one
+                        current_page = current_page + 1
+                        if current_page >= 100:
+                            current_page = 100
+                            embed = get_right_coin(100)
+                        else:
+                            embed = get_right_coin(current_page)
 
-                    message = await ctx.send(embed=embed)
-                    if current_page <= 1:  # Adds / Removes emoji if it passes threshold
-                        await message.add_reaction(emoji_list[1])
-                    elif current_page >= 100:
-                        await message.add_reaction(emoji_list[0])
-                    else:
-                        for emoji in emoji_list:
-                            await message.add_reaction(emoji)
+                        message = await ctx.send(embed=embed)
+                        if current_page <= 1:  # Adds / Removes emoji if it passes threshold
+                            await message.add_reaction(emoji_list[1])
+                        elif current_page >= 100:
+                            await message.add_reaction(emoji_list[0])
+                        else:
+                            for emoji in emoji_list:
+                                await message.add_reaction(emoji)
 
-                    check = reaction_check(message=message, author=ctx.author,
-                                           emoji=(emoji_list[0], emoji_list[1]))
-            except TimeoutError:
-                print('Timeout')
+                        check = reaction_check(message=message, author=ctx.author,
+                                               emoji=(emoji_list[0], emoji_list[1]))
+                except TimeoutError:
+                    print('Timeout')
+        except ValueError:
+            coin_name = name  # User input is confirmed to be a name
+            for x in rows:
+                #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Rank: x[4] || Change: x[5] || Logo: x[6]
+                if x[1] == coin_name:
+                    current_page = x[4]
+                    embed = discord.Embed(
+                        title=f'${str(x[3])}',
+                        description=' ',
+                        colour=discord.Colour.blurple()
+                    )
+                    embed.set_author(
+                        name=f'{x[4]}. {x[1]} / {x[2]}',
+                        icon_url=x[6]
+                    )
+                    embed.add_field(
+                        name='24h %',
+                        value=f'{x[5]:.2f}%',
+                        inline=False)
+                    embed.set_footer(text="")
+            message = await ctx.send(embed=embed)
+
+            if current_page <= 1:  # Adds / Removes emoji if it passes threshold
+                await message.add_reaction(emoji_list[1])
+            elif current_page >= 100:
+                await message.add_reaction(emoji_list[0])
+            else:
+                for emoji in emoji_list:
+                    await message.add_reaction(emoji)
+
+            check = reaction_check(message=message, author=ctx.author, emoji=(emoji_list[0], emoji_list[1]))
+            while True:
+                try:
+                    reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
+                    if reaction.emoji == emoji_list[0]:  # Left page
+                        await message.delete()  # Deletes embed before sending a new one
+                        current_page = current_page - 1
+                        if current_page <= 0:
+                            current_page = 1
+                            embed = get_left_coin(1)
+                        else:
+                            embed = get_left_coin(current_page)
+
+                        message = await ctx.send(embed=embed)
+                        if current_page <= 1:  # Adds / Removes emoji if it passes threshold
+                            await message.add_reaction(emoji_list[1])
+                        elif current_page >= 100:
+                            await message.add_reaction(emoji_list[0])
+                        else:
+                            for emoji in emoji_list:
+                                await message.add_reaction(emoji)
+                        check = reaction_check(message=message, author=ctx.author,
+                                               emoji=(emoji_list[0], emoji_list[1]))
+
+                    elif reaction.emoji == emoji_list[1]:  # Right page
+                        await message.delete()  # Deletes embed before sending a new one
+                        current_page = current_page + 1
+                        if current_page >= 100:
+                            current_page = 100
+                            embed = get_right_coin(100)
+                        else:
+                            embed = get_right_coin(current_page)
+
+                        message = await ctx.send(embed=embed)
+                        if current_page <= 1:  # Adds / Removes emoji if it passes threshold
+                            await message.add_reaction(emoji_list[1])
+                        elif current_page >= 100:
+                            await message.add_reaction(emoji_list[0])
+                        else:
+                            for emoji in emoji_list:
+                                await message.add_reaction(emoji)
+
+                        check = reaction_check(message=message, author=ctx.author,
+                                               emoji=(emoji_list[0], emoji_list[1]))
+                except TimeoutError:
+                    print('Timeout')
 
     @commands.command()
     @commands.check(bot_channel_check)
