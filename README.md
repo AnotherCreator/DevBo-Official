@@ -11,14 +11,25 @@ API wrapper to run the bot. Pybo also integrates the [CoinMarketCap API](https:/
 
 
 # Table of contents
+- [Future Features](#future-features)
 - [Usage](#usage)
 - [Install](#install)
 - [License](#license)
 
+# Future Features
+
+- [ ] Server leveling
+- [ ] Server economy
+- [ ] Increased interaction with cryptocurrency data
+    - [ ] Personal 'portfolio' of simulated gains and losses of coins you 'own.'
+    - [ ] Ability to buy/sell/trade coins based on current data
+    - [ ] Interaction between users with their coins / fiat
+- [ ] More admin commands
+
 # Usage
 
 After inviting PyBo to your server, simply create a text channel called __bot-spam__ and type __;help__ into the
-text bar to get a detailed list of commands. 
+text bar to get a detailed list of commands. If you happen to join my personal development server, feel free to '@iTakeDonations#8077'  
 
 # Install
 
@@ -30,7 +41,7 @@ text bar to get a detailed list of commands.
 
 ### PostgreSQL: 
 
-SQL Script to initialize local database tables:  
+Sample SQL script to initialize database tables:  
 ``` PostgreSQL
 create table coin_info
 (
