@@ -6,8 +6,8 @@
 </p>
 
 
-Pybo (paɪ boʊ) is a [Discord](https://discord.com/brand-new) bot that integrates the 
-[CoinMarketCap API](https://coinmarketcap.com/) to track and display the top 100 cryptocurrencies.
+Pybo (paɪ boʊ) is a [Discord](https://discord.com/brand-new) bot that utilizes the [discord.py](https://github.com/Rapptz/discord.py) 
+API wrapper to run the bot. Pybo also integrates the [CoinMarketCap API](https://coinmarketcap.com/) to track and display the top 100 cryptocurrencies.
 
 
 # Table of contents
