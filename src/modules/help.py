@@ -24,8 +24,7 @@ class Help(commands.Cog):
                 title='Use *;help* __*Module Name*__ to get more info',
                 description='• Administration\n'
                             '• Info\n'
-                            '• Market\n'
-                            '• Experimental',
+                            '• Market\n',
                 colour=discord.Colour.blurple()
             )
             embed.set_author(name='Commands List',
