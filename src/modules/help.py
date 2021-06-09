@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 from discord_slash import cog_ext, SlashContext
 from discord_slash.utils.manage_commands import create_choice, create_option
-from pybo import BOT_AVATAR
+from pybo import BOT_AVATAR, guild_ids
 
 
 # ---     CUSTOM CHECKS     --- #
@@ -18,10 +18,6 @@ def bot_channel_check(ctx):
 class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    # 746153452606062652 = Dev server
-    # 823595529250275378 = Water sapiens
-    guild_ids = [746153452606062652, 823595529250275378]
 
     # ---       SLASH COMMANDS       --- #
     @cog_ext.cog_slash(
