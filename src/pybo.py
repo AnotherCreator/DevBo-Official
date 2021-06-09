@@ -4,6 +4,7 @@ import asyncpg
 import discord
 import os
 from discord.ext import commands, tasks
+from discord_slash import SlashCommand
 from dotenvy import load_env, read_file
 from itertools import cycle
 
@@ -21,6 +22,7 @@ API_KEY = os.environ.get('CMC_API_KEY')
 if __name__ == '__main__':
     # ---     BOT INITIALIZATION    --- #
     bot = commands.Bot(command_prefix=';')
+    slash = SlashCommand(bot, sync_commands=True, sync_on_cog_reload=True)
     bot.remove_command('help')
 
     for filename in os.listdir('modules'):  # Load modules
@@ -50,12 +52,12 @@ if __name__ == '__main__':
             update_coins()
             await asyncio.sleep(60)
 
-    # ---       MAIN LINE           --- #
     @bot.event
     async def on_ready():
         change_status.start()
         print(f'{bot.user.name} is ready!')
 
+    # ---       OWNER COMMANDS          --- #
     @bot.command()
     @commands.is_owner()
     async def botmessage(ctx, *, message):
