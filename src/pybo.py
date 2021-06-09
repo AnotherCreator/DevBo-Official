@@ -5,6 +5,7 @@ import discord
 import os
 import psycopg2
 from discord.ext import commands, tasks
+from discord_slash import SlashCommand
 from dotenvy import load_env, read_file
 from itertools import cycle
 from subprocess import check_output
@@ -16,6 +17,9 @@ load_env(read_file('.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
 BOT_AVATAR = os.environ.get('BOT_AVATAR')
+# 746153452606062652 = Dev server
+# 823595529250275378 = Water sapiens
+guild_ids = [746153452606062652, 823595529250275378]
 # Database
 DB_URL = os.environ.get('HEROKU_DB_URL')
 DB_NAME = os.environ.get('HEROKU_DB_NAME')
@@ -27,6 +31,7 @@ API_KEY = os.environ.get('CMC_API_KEY')
 if __name__ == '__main__':
     # ---     BOT INITIALIZATION    --- #
     bot = commands.Bot(command_prefix=';')
+    slash = SlashCommand(bot, sync_commands=True, sync_on_cog_reload=True)
     bot.remove_command('help')
 
     for filename in os.listdir('modules'):  # Load modules

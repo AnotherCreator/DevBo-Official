@@ -16,6 +16,7 @@ certifi	==2020.12.5
 chardet	==3.0.4
 colorama	==0.4.4
 discord.py	==1.5.1
+discord-py-slash-command == 1.2.2
 dotenvy	==0.2.0
 flake8	==3.8.4
 future	==0.18.2
