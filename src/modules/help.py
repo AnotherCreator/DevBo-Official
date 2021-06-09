@@ -22,7 +22,7 @@ class Help(commands.Cog):
     # ---       SLASH COMMANDS       --- #
     @cog_ext.cog_slash(
         name='help',
-        description='List of bot commands!',
+        description='Detailed list of bot commands!',
         guild_ids=guild_ids,
         options=[
             create_option(
