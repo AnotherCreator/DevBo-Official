@@ -15,6 +15,10 @@ load_env(read_file('../.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 OWNER_ID = os.environ.get('OWNER_ID')
 BOT_AVATAR = os.environ.get('BOT_AVATAR')
+# 746153452606062652 = Dev server
+# 823595529250275378 = Water sapiens
+guild_ids = [746153452606062652, 823595529250275378]
+
 # Database
 DB_DEV_PW = os.environ.get('DB_DEV_PW')
 API_KEY = os.environ.get('CMC_API_KEY')
