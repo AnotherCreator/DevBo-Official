@@ -305,7 +305,7 @@ class Market(commands.Cog):
                     await message.add_reaction(emoji)
 
             check = reaction_check(message=message, author=ctx.author, emoji=(emoji_list[0], emoji_list[1]))
-            while True:
+            while True:  # Continues to run for 10 seconds until user does not click the emojis
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
                     if reaction.emoji == emoji_list[0]:  # Left page
@@ -381,7 +381,7 @@ class Market(commands.Cog):
                     await message.add_reaction(emoji)
 
             check = reaction_check(message=message, author=ctx.author, emoji=(emoji_list[0], emoji_list[1]))
-            while True:
+            while True:  # Continues to run for 10 seconds until user does not click the emojis
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
                     if reaction.emoji == emoji_list[0]:  # Left page
