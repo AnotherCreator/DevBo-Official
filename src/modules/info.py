@@ -21,14 +21,30 @@ class Info(commands.Cog):
 
     # ---       SLASH COMMANDS       --- #
     @cog_ext.cog_slash(
-        name='ping',
-        description='pong!',
-        guild_ids=guild_ids)
-    async def _ping(self, ctx: SlashContext):
-        embed = discord.Embed(
-            title=f'Pong! {str(round(self.bot.latency * 1000))}ms',
-            colour=discord.Colour.blurple()
-        )
+        name='info',
+        description='',
+        guild_ids=guild_ids,
+        options=[
+            create_option(
+                name='option',
+                description='Choose category!',
+                required=True,
+                option_type=3,
+                choices=[
+                    create_choice(
+                        name='ping',
+                        value='ping'
+                    )
+                ]
+            )
+        ]
+    )
+    async def _help(self, ctx: SlashContext, option: str):
+        if option == 'ping':
+            embed = discord.Embed(
+                title=f'Pong! {str(round(self.bot.latency * 1000))}ms',
+                colour=discord.Colour.blurple()
+            )
         await ctx.send(embeds=[embed])
 
     # ---       PREFIX COMMANDS       --- #
