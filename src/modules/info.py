@@ -20,31 +20,44 @@ class Info(commands.Cog):
         self.bot = bot
 
     # ---       SLASH COMMANDS       --- #
-    @cog_ext.cog_slash(
-        name='info',
-        description='',
-        guild_ids=guild_ids,
-        options=[
-            create_option(
-                name='option',
-                description='Choose category!',
-                required=True,
-                option_type=3,
-                choices=[
-                    create_choice(
-                        name='ping',
-                        value='ping'
-                    )
-                ]
-            )
-        ]
+    # @cog_ext.cog_slash(
+    #     name='info',
+    #     description='',
+    #     guild_ids=guild_ids,
+    #     options=[
+    #         create_option(
+    #             name='option',
+    #             description='Choose category!',
+    #             required=True,
+    #             option_type=3,
+    #             choices=[
+    #                 create_choice(
+    #                     name='ping',
+    #                     value='ping'
+    #                 )
+    #             ]
+    #         )
+    #     ]
+    # )
+    # async def _help(self, ctx: SlashContext, option: str):
+    #     if option == 'ping':
+    #         embed = discord.Embed(
+    #             title=f'Pong! {str(round(self.bot.latency * 1000))}ms',
+    #             colour=discord.Colour.blurple()
+    #         )
+    #     await ctx.send(embeds=[embed])
+
+    @cog_ext.cog_subcommand(
+        base='info',
+        name='ping',
+        description='Display your connection to the bot!',
+        guild_ids=guild_ids
     )
-    async def _help(self, ctx: SlashContext, option: str):
-        if option == 'ping':
-            embed = discord.Embed(
-                title=f'Pong! {str(round(self.bot.latency * 1000))}ms',
-                colour=discord.Colour.blurple()
-            )
+    async def info_ping(self, ctx: SlashContext):
+        embed = discord.Embed(
+            title=f'Pong! {str(round(self.bot.latency * 1000))}ms',
+            colour=discord.Colour.blurple()
+        )
         await ctx.send(embeds=[embed])
 
     # ---       PREFIX COMMANDS       --- #
