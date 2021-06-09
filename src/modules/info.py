@@ -1,6 +1,10 @@
 # ---       IMPORTS          ---#
 import discord
+
 from discord.ext import commands
+from discord_slash import cog_ext, SlashContext
+from discord_slash.utils.manage_commands import create_choice, create_option
+from pybo import guild_ids
 
 
 # ---     CUSTOM CHECKS     --- #
@@ -15,14 +19,27 @@ class Info(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    @commands.check(bot_channel_check)
-    async def ping(self, ctx):
+    # ---       SLASH COMMANDS       --- #
+    @cog_ext.cog_slash(
+        name='ping',
+        description='pong!',
+        guild_ids=guild_ids)
+    async def _ping(self, ctx: SlashContext):
         embed = discord.Embed(
             title=f'Pong! {str(round(self.bot.latency * 1000))}ms',
             colour=discord.Colour.blurple()
         )
-        await ctx.send(embed=embed)
+        await ctx.send(embeds=[embed])
+
+    # ---       PREFIX COMMANDS       --- #
+    # @commands.command()
+    # @commands.check(bot_channel_check)
+    # async def ping(self, ctx):
+    #     embed = discord.Embed(
+    #         title=f'Pong! {str(round(self.bot.latency * 1000))}ms',
+    #         colour=discord.Colour.blurple()
+    #     )
+    #     await ctx.send(embed=embed)
 
 
 # ---       END MAIN        ---#
