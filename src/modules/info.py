@@ -1,9 +1,6 @@
 # ---       IMPORTS          ---#
 import discord
-import unicodedata
-from bs4 import BeautifulSoup
 from discord.ext import commands
-from urllib.request import Request, urlopen
 
 
 # ---     CUSTOM CHECKS     --- #
