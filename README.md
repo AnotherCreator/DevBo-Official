@@ -11,7 +11,7 @@ API wrapper to run the bot. Pybo also integrates the [CoinMarketCap API](https:/
 
 #### Quick Disclaimer:
 The current version of Pybo (DevBo) being hosted here on Github will usually be the latest / stable version of the bot 
-available. I am currently running two separate instances of the bot locally (DevBo | Github) and in the cloud (PyBo | Heroku). 
+available. I am currently running two separate instances of the bot, one locally (DevBo | Github) and one in the cloud (PyBo | Heroku). 
 If you choose to invite the **official** PyBo hosted on the cloud, please be aware that there might still be some issues 
 as I am continually exploring *Heroku* and *PostgreSQL*.
 
