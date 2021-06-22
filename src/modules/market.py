@@ -1,11 +1,13 @@
 # ---       IMPORTS          ---#
-import json
+import asyncio.exceptions
 import discord
+import json
 import psycopg2
 
-from collections import Sequence
+from collections.abc import Sequence
 from discord.ext import commands
 from discord_slash import cog_ext, SlashContext
+from discord_slash.utils.manage_commands import create_choice, create_option
 from requests import Timeout, TooManyRedirects, Session
 from pybo import DB_URL, API_KEY, BOT_AVATAR, guild_ids
 
@@ -249,23 +251,60 @@ class Market(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-        # ---       SLASH COMMANDS       --- #
-        @cog_ext.cog_subcommand(
-            base='market',
-            name='coin',
-            description='Displays cryptocoin info from CoinMarketCap',
-            guild_ids=guild_ids
-        )
-        async def market_coin(self, ctx: SlashContext, *, rank_or_name):
-            # Variables
-            emoji_list = ['◀', '▶']
+    # ---       SLASH COMMANDS       --- #
+    @cog_ext.cog_subcommand(
+        base='market',
+        name='ccoin',
+        description='Displays cryptocoin info from CoinMarketCap',
+        guild_ids=guild_ids,
+        options=[
+            create_option(
+                name='module',
+                description=' ',
+                required=True,
+                option_type=3,
+                choices=[
+                    create_choice(
+                        name='rank',
+                        value='rank'
+                    ),
+                    create_choice(
+                        name='name',
+                        value='name'
+                    )
+                ]
+            )
+        ]
+    )
+    async def _market_ccoin(self, ctx: SlashContext, module: str):
+        # Variables
+        emoji_list = ['◀', '▶']
 
-            # Database
-            cur.execute('SELECT * FROM coin_info ORDER BY coin_rank asc')
-            rows = cur.fetchall()
+        # Database
+        cur.execute('SELECT * FROM coin_info ORDER BY coin_rank asc')
+        rows = cur.fetchall()
 
-            try:  # Checks to see if user input 'name' is a rank
-                coin_number = int(rank_or_name)
+        if module == 'rank':
+            embed = discord.Embed(
+                title='Please enter a rank from 1-100',
+                description=' ',
+                colour=discord.Colour.blurple()
+            )
+            await ctx.send(embeds=[embed], delete_after=5.0)
+
+            try:
+                msg = await self.bot.wait_for('message', timeout=5.0)
+            except asyncio.exceptions.TimeoutError:
+                embed = discord.Embed(
+                    title=f'{ctx.author} failed to send a message within the allotted time',
+                    description=' ',
+                    colour=discord.Colour.red()
+                )
+                await ctx.send(embeds=[embed], delete_after=5.0)
+
+            try:
+                coin_number = int(msg.content)
+                await msg.delete()  # Deletes message sent by user
                 for x in rows:
                     #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Rank: x[4] || Change: x[5] || Logo: x[6]
                     if x[4] == coin_number:
@@ -299,6 +338,7 @@ class Market(commands.Cog):
                     try:
                         reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
                         if reaction.emoji == emoji_list[0]:  # Left page
+                            await message.delete()  # Deletes embed before sending a new one
                             current_page = current_page - 1
                             if current_page <= 0:
                                 current_page = 1
@@ -318,6 +358,7 @@ class Market(commands.Cog):
                                                    emoji=(emoji_list[0], emoji_list[1]))
 
                         elif reaction.emoji == emoji_list[1]:  # Right page
+                            await message.delete()  # Deletes embed before sending a new one
                             current_page = current_page + 1
                             if current_page >= 100:
                                 current_page = 100
@@ -339,7 +380,35 @@ class Market(commands.Cog):
                     except TimeoutError:
                         print('Timeout')
             except ValueError:
-                coin_name = rank_or_name.lower()  # User input is confirmed to be a name
+                await msg.delete()  # Deletes message sent by user
+                embed = discord.Embed(
+                    title=f'Input is not a rank: {msg.content}',
+                    description=' ',
+                    colour=discord.Colour.red()
+                )
+                await ctx.send(embeds=[embed], delete_after=5.0)
+
+        elif module == 'name':
+            embed = discord.Embed(
+                title='Please enter a name',
+                description=' ',
+                colour=discord.Colour.blurple()
+            )
+            await ctx.send(embeds=[embed], delete_after=5.0)
+
+            try:
+                msg = await self.bot.wait_for('message', timeout=5.0)
+            except asyncio.exceptions.TimeoutError:
+                embed = discord.Embed(
+                    title=f'{ctx.author} failed to send a message within the allotted time',
+                    description=' ',
+                    colour=discord.Colour.red()
+                )
+                await ctx.send(embeds=[embed], delete_after=5.0)
+
+            try:
+                coin_name = msg.content.lower()
+                await msg.delete()  # Deletes message sent by user
                 for x in rows:
                     #  ID: x[0] || Name: x[1] || Symbol: x[2] || Price: x[3] || Rank: x[4] || Change: x[5] || Logo: x[6]
                     if x[1].lower() == coin_name:
@@ -373,6 +442,7 @@ class Market(commands.Cog):
                     try:
                         reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
                         if reaction.emoji == emoji_list[0]:  # Left page
+                            await message.delete()  # Deletes embed before sending a new one
                             current_page = current_page - 1
                             if current_page <= 0:
                                 current_page = 1
@@ -392,6 +462,7 @@ class Market(commands.Cog):
                                                    emoji=(emoji_list[0], emoji_list[1]))
 
                         elif reaction.emoji == emoji_list[1]:  # Right page
+                            await message.delete()  # Deletes embed before sending a new one
                             current_page = current_page + 1
                             if current_page >= 100:
                                 current_page = 100
@@ -412,21 +483,31 @@ class Market(commands.Cog):
                                                    emoji=(emoji_list[0], emoji_list[1]))
                     except TimeoutError:
                         print('Timeout')
+            except ValueError:
+                await msg.delete()  # Deletes message sent by user
+                embed = discord.Embed(
+                    title=f'Input is not a name: {msg.content}',
+                    description=' ',
+                    colour=discord.Colour.red()
+                )
+                await ctx.send(embeds=[embed], delete_after= 5.0)
 
-        @cog_ext.cog_subcommand(
-            base='market',
-            name='top',
-            description='Displays the top # coins',
-            guild_ids=guild_ids
-        )
-        async def market_top(self, ctx: SlashContext, *, rank):
-            # Variables
-            emoji_list = ['◀', '▶']
+    @cog_ext.cog_subcommand(
+        base='market',
+        name='ttop',
+        description='Displays the top # coins from 1-100',
+        guild_ids=guild_ids
+    )
+    async def _market_ttop(self, ctx: SlashContext, *, rank):
+        # Variables
+        emoji_list = ['◀', '▶']
+
+        # Database
+        cur.execute('SELECT * FROM coin_info ORDER BY coin_rank asc')  # 1,2,3...,100
+        rows = cur.fetchall()
+
+        try:
             rank = int(rank)
-
-            # Database
-            cur.execute('SELECT * FROM coin_info ORDER BY coin_rank asc')  # 1,2,3...,100
-            rows = cur.fetchall()
 
             if rank < 11:
                 min = 1
@@ -468,6 +549,7 @@ class Market(commands.Cog):
                 try:
                     reaction, user = await self.bot.wait_for('reaction_add', timeout=10.0, check=check)
                     if reaction.emoji == emoji_list[0]:  # Left page
+                        await message.delete()  # Deletes embed before sending a new one
                         current_page = current_page - 10
                         if current_page <= 0:
                             current_page = 10
@@ -488,6 +570,7 @@ class Market(commands.Cog):
                                                emoji=(emoji_list[0], emoji_list[1]))
 
                     elif reaction.emoji == emoji_list[1]:  # Right page
+                        await message.delete()  # Deletes embed before sending a new one
                         current_page = current_page + 10
                         if current_page >= 100:
                             current_page = 100
@@ -508,6 +591,13 @@ class Market(commands.Cog):
                                                emoji=(emoji_list[0], emoji_list[1]))
                 except TimeoutError:
                     print('Timeout')
+        except ValueError:
+            embed = discord.Embed(
+                title=f'Input is not a rank: {rank}',
+                description=' ',
+                colour=discord.Colour.red()
+            )
+            await ctx.send(embeds=[embed], delete_after=5.0)
 
 
 # ---       END MAIN        ---#
