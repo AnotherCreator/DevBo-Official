@@ -1,6 +1,5 @@
 # ---       IMPORTS          --- #
 import asyncio.exceptions
-
 import discord
 import json
 import psycopg2
