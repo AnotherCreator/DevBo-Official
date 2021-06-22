@@ -8,6 +8,6 @@
 # IDE Files
 /venv
 /.idea
-/modules/__pycache__
+src/modules/__pycache__
 # heh
 .env
