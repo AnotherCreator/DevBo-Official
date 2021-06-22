@@ -27,7 +27,7 @@ DB_USER = os.environ.get('HEROKU_DB_USER')
 DB_PW = os.environ.get('HEROKU_DB_PW')
 # API
 API_KEY = os.environ.get('CMC_API_KEY')
-
+#
 if __name__ == '__main__':
     # ---     BOT INITIALIZATION    --- #
     bot = commands.Bot(command_prefix=';')
