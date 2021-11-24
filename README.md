@@ -2,7 +2,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![License: MIT](https://img.shields.io/badge/Development_Server-PyBo-blue.svg)](https://discord.gg/25wb7AbaV5) [![License: MIT](https://img.shields.io/badge/Invite-PyBo-blue.svg)](https://discord.com/api/oauth2/authorize?client_id=733004304855597056&permissions=2435968598&scope=bot%20applications.commands)
 
 <p align="center">
-  <img width="676" height="267" src="https://github.com/AnotherCreator/Pybo-Discord-Bot/blob/master/images/Pybo_Banner_Color.png">
+  <img width="676" height="267" src="https://github.com/AnotherCreator/DevBo-Official/blob/master/images/Pybo_Banner_Color.png">
 </p>
 
 
